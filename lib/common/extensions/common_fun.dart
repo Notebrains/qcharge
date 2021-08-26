@@ -16,7 +16,6 @@ void showToast(BuildContext context, String message) {
         color: Colors.white,
         fontWeight: FontWeight.normal,
         fontSize: 16,
-        fontFamily: 'Roboto',
         shadows: [
           Shadow(color: Colors.white),
         ],

@@ -53,7 +53,7 @@ class _CustomSwitchState extends State<CustomSwitch>
               color: _circleAnimation.value ==
                   Alignment.centerLeft
                   ? Colors.grey
-                  : Colors.greenAccent.shade700,
+                  : Color(0xFFA88E36),
             ),
             child: Padding(
               padding: const EdgeInsets.only(

@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dev.qcharge">
    <application
-        android:label="qcharge_flutter"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Q Charge"
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="true"
+        android:fullBackupContent="true">
+
         <activity
             android:name="com.dev.qcharge.MainActivity"
             android:launchMode="singleTop"
@@ -37,5 +40,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyAJyzOhJBr-3I0aErGmue98rhhuYZTLR6s"/>
     </application>
 </manifest>

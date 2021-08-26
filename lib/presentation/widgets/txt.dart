@@ -25,7 +25,7 @@ class Txt extends StatelessWidget {
       child: InkWell(
         child: Text(
           txt,
-          style: TextStyle(fontFamily: 'Roboto', fontWeight: fontWeight, fontSize: txtSize, color: txtColor),
+          style: TextStyle(fontWeight: fontWeight, fontSize: txtSize, color: txtColor),
           maxLines: 8,
           softWrap: false,
           overflow: TextOverflow.ellipsis,

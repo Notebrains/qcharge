@@ -22,7 +22,7 @@ class NoDataFound extends StatelessWidget{
             padding: const EdgeInsets.only(bottom: 50, top: 5),
             child: Text(txt,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey, fontSize: 20, fontFamily: 'Roboto', fontWeight: FontWeight.normal, wordSpacing: 0),
+                style: TextStyle(color: Colors.grey, fontSize: 20, fontWeight: FontWeight.normal, wordSpacing: 0),
             ),
           ),
 
@@ -39,7 +39,7 @@ class NoDataFound extends StatelessWidget{
               ),
               alignment: Alignment.center,
               child: Text('Refresh',
-                style: TextStyle(fontFamily: 'Roboto', fontSize: 14, color: Colors.black54, fontWeight: FontWeight.normal),
+                style: TextStyle( fontSize: 14, color: Colors.black54, fontWeight: FontWeight.normal),
               ),
             ),
             onTap: (){

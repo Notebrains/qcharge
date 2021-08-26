@@ -38,7 +38,7 @@ showBottomSheetUi(BuildContext context) {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
-                    style: TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.bold, fontSize: 28, color: Colors.black87),
+                    style: TextStyle( fontWeight: FontWeight.bold, fontSize: 28, color: Colors.black87),
                   ),
                 ),
                 Padding(
@@ -64,7 +64,8 @@ showBottomSheetUi(BuildContext context) {
 
                 Padding(
                   padding: EdgeInsets.fromLTRB(20.0, 32, 20.0, 0),
-                  child: Button(text: 'SUBMIT', onPressed: () {
+                  child: Button(text: 'SUBMIT',
+                    bgColor: Colors.amber, onPressed: () {
 
                   },),
                 ),

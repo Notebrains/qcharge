@@ -24,7 +24,7 @@ class TxtWithWidth extends StatelessWidget {
         padding: const EdgeInsets.only(left: 3, top: 2, bottom: 2),
         child: Text(
           txt,
-          style: TextStyle(fontFamily: 'Roboto', fontWeight: fontWeight, fontSize: txtSize, color: txtColor),
+          style: TextStyle(fontWeight: fontWeight, fontSize: txtSize, color: txtColor),
           maxLines: 4,
           softWrap: false,
           overflow: TextOverflow.ellipsis,

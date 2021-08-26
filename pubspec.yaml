@@ -1,7 +1,7 @@
 name: qcharge_flutter
 description: Flutter qCharge project
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0
 versionCode: 1
@@ -28,15 +28,24 @@ dependencies:
   lottie: ^1.1.0
   google_fonts: ^2.1.0
   carousel_slider: ^4.0.0
+  hive: ^2.0.4
+  google_maps_flutter: ^2.0.6
+  geolocator: ^7.4.0
+  geocoding: ^2.0.0
+  flutter_polyline_points: ^1.0.0
 
   flutter_localizations:
     sdk: flutter
 
 
 dev_dependencies:
+  hive_generator: ^1.1.0
+  build_runner: ^2.0.1
+  test: ^1.16.5
+  bloc_test: ^8.0.0
+  mockito: ^5.0.5
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^1.2.1
 
 
 flutter:
@@ -49,16 +58,9 @@ flutter:
     - assets/icons/pngs/
     - assets/icons/svgs/
     - assets/images/
+    - assets/languages/
 
   fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto.ttf
-
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto.ttf
-
     - family: CenturyGothic
       fonts:
-        - asset: assets/fonts/century_gothic.TTF
+        - asset: assets/fonts/CenturyGothic.ttf

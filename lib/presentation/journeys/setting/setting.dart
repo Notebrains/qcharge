@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:qcharge_flutter/common/constants/route_constants.dart';
-import 'package:qcharge_flutter/presentation/widgets/button.dart';
+import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
+import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
+import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
+import 'package:qcharge_flutter/presentation/widgets/ic_txt_switch.dart';
 import 'package:qcharge_flutter/presentation/widgets/switcher_btn.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
-import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 
 class Setting extends StatefulWidget{
   @override
@@ -16,65 +17,59 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.only(left: 22, right: 22),
+      appBar: appBarIcBack(context, 'Filter'),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: Colors.amber.withOpacity(0.1),
-              margin: const EdgeInsets.only(top: 36, bottom: 18),
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Txt(txt: _isNotificationSwitchOn? 'Notification On' : 'Notification Off',
-                    txtColor: Colors.black,
-                    txtSize: 16,
-                    fontWeight: FontWeight.bold,
-                    padding: 0,
-                    onTap: (){},
-                  ),
-
-                  CustomSwitch(
-                    value: _isNotificationSwitchOn,
-                    onChanged: (bool val){
-                      setState(() {
-                        _isNotificationSwitchOn = val;
-                      });
-                    },
-                  ),
-                ],
-              ),
+                width: double.maxFinite,
+                color: AppColor.grey,
+                padding: EdgeInsets.all(6),
+                margin: EdgeInsets.only(bottom: 8, top: 8),
+                child: Text('Ev Stations Status', textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: Colors.white),),
             ),
 
-            Txt(txt: 'Contact Info',
-              txtColor: Colors.black,
-              txtSize: 18,
-              fontWeight: FontWeight.bold,
-              padding: 0,
-              onTap: (){},
+            IcTxtSwitch(txt: 'Private', img: 'assets/icons/pngs/create_account_layer_2.png', isSwitchOn: true, isVisible: true,),
+            IcTxtSwitch(txt: 'Public', img: 'assets/icons/pngs/filter_0016_Layer-3.png', isSwitchOn: true, isVisible: true,),
+            IcTxtSwitch(txt: 'Maintenance', img: 'assets/icons/pngs/filter_0014_Layer-4.png', isSwitchOn: true, isVisible: true,),
+            IcTxtSwitch(txt: 'Coming soon', img: 'assets/icons/pngs/filter_0013_Layer-5.png', isSwitchOn: true, isVisible: false,),
+
+            Container(
+              width: double.maxFinite,
+              color: AppColor.grey,
+              padding: EdgeInsets.all(6),
+              margin: EdgeInsets.only(bottom: 8, top: 12),
+              child: Text('Ev Stations Status', textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: Colors.white),),
             ),
 
-            TxtIcRow(txt: 'contact@restobuy.com', txtColor: Colors.black54,
-                txtSize: 16, fontWeight: FontWeight.normal, icon: Icons.email, icColor: Colors.black54,
-              isCenter: false,),
+            IcTxtSwitch(txt: 'AC', img: 'assets/icons/pngs/filter_0011_AC.png', isSwitchOn: true, isVisible: true,),
+            IcTxtSwitch(txt: 'DC', img: 'assets/icons/pngs/filter_dc.png', isSwitchOn: true, isVisible: false,),
 
-            TxtIcRow(txt: '+1 993346792', txtColor: Colors.black54,
-                txtSize: 16, fontWeight: FontWeight.normal, icon: Icons.call, icColor: Colors.black54,
-              isCenter: false,
+            Container(
+              width: double.maxFinite,
+              color: AppColor.grey,
+              padding: EdgeInsets.all(6),
+              margin: EdgeInsets.only(bottom: 8, top: 12),
+              child: Text('Ev Stations Status', textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: Colors.white),),
             ),
 
-            Padding(
-              padding: const EdgeInsets.only(top: 36),
-              child: Button(text: 'RAISE DISPUTE',
-                onPressed: () {
-                  Navigator.of(context).pushNamed(RouteList.raise_dispute);
-                },
-              ),
+            IcTxtSwitch(txt: 'Type 1', img: 'assets/icons/pngs/filter_type_1.png', isSwitchOn: true, isVisible: true,),
+            IcTxtSwitch(txt: 'Type 2', img: 'assets/icons/pngs/filter_type_2.png', isSwitchOn: true, isVisible: true,),
+            IcTxtSwitch(txt: 'CCS2', img: 'assets/icons/pngs/filter_ccs2.png', isSwitchOn: true, isVisible: false,),
+
+            Container(
+              width: double.maxFinite,
+              color: AppColor.grey,
+              padding: EdgeInsets.all(6),
+              margin: EdgeInsets.only(bottom: 8, top: 12),
+              child: Text('Ev Stations Status', textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: Colors.white),),
             ),
+
+            IcTxtSwitch(txt: 'Walk In Mode', img: 'assets/icons/pngs/filter_walk_in_mode_2.png', isSwitchOn: true, isVisible: true,),
+            IcTxtSwitch(txt: 'Reserve Mode', img: 'assets/icons/pngs/filter_reserve_mode_2.png', isSwitchOn: true, isVisible: false,),
           ],
         ),
       ),

@@ -60,6 +60,7 @@ class AppDialog extends StatelessWidget {
             ),
             if (image != null) image!,
             Button(
+              bgColor: Colors.amber,
               onPressed: () {
                 Navigator.of(context).pop();
               },

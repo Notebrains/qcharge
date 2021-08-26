@@ -14,7 +14,7 @@ class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      'assets/images/logo_vertical.png',
+      'assets/icons/pngs/q_charge_logo_1.png',
       height: height.w,
       width: height.w,
     );

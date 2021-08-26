@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../../common/constants/size_constants.dart';
 import '../../common/extensions/size_extensions.dart';
-import '../../common/extensions/string_extensions.dart';
-import '../themes/theme_color.dart';
 
 class Button extends StatelessWidget {
   final String text;
+  final Color bgColor;
   final Function() onPressed;
 
   const Button({
     Key? key,
     required this.text,
+    required this.bgColor,
     required this.onPressed,
   }) : super(key: key);
 
@@ -21,10 +21,13 @@ class Button extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeIn,
       decoration: BoxDecoration(
-        color: Colors.amber,
         borderRadius: BorderRadius.all(
           Radius.circular(5),
         ),
+        gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft, colors: [
+          Color(0xFFEFE07D),
+          Color(0xFFB49839),
+        ]),
       ),
       padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
       margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
@@ -34,7 +37,7 @@ class Button extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(color: Colors.black, fontSize: 16),
+          style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );

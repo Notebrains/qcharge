@@ -18,7 +18,7 @@ class HomeCardList extends StatelessWidget{
         width: Sizes.dimen_120.w,
         margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
         decoration: BoxDecoration(
-          //border: Border.all(color: Colors.black, width: 2),
+          // border: Border.all(color: Colors.black, width: 2),
           borderRadius: BorderRadius.circular(8),
           gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -29,7 +29,8 @@ class HomeCardList extends StatelessWidget{
             BoxShadow(
                 color: Colors.black38,
                 blurRadius: 5,
-                offset: Offset(3, 3))
+                offset: Offset(3, 3),
+            )
           ]),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -54,7 +54,7 @@ class Review extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 5),
                     child: Text(
                       '4.0',
-                      style: TextStyle(fontFamily: 'Roboto', fontSize: 30, color: Colors.black54),
+                      style: TextStyle( fontSize: 30, color: Colors.black54),
                     ),
                   ),
                 ),
@@ -70,7 +70,7 @@ class Review extends StatelessWidget {
 
                 Text(
                   'Based on 20 reviews',
-                  style: TextStyle(fontFamily: 'Roboto', fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey),
+                  style: TextStyle( fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey),
                 ),
               ],
             ),
@@ -114,7 +114,7 @@ class Review extends StatelessWidget {
                                     padding: const EdgeInsets.fromLTRB(6, 5, 5, 0),
                                     child: Text(
                                       'Product Name',
-                                      style: TextStyle(fontFamily: 'Roboto', fontSize: 14, color: Colors.black87, letterSpacing: 0.5),
+                                      style: TextStyle( fontSize: 14, color: Colors.black87, letterSpacing: 0.5),
                                     ),
                                   ),
                                   Row(
@@ -133,7 +133,7 @@ class Review extends StatelessWidget {
 
                                       Text(
                                         '4',
-                                        style: TextStyle(fontFamily: 'Roboto', fontSize: 14, color: Colors.black54),
+                                        style: TextStyle(fontSize: 14, color: Colors.black54),
                                       ),
                                     ],
                                   ),
@@ -146,7 +146,7 @@ class Review extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 8, bottom: 12, left: 3),
                             child: Text(
                               Strings.txt_review,
-                              style: TextStyle(fontFamily: 'Roboto', fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey),
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey),
                             ),
                           ),
 
@@ -156,12 +156,12 @@ class Review extends StatelessWidget {
                             children: [
                               Text(
                                 ' Restaurant Name',
-                                style: TextStyle(fontFamily: 'Roboto', fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black54),
+                                style: TextStyle( fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black54),
                               ),
 
                               Text(
                                 '25 jan, 2021',
-                                style: TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.normal, fontSize: 14, color: Colors.black54),
+                                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.black54),
                               ),
                             ],
                           ),

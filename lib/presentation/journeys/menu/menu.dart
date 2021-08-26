@@ -103,7 +103,7 @@ class _MenuState extends State<Menu> {
         //Navigator.of(context).pushNamed(RouteList.transaction);
         break;
       case 'REVIEW':
-        Navigator.of(context).pushNamed(RouteList.review);
+        Navigator.of(context).pushNamed(RouteList.activity);
         break;
     }
   }
