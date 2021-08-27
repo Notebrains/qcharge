@@ -1,5 +1,8 @@
+import 'package:dartz/dartz_streaming.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qcharge_flutter/presentation/widgets/button.dart';
+import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import '../../blocs/theme/theme_cubit.dart';
 import '../../themes/theme_color.dart';
 
@@ -21,90 +24,176 @@ class NavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).primaryColor.withOpacity(0.7),
-            blurRadius: 4,
-          ),
-        ],
-      ),
-      width: Sizes.dimen_300.w,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: Sizes.dimen_8.h,
-                bottom: Sizes.dimen_18.h,
-                left: Sizes.dimen_8.w,
-                right: Sizes.dimen_8.w,
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
+
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(Sizes.dimen_40.w, 12, 24, 16),
+          margin: EdgeInsets.only(top: statusBarHeight),
+          color: AppColor.grey,
+          width: Sizes.dimen_350.w,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 12, bottom: 5),
+                child: Txt(
+                  txt: 'HELLO',
+                  txtColor: Colors.white,
+                  txtSize: 22,
+                  fontWeight: FontWeight.bold,
+                  padding: 0,
+                  onTap: () {},
+                ),
               ),
-              child: Logo(
-                height: Sizes.dimen_20.h,
-              ),
-            ),
-            NavigationListItem(
-              title: TranslationConstants.favoriteMovies.t(context),
-              onPressed: () {
-                //Navigator.of(context).pushNamed(RouteList.favorite);
-              },
-            ),
-            NavigationExpandedListItem(
-              title: TranslationConstants.language.t(context),
-              children: Languages.languages.map((e) => e.value).toList(),
-              onPressed: (index) => _onLanguageSelected(index, context),
-            ),
-            NavigationListItem(
-              title: TranslationConstants.feedback.t(context),
-              onPressed: () {
-                Navigator.of(context).pop();
-                //Wiredash.of(context)?.show();
-              },
-            ),
-            NavigationListItem(
-              title: TranslationConstants.about.t(context),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _showDialog(context);
-              },
-            ),
-            BlocListener<LoginCubit, LoginState>(
-              listenWhen: (previous, current) => current is LogoutSuccess,
-              listener: (context, state) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    RouteList.initial, (route) => false);
-              },
-              child: NavigationListItem(
-                title: TranslationConstants.logout.t(context),
-                onPressed: () {
-                  BlocProvider.of<LoginCubit>(context).logout();
-                },
-              ),
-            ),
-            Spacer(),
-            BlocBuilder<ThemeCubit, Themes>(builder: (context, theme) {
-              return Align(
-                alignment: Alignment.center,
-                child: IconButton(
-                  onPressed: () => context.read<ThemeCubit>().toggleTheme(),
-                  icon: Icon(
-                    theme == Themes.dark
-                        ? Icons.brightness_4_sharp
-                        : Icons.brightness_7_sharp,
-                    color: context.read<ThemeCubit>().state == Themes.dark
-                        ? Colors.white
-                        : AppColor.primary_color,
-                    size: Sizes.dimen_40.w,
+
+              TextButton(
+                onPressed: (){},
+                style: ElevatedButton.styleFrom(
+                  onPrimary: Colors.black,
+                  primary: AppColor.border,
+                  minimumSize: Size(180, 30),
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                 ),
-              );
-            }),
-          ],
+                child: Txt(txt: 'UPDATE PROFILE', txtColor: Colors.black, txtSize: 12, fontWeight: FontWeight.bold,
+                    padding: 0, onTap: (){}),
+              ),
+            ],
+          ),
         ),
-      ),
+
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.only(left: Sizes.dimen_24.w,),
+            width: Sizes.dimen_350.w,
+            color: Colors.black,
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              children: <Widget>[
+
+                NavigationListItem(
+                  title: 'Map',
+                  onPressed: () {
+                    //Navigator.of(context).pushNamed(RouteList.favorite);
+                  },
+                ),
+
+                NavigationListItem(
+                  title: 'News and Update',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    //Wiredash.of(context)?.show();
+                  },
+                ),
+
+
+                NavigationListItem(
+                  title: 'Top Up',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    //_showDialog(context);
+                  },
+                ),
+
+                NavigationListItem(
+                  title: 'Profile',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(RouteList.profile);
+                    
+                  },
+                ),
+
+                NavigationListItem(
+                  title: 'FAQ',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    //_showDialog(context);
+                  },
+                ),
+
+                NavigationListItem(
+                  title: 'Setting',
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(RouteList.setting);
+                  },
+                ),
+                BlocListener<LoginCubit, LoginState>(
+                  listenWhen: (previous, current) => current is LogoutSuccess,
+                  listener: (context, state) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        RouteList.initial, (route) => false);
+                  },
+                  child: NavigationListItem(
+                    title: TranslationConstants.logout.t(context),
+                    onPressed: () {
+                      BlocProvider.of<LoginCubit>(context).logout();
+                    },
+                  ),
+                ),
+
+                /*
+                NavigationExpandedListItem(
+                  title: TranslationConstants.language.t(context),
+                  children: Languages.languages.map((e) => e.value).toList(),
+                  onPressed: (index) => _onLanguageSelected(index, context),
+                ),
+
+                BlocBuilder<ThemeCubit, Themes>(builder: (context, theme) {
+                  return Align(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                      onPressed: () => context.read<ThemeCubit>().toggleTheme(),
+                      icon: Icon(
+                        theme == Themes.dark
+                            ? Icons.brightness_4_sharp
+                            : Icons.brightness_7_sharp,
+                        color: context.read<ThemeCubit>().state == Themes.dark
+                            ? Colors.white
+                            : AppColor.primary_color,
+                        size: Sizes.dimen_40.w,
+                      ),
+                    ),
+                  );
+                }),*/
+
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: Sizes.dimen_24.w, top: Sizes.dimen_8.h,),
+                    child: Logo(
+                      height: Sizes.dimen_16.h,
+                    ),
+                  ),
+                ),
+
+
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: Sizes.dimen_20.w,
+                    top: 5,
+                    bottom: Sizes.dimen_40.h,
+                  ),
+                  child: Txt(
+                    txt: 'Q CHARGE',
+                    txtColor: Colors.white,
+                    txtSize: 16,
+                    fontWeight: FontWeight.normal,
+                    padding: 0,
+                    onTap: () {},
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

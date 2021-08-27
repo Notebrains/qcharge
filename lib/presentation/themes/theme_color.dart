@@ -12,7 +12,7 @@ class AppColor {
   static const Color violet = Color(0xFFFFFFFF);
 
   static const Color app_bg = Color(0xFF000000);
-  static const Color notification_bar = Color(0xFFA6944A);
+  static const Color notification_bar = Color(0xFF786A33);
   static const Color alert_color = Color(0xFF524D4D);
   static const Color text = Color(0xFFAA9E5F);
   static const Color app_ic = Color(0xFFC9B659);

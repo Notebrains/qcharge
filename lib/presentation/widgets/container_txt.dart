@@ -16,10 +16,11 @@ class ContainerTxt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(6),
-      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.only(top: 8, bottom: 8),
+      padding: EdgeInsets.fromLTRB(12, 8, 12, 12),
       decoration: BoxDecoration(
         color: AppColor.grey,
+        borderRadius: BorderRadius.all(Radius.circular(25)),
       ),
       child: Text(
         txt,

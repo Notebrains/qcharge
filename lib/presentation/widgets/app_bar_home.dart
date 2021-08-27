@@ -6,7 +6,7 @@ import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 PreferredSizeWidget appBarHome(BuildContext context) {
   return AppBar(
     toolbarHeight: 65,
-    title: Image.asset('assets/icons/pngs/account_register_2.png', fit: BoxFit.cover, width: 55),
+    title: Image.asset('assets/icons/pngs/q_charge_logo_1.png', fit: BoxFit.cover, width: 30),
     centerTitle: true,
     backgroundColor: AppColor.grey,
     elevation: 3,

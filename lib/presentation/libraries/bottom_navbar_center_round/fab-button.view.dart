@@ -1,8 +1,10 @@
+import 'package:dartz/dartz_streaming.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
+import 'package:qcharge_flutter/presentation/widgets/txt_with_width.dart';
 
 class PandaBarFabButton extends StatefulWidget {
 
@@ -59,19 +61,20 @@ class _PandaBarFabButtonState extends State<PandaBarFabButton> {
                 BoxShadow(
                     color: Colors.black38,
                     blurRadius: 5,
-                    offset: Offset(3, 3))
+                    offset: Offset(3, 3),
+                )
               ]),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/icons/pngs/scan_qr_for_filter_20_scan.png',
-                width: 23,
-                height: 23,
+                width: 20,
+                height: 20,
               ),
 
-              Txt(txt: 'QR Code', txtColor: AppColor.app_txt_white, txtSize: 11,
-                  fontWeight: FontWeight.normal, padding: 3, onTap: (){})
+              TxtWithWidth(txt: 'QR Code', txtColor: AppColor.app_txt_white, txtSize: 11,
+                  fontWeight: FontWeight.normal, width: double.maxFinite,)
             ],
           ),
         )

@@ -18,27 +18,30 @@ class Next extends StatelessWidget{
     return FadeIn(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ContainerTxt(txt: 'Left Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
-                  ContainerTxt(txt: 'AC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    ContainerTxt(txt: 'Left Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
+
+                    ContainerTxt(txt: 'AC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
+                  ],
+                ),
               ),
 
-              Image.asset('assets/images/scan_qr_for_filter_9_next.png', height: Sizes.dimen_150.h, width: Sizes.dimen_120.w,),
+              Image.asset('assets/images/scan_qr_for_filter_9_next.png', height: Sizes.dimen_150.h,
+                width: Sizes.dimen_120.w,),
 
-              Column(
-                children: [
-                  ContainerTxt(txt: 'Right Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
+              Expanded(
+                child: Column(
+                  children: [
+                    ContainerTxt(txt: 'Right Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
 
-                  ContainerTxt(txt: 'DC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
-                ],
+                    ContainerTxt(txt: 'DC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
+                  ],
+                ),
               ),
             ],
           ),

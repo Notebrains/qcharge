@@ -66,7 +66,6 @@ class _RootAppState extends State<RootApp> {
               return MaterialApp(
                 navigatorKey: _navigatorKey,
                 debugShowCheckedModeBanner: false,
-                title: 'Movie App',
                 theme: ThemeData(
                   unselectedWidgetColor: AppColor.secondary_color,
                   primaryColor: AppColor.primary_color,

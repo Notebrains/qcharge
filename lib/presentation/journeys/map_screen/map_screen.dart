@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/EtBorderProgressBar.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -321,6 +322,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: appBarHome(context),
+      drawer: NavigationDrawer(),
       body: Stack(
         children: <Widget>[
           Image.network(Strings.imgUrlMap, fit: BoxFit.fitHeight, height: double.maxFinite,),

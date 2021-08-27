@@ -44,4 +44,7 @@ class Sizes {
   static const double dimen_250 = 250;
   static const double dimen_280 = 280;
   static const double dimen_300 = 300;
+  static const double dimen_320 = 320;
+  static const double dimen_350 = 350;
+  static const double dimen_400 = 400;
 }
