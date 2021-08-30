@@ -188,7 +188,7 @@ class _HorizontalStepperState extends State<StatefulWidget> {
 
   Widget _getTitleWidgets() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: getTitles(),
     );
@@ -198,18 +198,13 @@ class _HorizontalStepperState extends State<StatefulWidget> {
     return Container(
       width: width,
       padding: const EdgeInsets.only(
-        left: 24,
-        right: 24,
+        left: 36,
+        right: 36,
         top: PADDING_SMALL,
       ),
-      child: Container(
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: _getStepCircles(),
-              )
-        ],
-      )),
+      child: Row(
+        children: _getStepCircles(),
+      ),
     );
   }
 
@@ -308,7 +303,8 @@ class _HorizontalStepperState extends State<StatefulWidget> {
 
   List<Widget> getTitles() {
     return steps
-        .map((e) => Flexible(
+        .map((e) => Expanded(
+              flex: 1,
               child: Text(
                 e.title,
                 textAlign: TextAlign.center,
@@ -357,13 +353,14 @@ class _StepLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
-      margin: const EdgeInsets.only(
-        left: 4,
-        right: 4,
-      ),
-      height: 2,
-      color: step.state == HorizontalStepState.SELECTED ? selectedColor : unSelectedColor,
-    ));
+          margin: const EdgeInsets.only(
+            left: 4,
+            right: 4,
+          ),
+          height: 2,
+          color: step.state == HorizontalStepState.SELECTED ? selectedColor : unSelectedColor,
+        ),
+      );
   }
 }
 

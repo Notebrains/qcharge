@@ -22,7 +22,7 @@ class TxtImgRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
       ),
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

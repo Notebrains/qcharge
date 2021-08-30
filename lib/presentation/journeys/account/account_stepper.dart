@@ -22,8 +22,6 @@ class AccountStepper extends StatelessWidget{
       appBar: appBarHome(context),
       //drawer: NavigationDrawer(),
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 34, bottom: 24),

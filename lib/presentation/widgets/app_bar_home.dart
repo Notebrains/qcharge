@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
 PreferredSizeWidget appBarHome(BuildContext context) {
   return AppBar(
-    toolbarHeight: 65,
+    toolbarHeight: Sizes.dimen_26.h,
     title: Image.asset('assets/icons/pngs/q_charge_logo_1.png', fit: BoxFit.cover, width: 30),
     centerTitle: true,
     backgroundColor: AppColor.grey,
@@ -37,7 +39,6 @@ PreferredSizeWidget appBarHome(BuildContext context) {
                       width: 20,
                       height: 40,
                     ),
-
 
                     title: Text(
                       choice,

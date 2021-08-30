@@ -41,7 +41,7 @@ class AppErrorWidget extends StatelessWidget {
               ),
               Button(
                 onPressed: () {},
-                text: TranslationConstants.feedback,
+                text: TranslationConstants.setting,
                 bgColor: Colors.amber,
               ),
             ],

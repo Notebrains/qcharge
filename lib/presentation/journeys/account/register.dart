@@ -20,7 +20,7 @@ class _RegisterState extends State<Register> {
           children: [
             Container(
               margin: const EdgeInsets.fromLTRB(45, 60, 45, 0),
-              child: IcIfRow(txt: 'First name*', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
+              child: IcIfRow(txt: 'Full name*', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_6.png', icColor: Colors.white,
                 initialTxtValue: 'First name*', hint: 'Enter first name', textInputType: TextInputType.text,
               ),
@@ -78,9 +78,7 @@ class _RegisterState extends State<Register> {
               child: Button(text: 'REGISTER',
                 bgColor: isAgreed? Colors.amber : Colors.grey.shade400,
                 onPressed: () {
-                  if (!isAgreed) {
-                    edgeAlert(context, title: 'Tips', description: 'Please agree to our terms & conditions', gravity: Gravity.top);
-                  }
+                  edgeAlert(context, title: 'Tips', description: 'Please slide to view next screen', gravity: Gravity.top);
                 },
               ),
             )

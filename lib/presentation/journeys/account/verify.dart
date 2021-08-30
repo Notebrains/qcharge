@@ -35,7 +35,7 @@ class _VerifyState extends State<Verify> {
               child: Button(text: 'REQUEST OTP',
                 bgColor: Colors.amber,
                 onPressed: () {
-
+                  edgeAlert(context, title: 'Tips', description: 'Please slide to view next screen', gravity: Gravity.top);
                 },
               ),
             ),

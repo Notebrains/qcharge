@@ -71,7 +71,7 @@ class _CarouselWithIndicatorState extends State<HomeSliderCarouselWithIndicator>
   final List<Widget> imageSliders = imgList
       .map((item) => ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            child: Image.asset(item, fit: BoxFit.fill, width: double.infinity),
+            child: Image.asset(item, fit: BoxFit.cover, width: double.infinity),
           ))
       .toList();
 }

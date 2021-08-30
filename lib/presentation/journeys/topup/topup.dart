@@ -25,99 +25,102 @@ class _TopUpState extends State<TopUp> {
     return Scaffold(
       appBar: appBarHome(context),
       drawer: NavigationDrawer(),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 5),
-            decoration: BoxDecoration(
-                color: AppColor.grey,
-                borderRadius: BorderRadius.circular(5.0),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 5),
+              decoration: BoxDecoration(
+                  color: AppColor.grey,
+                  borderRadius: BorderRadius.circular(5.0),
 
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 3,
-                  //child: cachedNetImgWithRadius(Strings.imgUrlMeeting, 100, 100, 0),
-                  child: Container(
-                      margin: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                          color: AppColor.grey,
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(color: AppColor.border),
-                      ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    //child: cachedNetImgWithRadius(Strings.imgUrlMeeting, 100, 100, 0),
+                    child: Container(
+                        margin: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                            color: AppColor.grey,
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(color: AppColor.border),
+                        ),
 
-                    child: Image.asset('assets/images/member_card.png',),
+                      child: Image.asset('assets/images/member_card.png',),
+                    ),
                   ),
-                ),
 
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: Txt(
-                          txt: 'BALANCE',
-                          txtColor: Colors.white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.bold,
-                          padding: 0,
-                          onTap: () {},
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Txt(
+                            txt: 'BALANCE',
+                            txtColor: Colors.white,
+                            txtSize: 12,
+                            fontWeight: FontWeight.bold,
+                            padding: 0,
+                            onTap: () {},
+                          ),
                         ),
-                      ),
 
-                      Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: Txt(
-                          txt: '0',
-                          txtColor: Colors.white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.normal,
-                          padding: 0,
-                          onTap: () {
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Txt(
+                            txt: '0',
+                            txtColor: Colors.white,
+                            txtSize: 12,
+                            fontWeight: FontWeight.normal,
+                            padding: 0,
+                            onTap: () {
 
-                          },
+                            },
+                          ),
                         ),
-                      ),
 
 
-                      Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: Txt(
-                          txt: 'BAHT',
-                          txtColor: Colors.white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.bold,
-                          padding: 0,
-                          onTap: () {},
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Txt(
+                            txt: 'BAHT',
+                            txtColor: Colors.white,
+                            txtSize: 12,
+                            fontWeight: FontWeight.bold,
+                            padding: 0,
+                            onTap: () {},
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 45, right: 40),
-            child: Button(text: isTopUpBtnSelected? 'USAGE HISTORY' : 'TOP UP',
-              bgColor: Colors.amber,
-              onPressed: () {
-                setState(() {
-                  isTopUpBtnSelected? isTopUpBtnSelected = false: isTopUpBtnSelected = true;
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.only(left: 45, right: 40),
+              child: Button(text: isTopUpBtnSelected? 'USAGE HISTORY' : 'TOP UP',
+                bgColor: Colors.amber,
+                onPressed: () {
+                  setState(() {
+                    isTopUpBtnSelected? isTopUpBtnSelected = false: isTopUpBtnSelected = true;
+                  });
+                },
+              ),
             ),
-          ),
 
-          isTopUpBtnSelected? Expanded(child: TopUpBanking()): Expanded(child: TopUpHistory()),
-        ],
+            isTopUpBtnSelected? TopUpBanking(): TopUpHistory(),
+          ],
+        ),
       ),
     );
   }

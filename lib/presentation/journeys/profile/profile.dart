@@ -20,7 +20,7 @@ class Profile extends StatelessWidget {
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 85),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,7 +98,7 @@ class Profile extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 25,
-                //padding: EdgeInsets.only(top: 24, bottom: 12),
+                margin: EdgeInsets.only(bottom: 3),
                 child: LiquidLinearProgressIndicator(
                   value: 0.5,
                   backgroundColor: AppColor.grey,
@@ -109,6 +109,30 @@ class Profile extends StatelessWidget {
                   //center: Text("Loading..."),
                 ),
               ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Txt(
+                    txt: ' VIP',
+                    txtColor: Colors.white,
+                    txtSize: 14,
+                    fontWeight: FontWeight.bold,
+                    padding: 0,
+                    onTap: () {},
+                  ),
+
+                  Txt(
+                    txt: ' VIP1',
+                    txtColor: Colors.white,
+                    txtSize: 14,
+                    fontWeight: FontWeight.bold,
+                    padding: 0,
+                    onTap: () {},
+                  ),
+                ],
+              ),
+
 
               Padding(
                 padding: const EdgeInsets.only(top: 16),
@@ -133,6 +157,8 @@ class Profile extends StatelessWidget {
                   ),
                 ),
               ),
+
+
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
@@ -156,6 +182,8 @@ class Profile extends StatelessWidget {
                   ),
                 ),
               ),
+
+
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
@@ -179,6 +207,7 @@ class Profile extends StatelessWidget {
                   ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
@@ -202,8 +231,9 @@ class Profile extends StatelessWidget {
                   ),
                 ),
               ),
+
               Padding(
-                padding: EdgeInsets.fromLTRB(0.0, 56, 0.0, 0),
+                padding: EdgeInsets.only(bottom: 56, top: 34),
                 child: Button(
                   text: 'LOGOUT',
                   bgColor: Colors.amber,

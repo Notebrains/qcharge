@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
 import 'package:qcharge_flutter/presentation/widgets/ic_txt_switch.dart';
-import 'package:qcharge_flutter/presentation/widgets/switcher_btn.dart';
-import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
 class Setting extends StatefulWidget{
   @override
@@ -70,6 +67,7 @@ class _SettingState extends State<Setting> {
 
             IcTxtSwitch(txt: 'Walk In Mode', img: 'assets/icons/pngs/filter_walk_in_mode_2.png', isSwitchOn: true, isVisible: true,),
             IcTxtSwitch(txt: 'Reserve Mode', img: 'assets/icons/pngs/filter_reserve_mode_2.png', isSwitchOn: true, isVisible: false,),
+
           ],
         ),
       ),

@@ -20,32 +20,30 @@ class _TopUpBankingState extends State<TopUpBanking> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SlideInUp(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 36, left: 20, bottom: 6),
-              child: Txt(txt: 'Select Top Up Method', txtColor: Colors.white, txtSize: 14,
-                fontWeight: FontWeight.normal, padding: 0, onTap: (){},
-              ),
+    return SlideInUp(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 24, left: 20, bottom: 6),
+            child: Txt(txt: 'Select Top Up Method', txtColor: Colors.white, txtSize: 14,
+              fontWeight: FontWeight.normal, padding: 0, onTap: (){},
             ),
+          ),
 
-            TxtImgRow(txt: 'THAI QR', txtColor: AppColor.app_txt_white, txtSize: 16,
-              img: 'assets/icons/pngs/create_account_logo.png',
-            ),
+          TxtImgRow(txt: 'THAI QR', txtColor: AppColor.app_txt_white, txtSize: 16,
+            img: 'assets/icons/pngs/create_account_logo.png',
+          ),
 
-            TxtImgRow(txt: 'CREDIT/DEBIT CARD', txtColor: AppColor.app_txt_white, txtSize: 16,
-              img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
-            ),
+          TxtImgRow(txt: 'CREDIT/DEBIT CARD', txtColor: AppColor.app_txt_white, txtSize: 16,
+            img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
+          ),
 
-            TxtImgRow(txt: 'MOBILE BANKING', txtColor: AppColor.app_txt_white, txtSize: 16,
-              img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
-            ),
-          ],
-        ),
+          TxtImgRow(txt: 'MOBILE BANKING', txtColor: AppColor.app_txt_white, txtSize: 16,
+            img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
+          ),
+        ],
       ),
     );
   }

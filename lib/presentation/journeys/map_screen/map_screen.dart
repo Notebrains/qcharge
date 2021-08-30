@@ -2,23 +2,19 @@ import 'dart:async';
 import 'dart:math' show cos, sqrt, asin;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/EtBorderProgressBar.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
 import 'package:qcharge_flutter/presentation/widgets/show_snack_bar.dart';
-import 'package:qcharge_flutter/presentation/widgets/text_field_map_address.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
-import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 
 class MapScreen extends StatefulWidget {
@@ -375,7 +371,7 @@ class _MapScreenState extends State<MapScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
                                   child: Txt(
-                                    txt: 'Type 1 AC',
+                                    txt: 'Type 1 (AC)',
                                     txtColor: Colors.white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -431,7 +427,7 @@ class _MapScreenState extends State<MapScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
                                   child: Txt(
-                                    txt: 'Type 1 AC',
+                                    txt: 'Type 2 (DC)',
                                     txtColor: Colors.white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -733,10 +729,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   showBottomSheetUi() {
-    ValueNotifier<int> _checkboxNotifier = ValueNotifier(0);
-    List<bool> itemCheckedList = [];
-    List<String> itemCheckedIdList = [];
-
     showModalBottomSheet<void>(
         backgroundColor: Colors.black,
         context: context,

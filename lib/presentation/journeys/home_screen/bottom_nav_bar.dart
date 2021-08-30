@@ -90,16 +90,16 @@ class _BottomNavbarState extends State<BottomNavbar> {
       context: context,
       builder: (context) =>
       new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
+        title: Text('Are you sure?'),
+        content: Text('Do you want to exit an App?'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('No'),
+            child: Text('No'),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: new Text('Yes',),
+            child: Text('Yes',),
           ),
         ],
       ),

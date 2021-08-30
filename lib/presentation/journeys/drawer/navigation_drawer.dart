@@ -1,10 +1,6 @@
-import 'package:dartz/dartz_streaming.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
-import '../../blocs/theme/theme_cubit.dart';
-import '../../themes/theme_color.dart';
 
 import '../../../common/constants/languages.dart';
 import '../../../common/constants/route_constants.dart';
@@ -14,6 +10,7 @@ import '../../../common/extensions/size_extensions.dart';
 import '../../../common/extensions/string_extensions.dart';
 import '../../blocs/language/language_cubit.dart';
 import '../../blocs/login/login_cubit.dart';
+import '../../themes/theme_color.dart';
 import '../../widgets/app_dialog.dart';
 import '../../widgets/logo.dart';
 import 'navigation_expanded_list_item.dart';
@@ -27,9 +24,12 @@ class NavigationDrawer extends StatelessWidget {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+
       children: [
         Container(
-          padding: EdgeInsets.fromLTRB(Sizes.dimen_40.w, 12, 24, 16),
+          padding: EdgeInsets.fromLTRB(Sizes.dimen_40.w, 36, 24, 36),
           margin: EdgeInsets.only(top: statusBarHeight),
           color: AppColor.grey,
           width: Sizes.dimen_350.w,
@@ -75,19 +75,64 @@ class NavigationDrawer extends StatelessWidget {
             child: ListView(
               physics: BouncingScrollPhysics(),
               children: <Widget>[
+                NavigationListItem(
+                  title: 'News and Update',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+
+
+                NavigationListItem(
+                  title: 'FAQ',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    //_showDialog(context);
+                  },
+                ),
+
+                NavigationListItem(
+                  title: 'Setting',
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(RouteList.setting);
+                  },
+                ),
+
+                NavigationListItem(
+                  title: 'Logout',
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        RouteList.initial, (route) => false);
+                  },
+                ),
+
+                /*BlocListener<LoginCubit, LoginState>(
+                  listenWhen: (previous, current) => current is LogoutSuccess,
+                  listener: (context, state) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        RouteList.initial, (route) => false);
+                  },
+                  child: NavigationListItem(
+                    title: TranslationConstants.logout.t(context),
+                    onPressed: () {
+                      BlocProvider.of<LoginCubit>(context).logout();
+                    },
+                  ),
+                ),*/
+
+               /* NavigationExpandedListItem(
+                  title: TranslationConstants.language.t(context),
+                  children: Languages.languages.map((e) => e.value).toList(),
+                  onPressed: (index) => _onLanguageSelected(index, context),
+                ),*/
+
+                /*
+
 
                 NavigationListItem(
                   title: 'Map',
                   onPressed: () {
                     //Navigator.of(context).pushNamed(RouteList.favorite);
-                  },
-                ),
-
-                NavigationListItem(
-                  title: 'News and Update',
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    //Wiredash.of(context)?.show();
                   },
                 ),
 
@@ -105,44 +150,12 @@ class NavigationDrawer extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(RouteList.profile);
-                    
+
                   },
                 ),
 
-                NavigationListItem(
-                  title: 'FAQ',
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    //_showDialog(context);
-                  },
-                ),
 
-                NavigationListItem(
-                  title: 'Setting',
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(RouteList.setting);
-                  },
-                ),
-                BlocListener<LoginCubit, LoginState>(
-                  listenWhen: (previous, current) => current is LogoutSuccess,
-                  listener: (context, state) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        RouteList.initial, (route) => false);
-                  },
-                  child: NavigationListItem(
-                    title: TranslationConstants.logout.t(context),
-                    onPressed: () {
-                      BlocProvider.of<LoginCubit>(context).logout();
-                    },
-                  ),
-                ),
 
-                /*
-                NavigationExpandedListItem(
-                  title: TranslationConstants.language.t(context),
-                  children: Languages.languages.map((e) => e.value).toList(),
-                  onPressed: (index) => _onLanguageSelected(index, context),
-                ),
 
                 BlocBuilder<ThemeCubit, Themes>(builder: (context, theme) {
                   return Align(
@@ -162,37 +175,44 @@ class NavigationDrawer extends StatelessWidget {
                   );
                 }),*/
 
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: Sizes.dimen_24.w, top: Sizes.dimen_8.h,),
-                    child: Logo(
-                      height: Sizes.dimen_16.h,
-                    ),
-                  ),
-                ),
-
-
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: Sizes.dimen_20.w,
-                    top: 5,
-                    bottom: Sizes.dimen_40.h,
-                  ),
-                  child: Txt(
-                    txt: 'Q CHARGE',
-                    txtColor: Colors.white,
-                    txtSize: 16,
-                    fontWeight: FontWeight.normal,
-                    padding: 0,
-                    onTap: () {},
-                  ),
-                ),
-
               ],
             ),
           ),
         ),
+
+        Container(
+          color: Colors.black,
+          width: Sizes.dimen_350.w,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: Sizes.dimen_50.w, top: Sizes.dimen_8.h,),
+                child: Logo(
+                  height: Sizes.dimen_16.h,
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(
+                  left: Sizes.dimen_40.w,
+                  top: 5,
+                  bottom: Sizes.dimen_50.h,
+                ),
+                child: Txt(
+                  txt: 'Q CHARGE',
+                  txtColor: Colors.white,
+                  txtSize: 16,
+                  fontWeight: FontWeight.normal,
+                  padding: 0,
+                  onTap: () {},
+                ),
+              ),
+
+            ],
+          ),
+        )
       ],
     );
   }

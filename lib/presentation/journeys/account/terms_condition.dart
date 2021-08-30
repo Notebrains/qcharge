@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
+import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
-import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
@@ -21,7 +22,7 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
         child: Column(
           children: [
             Container(
-              margin: const EdgeInsets.fromLTRB(45, 100, 45, 12),
+              margin: EdgeInsets.fromLTRB(45, Sizes.dimen_24.h, 45, Sizes.dimen_16.h),
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: AppColor.grey,
@@ -65,7 +66,7 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
                     if (!isAgreed) {
                       edgeAlert(context, title: 'Tips', description: 'Please agree to our terms & conditions', gravity: Gravity.top);
                     } else {
-                      Navigator.of(context).pushNamed(RouteList.home_screen);
+                      edgeAlert(context, title: 'Tips', description:'Please slide to view next screen');
                     }
                   },
               ),

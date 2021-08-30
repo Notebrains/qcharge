@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
@@ -51,9 +52,7 @@ class _AccountSuccessState extends State<AccountSuccess> {
               child: Button(text: 'GET STARTED',
                 bgColor: isAgreed? Colors.amber : Colors.grey.shade400,
                 onPressed: () {
-                  if (!isAgreed) {
-                    edgeAlert(context, title: 'Tips', description: 'Please agree to our terms & conditions', gravity: Gravity.top);
-                  }
+                  Navigator.of(context).pushNamed(RouteList.home_screen);
                 },
               ),
             )

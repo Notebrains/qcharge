@@ -16,44 +16,51 @@ class Next extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return FadeIn(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    ContainerTxt(txt: 'Left Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 56),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        ContainerTxt(txt: 'Left Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
 
-                    ContainerTxt(txt: 'AC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
-                  ],
-                ),
+                        ContainerTxt(txt: 'AC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
+                      ],
+                    ),
+                  ),
+
+                  Image.asset('assets/images/scan_qr_for_filter_9_next.png', height: Sizes.dimen_150.h,
+                    width: Sizes.dimen_110.w,),
+
+                  Expanded(
+                    child: Column(
+                      children: [
+                        ContainerTxt(txt: 'Right Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
+
+                        ContainerTxt(txt: 'DC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-
-              Image.asset('assets/images/scan_qr_for_filter_9_next.png', height: Sizes.dimen_150.h,
-                width: Sizes.dimen_120.w,),
-
-              Expanded(
-                child: Column(
-                  children: [
-                    ContainerTxt(txt: 'Right Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
-
-                    ContainerTxt(txt: 'DC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
 
 
-          Padding(
-            padding: const EdgeInsets.all(36.0),
-            child: Button(text: 'NEXT', bgColor: Colors.white, onPressed: (){
-              onTap();
-            },),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(36.0),
+              child: Button(text: 'NEXT', bgColor: Colors.white, onPressed: (){
+                onTap();
+              },),
+            ),
+          ],
+        ),
       ),
     );
   }

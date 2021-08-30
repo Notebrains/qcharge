@@ -33,7 +33,7 @@ class Activity extends StatelessWidget{
                 itemBuilder: (context, position) {
                   return Column(
                     children: [
-                      cachedNetImgWithRadius(Strings.imgUrlMeeting, double.infinity, Sizes.dimen_60.h, 6),
+                      cachedNetImgWithRadius(Strings.imgUrlMeeting, double.infinity, Sizes.dimen_70.h, 6),
 
                       Padding(
                         padding: const EdgeInsets.only(top: 12, bottom: 24),
