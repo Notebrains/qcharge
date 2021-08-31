@@ -30,21 +30,21 @@ class Home extends StatelessWidget{
                 physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
-                  HomeCardList(title: 'Promotion', img: 'assets/images/home_screen_9.png', onTap: (){
+                  HomeCardList(title: TranslationConstants.promotion.t(context), img: 'assets/images/home_screen_9.png', onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Activity(screenTitle: 'Promotion',)),
+                      MaterialPageRoute(builder: (context) => Activity(screenTitle:  TranslationConstants.promotion.t(context),)),
                     );
                   }),
-                  HomeCardList(title: 'Activity', img: 'assets/images/home_screen_8.png', onTap: (){
+                  HomeCardList(title: TranslationConstants.activity.t(context), img: 'assets/images/home_screen_8.png', onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Activity(screenTitle: 'Activity',)),
+                      MaterialPageRoute(builder: (context) => Activity(screenTitle:  TranslationConstants.activity.t(context),)),
                     );
                     },
                   ),
 
-                  HomeCardList(title: 'Call Center', img: 'assets/images/home_screen_7.png', onTap: (){
+                  HomeCardList(title: TranslationConstants.callCenter.t(context), img: 'assets/images/home_screen_7.png', onTap: (){
 
                     },
                   ),

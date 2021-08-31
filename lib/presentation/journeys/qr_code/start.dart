@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 
 class Start extends StatelessWidget {
   final Function onTap;
@@ -34,7 +36,7 @@ class Start extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ImgTxtRow(
-                      txt: 'Charging time 00:00:00',
+                      txt: '${TranslationConstants.chargingTime.t(context)}',
                       txtColor: AppColor.app_txt_white,
                       txtSize: 12,
                       fontWeight: FontWeight.normal,
@@ -42,7 +44,7 @@ class Start extends StatelessWidget {
                       icColor: AppColor.app_txt_white,
                   ),
                   ImgTxtRow(
-                      txt: 'Unit: 0 kWh',
+                      txt: '${TranslationConstants.unit.t(context)}',
                       txtColor: AppColor.app_txt_white,
                       txtSize: 12,
                       fontWeight: FontWeight.normal,
@@ -51,7 +53,7 @@ class Start extends StatelessWidget {
                   ),
 
                   ImgTxtRow(
-                      txt: 'AC Type: 2 22km',
+                      txt: TranslationConstants.acType.t(context),
                       txtColor: AppColor.app_txt_white,
                       txtSize: 12,
                       fontWeight: FontWeight.normal,
@@ -82,7 +84,7 @@ class Start extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 36, right: 36, bottom: 70),
               child: Button(
-                text: 'START',
+                text: TranslationConstants.start.t(context),
                 bgColor: Colors.white,
                 onPressed: () {
                   onTap();

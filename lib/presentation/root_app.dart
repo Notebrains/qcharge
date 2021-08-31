@@ -96,12 +96,6 @@ class _RootAppState extends State<RootApp> {
                 ],
                 builder: (context, child) {
                   var size = MediaQuery.of(context).size;
-                  //print('----appbar Height : ${MediaQuery.of(context).padding.top + 65}');
-                  //print('----statusBarHeight : ${MediaQuery.of(context).size.height}');
-                  //print('----statusBarWidth : ${MediaQuery.of(context).size.width}');
-
-                  //ScreenUtil.init(width: , height: size.height - MediaQuery.of(context).padding.top - 65);
-
                   ScreenUtil().setWidth(size.width);
                   ScreenUtil().setHeight(size.height - MediaQuery.of(context).padding.top - 65);
 

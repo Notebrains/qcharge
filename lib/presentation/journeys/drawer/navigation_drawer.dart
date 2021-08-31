@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qcharge_flutter/common/constants/languages.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
-import '../../../common/constants/languages.dart';
 import '../../../common/constants/route_constants.dart';
 import '../../../common/constants/size_constants.dart';
 import '../../../common/constants/translation_constants.dart';
@@ -40,7 +40,7 @@ class NavigationDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 12, bottom: 5),
                 child: Txt(
-                  txt: 'HELLO',
+                  txt: TranslationConstants.hello.t(context),
                   txtColor: Colors.white,
                   txtSize: 22,
                   fontWeight: FontWeight.bold,
@@ -60,8 +60,9 @@ class NavigationDrawer extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                 ),
-                child: Txt(txt: 'UPDATE PROFILE', txtColor: Colors.black, txtSize: 12, fontWeight: FontWeight.bold,
-                    padding: 0, onTap: (){}),
+                child: Txt(txt: TranslationConstants.updateProfile.t(context), txtColor: Colors.black, txtSize: 12, fontWeight: FontWeight.bold,
+                    padding: 0, onTap: (){},
+                ),
               ),
             ],
           ),
@@ -76,15 +77,14 @@ class NavigationDrawer extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               children: <Widget>[
                 NavigationListItem(
-                  title: 'News and Update',
+                  title: TranslationConstants.newsAndUpdate.t(context),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
 
-
                 NavigationListItem(
-                  title: 'FAQ',
+                  title: TranslationConstants.faq.t(context),
                   onPressed: () {
                     Navigator.of(context).pop();
                     //_showDialog(context);
@@ -92,14 +92,20 @@ class NavigationDrawer extends StatelessWidget {
                 ),
 
                 NavigationListItem(
-                  title: 'Setting',
+                  title: TranslationConstants.setting.t(context),
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteList.setting);
                   },
                 ),
 
+                 NavigationExpandedListItem(
+                  title: TranslationConstants.language.t(context),
+                  children: Languages.languages.map((e) => e.value).toList(),
+                  onPressed: (index) => _onLanguageSelected(index, context),
+                ),
+
                 NavigationListItem(
-                  title: 'Logout',
+                  title: TranslationConstants.logout.t(context),
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         RouteList.initial, (route) => false);
@@ -118,12 +124,6 @@ class NavigationDrawer extends StatelessWidget {
                       BlocProvider.of<LoginCubit>(context).logout();
                     },
                   ),
-                ),*/
-
-               /* NavigationExpandedListItem(
-                  title: TranslationConstants.language.t(context),
-                  children: Languages.languages.map((e) => e.value).toList(),
-                  onPressed: (index) => _onLanguageSelected(index, context),
                 ),*/
 
                 /*
@@ -206,7 +206,9 @@ class NavigationDrawer extends StatelessWidget {
                   txtSize: 16,
                   fontWeight: FontWeight.normal,
                   padding: 0,
-                  onTap: () {},
+                  onTap: () {
+
+                  },
                 ),
               ),
 
@@ -231,7 +233,7 @@ class NavigationDrawer extends StatelessWidget {
         description: TranslationConstants.aboutDescription,
         buttonText: TranslationConstants.okay,
         image: Image.asset(
-          'assets/pngs/tmdb_logo.png',
+          'assets/icons/pngs/account_register_2.png',
           height: Sizes.dimen_32.h,
         ),
       ),

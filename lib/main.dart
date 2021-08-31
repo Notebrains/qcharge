@@ -12,12 +12,10 @@ import 'presentation/root_app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   unawaited(SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]));
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: AppColor.notification_bar
-  ));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: AppColor.notification_bar));
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDir.path);
-  Hive.registerAdapter(MovieTableAdapter());
+  //Hive.registerAdapter(MovieTableAdapter());
   unawaited(getIt.init());
   runApp(RootApp());
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
@@ -75,7 +77,7 @@ class _RegisterState extends State<Register> {
 
             Padding(
               padding: const EdgeInsets.only(left: 45, right: 40),
-              child: Button(text: 'REGISTER',
+              child: Button(text: TranslationConstants.register.t(context),
                 bgColor: isAgreed? Colors.amber : Colors.grey.shade400,
                 onPressed: () {
                   edgeAlert(context, title: 'Tips', description: 'Please slide to view next screen', gravity: Gravity.top);

@@ -6,6 +6,8 @@ import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import '../../../common/extensions/string_extensions.dart';
 
 class TermsAndCondition extends StatefulWidget {
   @override
@@ -13,7 +15,7 @@ class TermsAndCondition extends StatefulWidget {
 }
 
 class _TermsAndConditionState extends State<TermsAndCondition> {
-  bool isAgreed = true ;
+  bool isAgreed = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,12 +48,12 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
               child: CheckboxListTile(
                 activeColor: Colors.amber,
                 checkColor: Colors.black,
-                title: Text("I agree with terms & conditions",
+                title: Text(TranslationConstants.tAndCTxt.t(context),
                   style: TextStyle(fontSize: 13.0),),
                 value: isAgreed,
-                onChanged: (newValue) {
+                onChanged: (isChecked) {
                   setState(() {
-                    isAgreed = newValue!;
+                    isAgreed = isChecked!;
                   });
                 },
                 controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
@@ -60,13 +62,14 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
 
             Padding(
               padding: const EdgeInsets.only(left: 45, right: 40),
-              child: Button(text: 'CONTINUE',
+              child: Button(text: TranslationConstants.continueCaps.t(context),
                   bgColor: isAgreed? Colors.amber : Colors.grey.shade400,
                   onPressed: () {
                     if (!isAgreed) {
                       edgeAlert(context, title: 'Tips', description: 'Please agree to our terms & conditions', gravity: Gravity.top);
                     } else {
-                      edgeAlert(context, title: 'Tips', description:'Please slide to view next screen');
+                      //edgeAlert(context, title: 'Tips', description:'Please slide to view next screen');
+                      Navigator.of(context).pushNamed(RouteList.home_screen);
                     }
                   },
               ),

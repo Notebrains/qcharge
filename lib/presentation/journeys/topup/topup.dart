@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/topup/top_up_banking.dart';
 import 'package:qcharge_flutter/presentation/journeys/topup/usage_history.dart';
@@ -64,7 +66,7 @@ class _TopUpState extends State<TopUp> {
                         Padding(
                           padding: const EdgeInsets.only(right: 12),
                           child: Txt(
-                            txt: 'BALANCE',
+                            txt: TranslationConstants.balance.t(context),
                             txtColor: Colors.white,
                             txtSize: 12,
                             fontWeight: FontWeight.bold,
@@ -108,7 +110,9 @@ class _TopUpState extends State<TopUp> {
 
             Padding(
               padding: const EdgeInsets.only(left: 45, right: 40),
-              child: Button(text: isTopUpBtnSelected? 'USAGE HISTORY' : 'TOP UP',
+              child: Button(text: isTopUpBtnSelected?
+              TranslationConstants.usageHistory.t(context) :
+              TranslationConstants.topUpCaps.t(context),
                 bgColor: Colors.amber,
                 onPressed: () {
                   setState(() {

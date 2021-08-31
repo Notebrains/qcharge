@@ -8,12 +8,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
+import 'package:qcharge_flutter/presentation/widgets/EtBorderProgressBar.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
 import 'package:qcharge_flutter/presentation/widgets/show_snack_bar.dart';
+import 'package:qcharge_flutter/presentation/widgets/text_field_map_address.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 
@@ -27,10 +31,10 @@ class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   CameraPosition _initialLocation = CameraPosition(
       target: LatLng(
-        13.4502076,
-        144.7874584,
+        13.736717,
+        100.523186,
       ),
-      zoom: 10);
+      zoom: 8);
   late GoogleMapController mapController;
 
   late Position _currentPosition;
@@ -321,16 +325,24 @@ class _MapScreenState extends State<MapScreen> {
       drawer: NavigationDrawer(),
       body: Stack(
         children: <Widget>[
-          Image.network(Strings.imgUrlMap, fit: BoxFit.fitHeight, height: double.maxFinite,),
+          // Map View
+          GoogleMap(
+            markers: Set<Marker>.from(markers),
+            circles: Set.of((circle != null) ? [circle] : []),
+            initialCameraPosition: _initialLocation,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            mapType: MapType.normal,
+            zoomGesturesEnabled: true,
+            zoomControlsEnabled: false,
+            polylines: Set<Polyline>.of(polylines.values),
+            onMapCreated: (GoogleMapController controller) {
+              //controller.setMapStyle(Utils.mapStyles); // map theme
+              _controllerGoogleMap.complete(controller);
+              mapController = controller;
 
-          GestureDetector(
-            child: Container(
-              width: double.maxFinite,
-              height: double.maxFinite,
-              color: Color(0x7E6D4E0C),
-            ),
-            onTap: (){
-              showBottomSheetUi();
+              // Getting user loc and address after map loaded
+              _getCurrentLocation();
             },
           ),
 
@@ -371,7 +383,7 @@ class _MapScreenState extends State<MapScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
                                   child: Txt(
-                                    txt: 'Type 1 (AC)',
+                                    txt: TranslationConstants.type1Ac.t(context),
                                     txtColor: Colors.white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -427,7 +439,7 @@ class _MapScreenState extends State<MapScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
                                   child: Txt(
-                                    txt: 'Type 2 (DC)',
+                                    txt: TranslationConstants.type2Dc.t(context),
                                     txtColor: Colors.white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -475,31 +487,12 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
 
-          /*// Map View
-          GoogleMap(
-            markers: Set<Marker>.from(markers),
-            circles: Set.of((circle != null) ? [circle] : []),
-            initialCameraPosition: _initialLocation,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            mapType: MapType.normal,
-            zoomGesturesEnabled: true,
-            zoomControlsEnabled: false,
-            polylines: Set<Polyline>.of(polylines.values),
-            onMapCreated: (GoogleMapController controller) {
-              //controller.setMapStyle(Utils.mapStyles); // map theme
-              _controllerGoogleMap.complete(controller);
-              mapController = controller;
 
-              // Getting user loc and address after map loaded
-              _getCurrentLocation();
-            },
-          ),
 
           // Show the place input fields & button for
           // showing the route
 
-          SafeArea(
+          /*SafeArea(
             child: Align(
               alignment: Alignment.topCenter,
               child: Padding(
@@ -650,8 +643,7 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ),
             ),
-          ),
-*/
+          ),*/
           // Show current location button
           /*SafeArea(
             child: Align(
@@ -764,7 +756,7 @@ class _MapScreenState extends State<MapScreen> {
                           Padding(
                             padding: const EdgeInsets.only(right: 12),
                             child: Txt(
-                              txt: 'Available or unavailable',
+                              txt: TranslationConstants.availOrUnavail.t(context),
                               txtColor: Colors.white,
                               txtSize: 14,
                               fontWeight: FontWeight.bold,
@@ -776,7 +768,7 @@ class _MapScreenState extends State<MapScreen> {
                           Padding(
                             padding: const EdgeInsets.only(right: 12),
                             child: Txt(
-                              txt: 'Private & Public',
+                              txt: TranslationConstants.pvtPub.t(context),
                               txtColor: Colors.white,
                               txtSize: 14,
                               fontWeight: FontWeight.normal,
@@ -817,7 +809,7 @@ class _MapScreenState extends State<MapScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ImgTxtRow(txt: 'Location', txtColor: Colors.white, txtSize: 16, fontWeight: FontWeight.bold,
+                          ImgTxtRow(txt: TranslationConstants.loc.t(context), txtColor: Colors.white, txtSize: 16, fontWeight: FontWeight.bold,
                               icon: 'assets/icons/pngs/filter_0016_Layer-3.png', icColor: Colors.white,
                           ),
 

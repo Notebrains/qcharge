@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -52,7 +54,7 @@ class Profile extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 24),
                           child: ImgTxtRow(
-                            txt: 'Username',
+                            txt: TranslationConstants.username.t(context),
                             txtColor: AppColor.app_txt_white,
                             txtSize: 14,
                             fontWeight: FontWeight.normal,
@@ -68,7 +70,7 @@ class Profile extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 24),
                           child: ImgTxtRow(
-                            txt: 'Member',
+                            txt: TranslationConstants.member.t(context),
                             txtColor: AppColor.app_txt_white,
                             txtSize: 14,
                             fontWeight: FontWeight.normal,
@@ -84,7 +86,7 @@ class Profile extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(bottom: 12),
                 child: Txt(
-                  txt: 'Collect Point',
+                  txt: TranslationConstants.collectPoint.t(context),
                   txtColor: Colors.white,
                   txtSize: 14,
                   fontWeight: FontWeight.bold,
@@ -114,7 +116,7 @@ class Profile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Txt(
-                    txt: ' VIP',
+                    txt: TranslationConstants.vip.t(context),
                     txtColor: Colors.white,
                     txtSize: 14,
                     fontWeight: FontWeight.bold,
@@ -123,7 +125,7 @@ class Profile extends StatelessWidget {
                   ),
 
                   Txt(
-                    txt: ' VIP1',
+                    txt: TranslationConstants.vip1.t(context),
                     txtColor: Colors.white,
                     txtSize: 14,
                     fontWeight: FontWeight.bold,
@@ -137,13 +139,13 @@ class Profile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
-                  initialValue: 'Email',
+                  initialValue: TranslationConstants.email.t(context),
                   autocorrect: true,
                   keyboardType: TextInputType.emailAddress,
                   //validator: validator,
                   //onSaved: onSaved,
                   decoration: InputDecoration(
-                    hintText: 'Email',
+                    hintText: TranslationConstants.email.t(context),
                     contentPadding: EdgeInsets.only(top: 15),
                     prefixIcon: Padding(
                       padding: EdgeInsets.only(top: 8, bottom: 8, right: 24),
@@ -162,13 +164,13 @@ class Profile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
-                  initialValue: 'Phone Number',
+                  initialValue: TranslationConstants.phoneNumber.t(context),
                   autocorrect: true,
                   keyboardType: TextInputType.phone,
                   //validator: validator,
                   //onSaved: onSaved,
                   decoration: InputDecoration(
-                    hintText: 'Phone Number',
+                    hintText: TranslationConstants.phoneNumber.t(context),
                     contentPadding: EdgeInsets.only(top: 15),
                     prefixIcon: Padding(
                       padding: EdgeInsets.only(top: 11, bottom: 11, right: 28),
@@ -187,7 +189,7 @@ class Profile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
-                  initialValue: 'Car Brand',
+                  initialValue: TranslationConstants.carBrand.t(context),
                   autocorrect: true,
                   keyboardType: TextInputType.text,
                   //validator: validator,
@@ -211,13 +213,13 @@ class Profile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
-                  initialValue: 'Car Model',
+                  initialValue: TranslationConstants.carModel.t(context),
                   autocorrect: true,
                   keyboardType: TextInputType.text,
                   //validator: validator,
                   //onSaved: onSaved,
                   decoration: InputDecoration(
-                    hintText: 'Car Model',
+                    hintText: TranslationConstants.profile.t(context),
                     contentPadding: EdgeInsets.only(top: 15, left: 16),
                     prefixIcon: Padding(
                       padding: EdgeInsets.only(top: 8, bottom: 8, right: 16),
@@ -235,10 +237,12 @@ class Profile extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(bottom: 56, top: 34),
                 child: Button(
-                  text: 'LOGOUT',
+                  text: TranslationConstants.logoutCaps.t(context),
                   bgColor: Colors.amber,
                   onPressed: () {
-                    showDialog(
+                    Navigator.of(context).pushNamed(RouteList.login);
+
+                    /*showDialog(
                         context: context,
                         builder: (BuildContext context) => CupertinoAlertDialog(
                               title: new Text("LOGOUT ?"),
@@ -266,7 +270,8 @@ class Profile extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ));
+                            ),
+                    );*/
                   },
                 ),
               ),

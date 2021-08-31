@@ -1,9 +1,10 @@
 import 'package:dartz/dartz_streaming.dart';
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'dart:math' as math;
 
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/txt.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_with_width.dart';
 
 class PandaBarFabButton extends StatefulWidget {
@@ -73,7 +74,7 @@ class _PandaBarFabButtonState extends State<PandaBarFabButton> {
                 height: 20,
               ),
 
-              TxtWithWidth(txt: 'QR Code', txtColor: AppColor.app_txt_white, txtSize: 11,
+              TxtWithWidth(txt: TranslationConstants.qrCode.t(context), txtColor: AppColor.app_txt_white, txtSize: 11,
                   fontWeight: FontWeight.normal, width: double.maxFinite,)
             ],
           ),

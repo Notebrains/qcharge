@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
@@ -25,7 +27,7 @@ class Finish extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 36, top: 100),
-              child: Txt(txt: 'Thank you for using our service', txtColor: Colors.white, txtSize: 18,
+              child: Txt(txt: TranslationConstants.thanksForUsingServc.t(context), txtColor: Colors.white, txtSize: 18,
                   fontWeight: FontWeight.normal, padding: 0, onTap: (){}),
             ),
 
@@ -42,7 +44,7 @@ class Finish extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ImgTxtRow(
-                    txt: 'Date: 20/08/21',
+                    txt: '${TranslationConstants.date.t(context)} 14/12/21',
                     txtColor: AppColor.app_txt_white,
                     txtSize: 12,
                     fontWeight: FontWeight.normal,
@@ -50,7 +52,7 @@ class Finish extends StatelessWidget {
                     icColor: AppColor.app_txt_white,
                   ),
                   ImgTxtRow(
-                    txt: 'Unit: 1.56 kWh',
+                    txt: TranslationConstants.unit.t(context),
                     txtColor: AppColor.app_txt_white,
                     txtSize: 12,
                     fontWeight: FontWeight.normal,
@@ -59,7 +61,7 @@ class Finish extends StatelessWidget {
                   ),
 
                   ImgTxtRow(
-                    txt: 'Time: 00:00:40',
+                    txt: '${TranslationConstants.time.t(context)} 00:00:44',
                     txtColor: AppColor.app_txt_white,
                     txtSize: 12,
                     fontWeight: FontWeight.normal,
@@ -68,7 +70,7 @@ class Finish extends StatelessWidget {
                   ),
 
                   ImgTxtRow(
-                    txt: 'Unit (kWh): 1.56 kWh',
+                    txt: TranslationConstants.unit.t(context),
                     txtColor: AppColor.app_txt_white,
                     txtSize: 12,
                     fontWeight: FontWeight.normal,
@@ -77,7 +79,7 @@ class Finish extends StatelessWidget {
                   ),
 
                   ImgTxtRow(
-                    txt: 'Price (Baht): 0.00',
+                    txt: TranslationConstants.price.t(context),
                     txtColor: AppColor.app_txt_white,
                     txtSize: 12,
                     fontWeight: FontWeight.normal,
@@ -91,7 +93,7 @@ class Finish extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(36, Sizes.dimen_30.h, 36, 20),
               child: Button(
-                text: 'FINISH',
+                text: TranslationConstants.finish.t(context),
                 bgColor: Colors.white,
                 onPressed: () {
                   onTap();

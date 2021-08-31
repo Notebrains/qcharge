@@ -5,6 +5,9 @@ import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_txt_txt_row.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 
 class TopUpHistory extends StatefulWidget {
   @override
@@ -25,7 +28,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 12, bottom: 25),
-                child: Txt(txt: 'USAGE HISTORY', txtColor: Colors.white, txtSize: 14,
+                child: Txt(txt: TranslationConstants.usageHistory.t(context), txtColor: Colors.white, txtSize: 14,
                   fontWeight: FontWeight.bold, padding: 0, onTap: (){},
                 ),
               ),
@@ -69,7 +72,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
                             color: isTopUpTabSelected? Colors.grey.shade700 : AppColor.grey,
                           ),
                           margin: const EdgeInsets.only(bottom: 25),
-                          child: Txt(txt: 'TOP UP History', txtColor: Colors.white, txtSize: 16,
+                          child: Txt(txt: TranslationConstants.topUpHistory.t(context), txtColor: Colors.white, txtSize: 16,
                             fontWeight: FontWeight.bold, padding: 0, onTap: (){
                               setState(() {
                                 isTopUpTabSelected = true;
@@ -88,7 +91,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
                             color: isTopUpTabSelected? AppColor.grey : Colors.grey.shade700,
                           ),
                           margin: const EdgeInsets.only(bottom: 25),
-                          child: Txt(txt: 'Charging History', txtColor: Colors.white, txtSize: 16,
+                          child: Txt(txt: TranslationConstants.chargingHistory.t(context), txtColor: Colors.white, txtSize: 16,
                             fontWeight: FontWeight.bold, padding: 0, onTap: (){
                               setState(() {
                                 isTopUpTabSelected = false;
@@ -102,7 +105,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
 
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: TxtTxtTxtRow(text1: '  Date:', text2: '    Time:', text3: 'Amount:', size: 14, fontWeight: FontWeight.bold,),
+                    child: TxtTxtTxtRow(text1: '  ${TranslationConstants.date.t(context)}', text2: '    ${TranslationConstants.time.t(context)}', text3: TranslationConstants.amount.t(context), size: 14, fontWeight: FontWeight.bold,),
                   ),
 
 

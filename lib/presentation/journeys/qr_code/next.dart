@@ -6,6 +6,8 @@ import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/container_txt.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 
 
 class Next extends StatelessWidget{
@@ -29,9 +31,9 @@ class Next extends StatelessWidget{
                   Expanded(
                     child: Column(
                       children: [
-                        ContainerTxt(txt: 'Left Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
+                        ContainerTxt(txt: TranslationConstants.leftSocket.t(context), txtColor: AppColor.app_txt_white, txtSize: 12),
 
-                        ContainerTxt(txt: 'AC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
+                        ContainerTxt(txt: TranslationConstants.acType.t(context), txtColor: AppColor.app_txt_white, txtSize: 12),
                       ],
                     ),
                   ),
@@ -42,9 +44,9 @@ class Next extends StatelessWidget{
                   Expanded(
                     child: Column(
                       children: [
-                        ContainerTxt(txt: 'Right Socket', txtColor: AppColor.app_txt_white, txtSize: 12),
+                        ContainerTxt(txt: TranslationConstants.rightSocket.t(context), txtColor: AppColor.app_txt_white, txtSize: 12),
 
-                        ContainerTxt(txt: 'DC Type: 2 , 22km', txtColor: AppColor.app_txt_white, txtSize: 12),
+                        ContainerTxt(txt: TranslationConstants.dcType.t(context), txtColor: AppColor.app_txt_white, txtSize: 12),
                       ],
                     ),
                   ),
@@ -55,7 +57,7 @@ class Next extends StatelessWidget{
 
             Padding(
               padding: const EdgeInsets.all(36.0),
-              child: Button(text: 'NEXT', bgColor: Colors.white, onPressed: (){
+              child: Button(text: TranslationConstants.next.t(context), bgColor: Colors.white, onPressed: (){
                 onTap();
               },),
             ),
