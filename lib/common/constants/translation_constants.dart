@@ -94,4 +94,13 @@ class TranslationConstants {
   static const String cancel = "cancel";
   static const String logoutCaps = 'logoutCaps';
   static const String logoutDialogContent = 'logoutDialogContent';
+  static const String faqCaps = 'faqCaps';
+  static const String faqFullForm = 'faqFullForm';
+  static const String welcomeToCaps = 'welcomeToCaps';
+  static const String rememberMe = 'rememberMe';
+  static const String loginCaps = 'loginCaps';
+  static const String signup = 'signup';
+  static const String forgotPass = 'forgotPass';
+  static const String forgotPassSuggestionTxt = 'forgotPassSuggestionTxt';
+  static const String sendCaps = 'sendCaps';
 }

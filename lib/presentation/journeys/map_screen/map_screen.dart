@@ -473,6 +473,7 @@ class _MapScreenState extends State<MapScreen> {
                 Padding(
                   padding: const EdgeInsets.only( right: 12),
                   child: FloatingActionButton(
+                    heroTag: '1',
                     onPressed: () {
                       //Navigator.of(context).pushNamed(RouteList.add_review);
                     },
@@ -693,6 +694,7 @@ class _MapScreenState extends State<MapScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 28),
               child: FloatingActionButton(
+                heroTag: '2',
                 onPressed: () {
                   showBottomSheetUi();
                 },
@@ -705,6 +707,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
 
             FloatingActionButton(
+              heroTag: '3',
               onPressed: () {
                 //Navigator.of(context).pushNamed(RouteList.add_review);
               },

@@ -27,7 +27,7 @@ class ImgTxtRow extends StatelessWidget {
           icon,
           width: 18,
           height: 18,
-          //color: icColor,
+          color: icColor,
         ),
 
         Padding(

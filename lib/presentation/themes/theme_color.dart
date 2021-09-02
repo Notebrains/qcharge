@@ -18,6 +18,7 @@ class AppColor {
   static const Color app_ic = Color(0xFFC9B659);
   static const Color border = Color(0xFFC9B659);
   static const Color app_txt_white = Color(0xFFEFEFEF);
+  static const Color app_txt_amber_light = Color(0xFFFCE26A);
 
 
   static const Color grey = Color(0xFF212121);

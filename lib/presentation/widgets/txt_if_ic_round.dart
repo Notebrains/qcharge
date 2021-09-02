@@ -14,7 +14,7 @@ class IfIconRound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.fromLTRB(40.0, 0, 40.0, 12),
+        margin: EdgeInsets.fromLTRB(34.0, 0, 34.0, 12),
         child: TextField(
           enabled: true,
           autocorrect: true,

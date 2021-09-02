@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
@@ -17,7 +16,6 @@ class AccountStepper extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      //drawer: NavigationDrawer(),
       body: Column(
         children: [
           Padding(

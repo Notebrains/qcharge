@@ -33,7 +33,7 @@ class _VerifyState extends State<Verify> {
             IfIconRound(hint: TranslationConstants.mobNo.t(context), icon: Icons.phone_android_rounded),
 
             Padding(
-              padding: const EdgeInsets.only(left: 45, right: 40, top: 25),
+              padding: const EdgeInsets.only(left: 34, right: 34, top: 25),
               child: Button(text: TranslationConstants.reqOtp.t(context),
                 bgColor: Colors.amber,
                 onPressed: () {

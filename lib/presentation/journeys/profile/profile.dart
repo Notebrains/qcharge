@@ -240,7 +240,7 @@ class Profile extends StatelessWidget {
                   text: TranslationConstants.logoutCaps.t(context),
                   bgColor: Colors.amber,
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RouteList.login);
+                    Navigator.of(context).pushNamed(RouteList.initial);
 
                     /*showDialog(
                         context: context,

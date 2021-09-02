@@ -17,6 +17,7 @@ class Review extends StatelessWidget {
       appBar: appBarIcBackCart(context, 'Reviews'),
       body: buildUi(),
       floatingActionButton: FloatingActionButton(
+        heroTag: '7',
         onPressed: () {
           Navigator.of(context).pushNamed(RouteList.add_review);
         },

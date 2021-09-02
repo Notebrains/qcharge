@@ -86,8 +86,8 @@ class NavigationDrawer extends StatelessWidget {
                 NavigationListItem(
                   title: TranslationConstants.faq.t(context),
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    //_showDialog(context);
+                    //Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(RouteList.faq);
                   },
                 ),
 
