@@ -4,11 +4,15 @@ import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 class IfIconRound extends StatelessWidget {
   final String hint;
   final IconData icon;
+  final TextEditingController? controller;
+  final TextInputType textInputType;
 
   const IfIconRound({
     Key? key,
     required this.hint,
     required this.icon,
+    required this.controller,
+    required this.textInputType,
   }) : super(key: key);
 
   @override
@@ -18,6 +22,8 @@ class IfIconRound extends StatelessWidget {
         child: TextField(
           enabled: true,
           autocorrect: true,
+          controller: controller,
+          keyboardType: textInputType,
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: Container(

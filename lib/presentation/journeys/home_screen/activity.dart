@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
-import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
+import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
+import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
 import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
-import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 
 
 class Activity extends StatelessWidget{
   final String screenTitle;
+  final HomeCardApiResModel model;
 
-  const Activity({Key? key, required this.screenTitle}) : super(key: key);
+  const Activity({Key? key, required this.screenTitle, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +32,23 @@ class Activity extends StatelessWidget{
 
             Expanded(
               child: ListView.builder(
+                itemCount: model.response!.length,
                 itemBuilder: (context, position) {
                   return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      cachedNetImgWithRadius(Strings.imgUrlMeeting, double.infinity, Sizes.dimen_70.h, 6),
+                      cachedNetImgWithRadius(model.response![position].image!, double.infinity, Sizes.dimen_70.h, 6),
 
                       Padding(
                         padding: const EdgeInsets.only(top: 12, bottom: 24),
-                        child: Txt(txt: Strings.txt_lorem_ipsum_big, txtColor: Colors.white, txtSize: 13, fontWeight: FontWeight.normal,
-                            padding: 0, onTap: (){}),
+                        child: Text(
+                          parseHtmlString(model.response![position].body!),
+                          style: TextStyle(fontSize: 13, color: AppColor.app_txt_white),
+                          maxLines: 4,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   );

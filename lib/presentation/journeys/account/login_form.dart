@@ -13,9 +13,8 @@ import '../../../common/constants/translation_constants.dart';
 import '../../../common/extensions/size_extensions.dart';
 import '../../../common/extensions/string_extensions.dart';
 import '../../blocs/login/login_cubit.dart';
-import '../../themes/theme_text.dart';
 import '../../widgets/button.dart';
-import 'label_field_widget.dart';
+
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -25,25 +24,25 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  late TextEditingController? _userNameController, _passwordController;
+  late TextEditingController? _mobileController, _passwordController;
   bool enableSignIn = false;
-  bool isAgreed = true;
+  bool isRememberMeChecked = true;
 
   @override
   void initState() {
     super.initState();
-    _userNameController = TextEditingController();
+    _mobileController = TextEditingController();
     _passwordController = TextEditingController();
 
-    _userNameController?.addListener(() {
+    _mobileController?.addListener(() {
       setState(() {
-        enableSignIn = (_userNameController?.text.isNotEmpty ?? false) &&
+        enableSignIn = (_mobileController?.text.isNotEmpty ?? false) &&
             (_passwordController?.text.isNotEmpty ?? false);
       });
     });
     _passwordController?.addListener(() {
       setState(() {
-        enableSignIn = (_userNameController?.text.isNotEmpty ?? false) &&
+        enableSignIn = (_mobileController?.text.isNotEmpty ?? false) &&
             (_passwordController?.text.isNotEmpty ?? false);
       });
     });
@@ -51,7 +50,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void dispose() {
-    _userNameController?.dispose();
+    _mobileController?.dispose();
     _passwordController?.dispose();
     super.dispose();
   }
@@ -83,21 +82,27 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
 
-            IfIconRound(hint: TranslationConstants.mobNo.t(context), icon: Icons.phone_android_rounded),
+            IfIconRound(hint: TranslationConstants.mobNo.t(context), icon: Icons.phone_android_sharp,
+            controller: _mobileController,
+              textInputType: TextInputType.phone,
+            ),
 
-            IfIconRound(hint: TranslationConstants.pass.t(context), icon: Icons.lock_rounded),
+            IfIconRound(hint: TranslationConstants.pass.t(context), icon: Icons.lock_rounded,
+            controller: _passwordController,
+              textInputType: TextInputType.visiblePassword,
+            ),
 
             Padding(
-              padding: const EdgeInsets.only(left: 25,),
+              padding: const EdgeInsets.only(left: 16,),
               child: CheckboxListTile(
                 activeColor: Colors.amber,
                 checkColor: Colors.black,
                 title: Text(TranslationConstants.rememberMe.t(context),
                   style: TextStyle(fontSize: 13.0),),
-                value: isAgreed,
+                value: isRememberMeChecked,
                 onChanged: (isChecked) {
                   setState(() {
-                    isAgreed = isChecked!;
+                    isRememberMeChecked = isChecked!;
                   });
                 },
                 controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
@@ -107,10 +112,23 @@ class _LoginFormState extends State<LoginForm> {
             Padding(
               padding: const EdgeInsets.only(left: 36, right: 36, top: 12),
               child: Button(text: TranslationConstants.loginCaps.t(context),
-                bgColor: Colors.amber,
+                bgColor: enableSignIn ? [Color(0xFFEFE07D), Color(0xFFB49839)]: [Color(0xFFA09D98), Color(0xFFB4B4B4)],
                 onPressed: () {
                   //edgeAlert(context, title: 'Tips', description: 'Please slide to view next screen', gravity: Gravity.top);
-                  Navigator.of(context).pushNamed(RouteList.home_screen);
+                  //Navigator.of(context).pushNamed(RouteList.home_screen);
+
+                  if (_mobileController!.text.isEmpty) {
+                    edgeAlert(context, title: 'Warning', description: 'Please enter mobile number', gravity: Gravity.top);
+                  } else if(_passwordController!.text.isEmpty){
+                    edgeAlert(context, title: 'Warning', description: 'Please enter password', gravity: Gravity.top);
+                  } else {
+                    if (enableSignIn) {
+                      BlocProvider.of<LoginCubit>(context).initiateLogin(
+                        _mobileController?.text ?? '',
+                        _passwordController?.text ?? '',
+                      );
+                    }
+                  }
                 },
               ),
             ),
@@ -176,7 +194,7 @@ class _LoginFormState extends State<LoginForm> {
               ],
             ),
 
-            /*BlocConsumer<LoginCubit, LoginState>(
+            BlocConsumer<LoginCubit, LoginState>(
               buildWhen: (previous, current) => current is LoginError,
               builder: (context, state) {
                 if (state is LoginError)
@@ -188,12 +206,13 @@ class _LoginFormState extends State<LoginForm> {
               },
               listenWhen: (previous, current) => current is LoginSuccess,
               listener: (context, state) {
-
+                Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
               },
-            ),*/
+            ),
           ],
         ),
       ),
     );
   }
+
 }

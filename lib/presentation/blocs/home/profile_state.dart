@@ -1,0 +1,29 @@
+part of 'profile_cubit.dart';
+
+
+abstract class ProfileState extends Equatable {
+  const ProfileState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ProfileInitial extends ProfileState {}
+
+class ProfileSuccess extends ProfileState {
+  final ProfileApiResModel model;
+
+  ProfileSuccess(this.model);
+
+  @override
+  List<Object> get props => [model];
+}
+
+class ProfileError extends ProfileState {
+  final String message;
+
+  ProfileError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

@@ -15,6 +15,7 @@ class TranslationConstants {
   static const String register = 'register';
   static const String success = 'success';
   static const String continueCaps = 'continueCaps';
+  static const String continueNotCaps = 'continueNotCaps';
   static const String createAc = 'createAc';
   static const String mobNo = 'mobNo';
   static const String reqOtp = 'reqOtp';

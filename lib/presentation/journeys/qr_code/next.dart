@@ -57,7 +57,7 @@ class Next extends StatelessWidget{
 
             Padding(
               padding: const EdgeInsets.all(36.0),
-              child: Button(text: TranslationConstants.next.t(context), bgColor: Colors.white, onPressed: (){
+              child: Button(text: TranslationConstants.next.t(context), bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)], onPressed: (){
                 onTap();
               },),
             ),

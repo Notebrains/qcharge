@@ -24,11 +24,11 @@ class LoginCubit extends Cubit<LoginState> {
     required this.loadingCubit,
   }) : super(LoginInitial());
 
-  void initiateLogin(String username, String password) async {
+  void initiateLogin(String mobile, String password) async {
     loadingCubit.show();
     final Either<AppError, bool> eitherResponse = await loginUser(
       LoginRequestParams(
-        userName: username,
+        mobile: mobile,
         password: password,
       ),
     );

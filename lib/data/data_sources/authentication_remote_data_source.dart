@@ -1,46 +1,80 @@
+import 'package:qcharge_flutter/data/core/api_constants.dart';
+import 'package:qcharge_flutter/data/models/car_brand_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/car_brand_model.dart';
+import 'package:qcharge_flutter/data/models/forgot_pass_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/login_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
+
 import '../core/api_client.dart';
-import '../models/request_token_model.dart';
+
 
 abstract class AuthenticationRemoteDataSource {
-  Future<RequestTokenModel> getRequestToken();
-  Future<RequestTokenModel> validateWithLogin(Map<String, dynamic> requestBody);
-  Future<String?> createSession(Map<String, dynamic> requestBody);
+  Future<LoginApiResModel> doLogin(Map<String, dynamic> requestBody);
+  Future<StatusMessageApiResModel> doVerifyUser(Map<String, dynamic> requestBody);
+  Future<StatusMessageApiResModel> doSendOtp(Map<String, dynamic> requestBody);
+  Future<HomeCardApiResModel> callHomeCardApi();
+  Future<RegisterApiResModel> doRegister(Map<String, dynamic> requestBody);
+  Future<List<CarBrandModelResponse>> getCarBrand();
+  Future<List<CarBrandModelResponse>> getCarModel(String id);
   Future<bool> deleteSession(String sessionId);
+  Future<ProfileApiResModel> getProfile(String userId);
+  Future<TopUpApiResModel> getTopUp(String userId);
+  Future<ForgotPassApiResModel> getForgotPass(String mobile);
 }
 
 class AuthenticationRemoteDataSourceImpl
     extends AuthenticationRemoteDataSource {
   final ApiClient _client;
 
+
   AuthenticationRemoteDataSourceImpl(this._client);
 
-  @override
-  Future<RequestTokenModel> getRequestToken() async {
-    final response = await _client.get('authentication/token/new');
-    print(response);
-    final requestTokenModel = RequestTokenModel.fromJson(response);
-    return requestTokenModel;
-  }
 
   @override
-  Future<RequestTokenModel> validateWithLogin(
-      Map<String, dynamic> requestBody) async {
+  Future<LoginApiResModel> doLogin(Map<String, dynamic> requestBody) async {
     final response = await _client.post(
-      'authentication/token/validate_with_login',
+      ApiConstants.login,
       params: requestBody,
     );
-    print(response);
-    return RequestTokenModel.fromJson(response);
+    print("Login response: $response");
+    return LoginApiResModel.fromJson(response);
   }
 
+
   @override
-  Future<String?> createSession(Map<String, dynamic> requestBody) async {
+  Future<StatusMessageApiResModel> doVerifyUser(Map<String, dynamic> requestBody) async {
     final response = await _client.post(
-      'authentication/session/new',
+      ApiConstants.verifyMobile,
       params: requestBody,
     );
-    print(response);
-    return response['success'] ? response['session_id'] : null;
+    print("Verify response: $response");
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+
+  @override
+  Future<StatusMessageApiResModel> doSendOtp(Map<String, dynamic> requestBody) async {
+    final response = await _client.post(
+      ApiConstants.sendOtp,
+      params: requestBody,
+    );
+    print("Send Otp response: $response");
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+
+  @override
+  Future<RegisterApiResModel> doRegister(Map<String, dynamic> requestBody) async {
+    final response = await _client.post(
+      ApiConstants.register,
+      params: requestBody,
+    );
+    print("Register response: $response");
+    return RegisterApiResModel.fromJson(response);
   }
 
   @override
@@ -53,4 +87,69 @@ class AuthenticationRemoteDataSourceImpl
     );
     return response['success'] ?? false;
   }
+
+  @override
+  Future<List<CarBrandModelResponse>> getCarBrand() async{
+    final response = await _client.post(ApiConstants.carBrand,);
+    print('Car brand Res: $response');
+    return CarBrandApiResModel.fromJson(response).response!;
+  }
+
+  @override
+  Future<List<CarBrandModelResponse>> getCarModel(String id) async{
+    final response = await _client.post(
+        ApiConstants.carModel,
+        params: {
+          'brand_id': id,
+        }
+    );
+    print('Car model res: $response');
+    return CarBrandApiResModel.fromJson(response).response!;
+  }
+
+  @override
+  Future<HomeCardApiResModel> callHomeCardApi() async{
+    final response = await _client.post(ApiConstants.activity,);
+    print('Home Card Api Res: $response');
+    return HomeCardApiResModel.fromJson(response);
+  }
+
+
+  @override
+  Future<ProfileApiResModel> getProfile(String userId) async{
+    final response = await _client.post(
+        ApiConstants.profile,
+        params: {
+          'user_id': userId,
+        }
+    );
+    print('Profile res: $response');
+    return ProfileApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<TopUpApiResModel> getTopUp(String userId) async{
+    final response = await _client.post(
+        ApiConstants.topUp,
+        params: {
+          'user_id': userId,
+        }
+    );
+    print('Profile res: $response');
+    return TopUpApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<ForgotPassApiResModel> getForgotPass(String mobile) async {
+    final response = await _client.post(
+        ApiConstants.forgotPassword,
+        params: {
+          'mobile': mobile,
+        }
+    );
+    print('Profile res: $response');
+    return ForgotPassApiResModel.fromJson(response);
+  }
+
+
 }

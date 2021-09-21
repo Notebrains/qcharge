@@ -15,7 +15,9 @@ class ApiClient {
     final response = await _client.get(
       getPath(path, params),
       headers: {
-        'Content-Type': 'application/json',
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        "Authorization": "ZTFKc3ZKYTN3eGZoSUk4dmRuSTU2VllHdm1HWTlWNDVDTzBPT1ZTeXF3dTkwQXpJNnpVU0htY2NaYUpN6137529503b88"
       },
     );
 
@@ -70,6 +72,8 @@ class ApiClient {
     }
 
     return Uri.parse(
-        '${ApiConstants.BASE_URL}$path?api_key=${ApiConstants.API_KEY}$paramsString');
+        //'${ApiConstants.BASE_URL}$path?api_key=${ApiConstants.API_KEY}$paramsString');
+        '${ApiConstants.BASE_URL}$path?$paramsString'
+    );
   }
 }

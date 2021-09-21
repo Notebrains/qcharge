@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:qcharge_flutter/common/constants/route_constants.dart';
-import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
-import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/button.dart';
-import 'package:qcharge_flutter/common/constants/translation_constants.dart';
-import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
-import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 
 class AccountSuccess extends StatefulWidget {
+
   @override
   _AccountSuccessState createState() => _AccountSuccessState();
 }
@@ -50,16 +44,18 @@ class _AccountSuccessState extends State<AccountSuccess> {
                 style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
               ),
             ),
-
+/*
             Padding(
               padding: const EdgeInsets.only(left: 45, right: 40),
               child: Button(text: TranslationConstants.getStarted.t(context),
-                bgColor: isAgreed? Colors.amber : Colors.grey.shade400,
+                bgColor: isAgreed? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Colors.grey.shade400],
                 onPressed: () {
-                  Navigator.of(context).pushNamed(RouteList.home_screen);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    RouteList.initial, (route) => false,
+                  );
                 },
               ),
-            )
+            )*/
           ],
         ),
       ),

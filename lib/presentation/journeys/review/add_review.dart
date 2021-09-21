@@ -81,7 +81,7 @@ class _AddReviewState extends State<AddReview> {
             Container(
               padding: const EdgeInsets.all(18.0),
               child: Button(text: 'SUBMIT',
-                  bgColor: Colors.amber, onPressed: (){
+                  bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)], onPressed: (){
 
               }),
             ),

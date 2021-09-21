@@ -37,12 +37,12 @@ class AppErrorWidget extends StatelessWidget {
               Button(
                 onPressed: onPressed,
                 text: TranslationConstants.retry,
-                bgColor: Colors.amber,
+                bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
               ),
               Button(
                 onPressed: () {},
                 text: TranslationConstants.setting,
-                bgColor: Colors.amber,
+                bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
               ),
             ],
           ),

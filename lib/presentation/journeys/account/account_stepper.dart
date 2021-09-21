@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
-import 'package:qcharge_flutter/presentation/journeys/account/register.dart';
+import 'package:qcharge_flutter/presentation/demo/stepper_demo.dart';
+import 'package:qcharge_flutter/presentation/journeys/account/register_form.dart';
+import 'package:qcharge_flutter/presentation/journeys/account/register_screen.dart';
 import 'package:qcharge_flutter/presentation/journeys/account/terms_condition.dart';
+import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/libraries/stepper.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
+import 'package:qcharge_flutter/presentation/widgets/select_drop_list.dart';
 
 import 'success.dart';
 import 'verify.dart';
 
+class AccountStepper extends StatefulWidget{
+  @override
+  _AccountStepperState createState() => _AccountStepperState();
+}
 
-class AccountStepper extends StatelessWidget{
+class _AccountStepperState extends State<AccountStepper> {
+  bool isTermConditionStepComplete = false;
+  bool isVerifyStepComplete = false;
+  bool isRegisterStepComplete = false;
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: appBarHome(context),
       body: Column(
@@ -30,11 +44,7 @@ class AccountStepper extends StatelessWidget{
                   decorationColor: AppColor.border,
                   decorationThickness: 2,
                   color: Colors.transparent,
-                  shadows: [
-                    Shadow(
-                        color: Colors.white,
-                        offset: Offset(0, -8))
-                  ],
+                  shadows: [Shadow(color: Colors.white, offset: Offset(0, -8))],
               ),
               maxLines: 1,
               softWrap: false,
@@ -48,13 +58,21 @@ class AccountStepper extends StatelessWidget{
               child: HorizontalStepper(
                 selectedColor: AppColor.border,
                 unSelectedColor: Colors.grey.shade400,
-                leftBtnColor: const Color(0xffEA7F8B),
-                rightBtnColor: const Color(0xFF4FE2C0),
+                leftBtnColor: const Color(0x4b4b4b),
+                rightBtnColor: const Color(0x4b4b4b),
                 selectedOuterCircleColor: AppColor.border,
-                type: Type.TOP,
                 circleRadius: 24,
                 onComplete: () {
-                  print("completed");
+                  print("onComplete called");
+                  if (isTermConditionStepComplete && isVerifyStepComplete && isRegisterStepComplete) {
+                    Navigator.of(context).pushNamed(RouteList.initial);
+                  } else if(!isTermConditionStepComplete){
+                    edgeAlert(context, title: 'Warning', description: 'Please complete Terms & conditions step', gravity: Gravity.top);
+                  } else if(!isVerifyStepComplete){
+                    edgeAlert(context, title: 'Warning', description: 'Please complete verify step', gravity: Gravity.top);
+                  } else if(!isRegisterStepComplete){
+                    edgeAlert(context, title: 'Warning', description: 'Please complete registration process', gravity: Gravity.top);
+                  }
                 },
                 textStyle: TextStyle(
                   fontSize: 12,
@@ -63,24 +81,42 @@ class AccountStepper extends StatelessWidget{
                 btnTextColor: AppColor.app_txt_white,
                 steps: [
                   HorizontalStep(
-                    title: TranslationConstants.continueCaps.t(context),
-                    widget: TermsAndCondition(),
+                    title: TranslationConstants.continueNotCaps.t(context),
+                    widget: TermsAndCondition(isProcessCompleted: (){
+                      print("isTermConditionStepComplete: $isTermConditionStepComplete");
+                      setState(() {
+                        isTermConditionStepComplete = true;
+                      });
+                    },),
                     state: HorizontalStepState.SELECTED,
                     isValid: true,
                   ),
+
                   HorizontalStep(
                     title: TranslationConstants.verify.t(context),
-                    widget:  Verify(),
+                    widget: Verify(isProcessCompleted: (){
+                          print("isVerifyStepComplete: $isVerifyStepComplete");
+                          setState(() {
+                            isVerifyStepComplete = true;
+                          });
+                        }
+                    ),
                     isValid: true,
                   ),
                   HorizontalStep(
                     title: TranslationConstants.register.t(context),
-                    widget: Register(),
+                    widget: RegisterScreen(isProcessCompleted: (){
+                      print("isRegisterStepComplete: $isRegisterStepComplete");
+                      setState(() {
+                        isRegisterStepComplete = true;
+                      });
+                    },
+                    ),
                     isValid: true,
                   ),
                   HorizontalStep(
                     title: TranslationConstants.success.t(context),
-                    widget:  AccountSuccess(),
+                    widget: AccountSuccess(),
                     isValid: true,
                   )
                 ],
@@ -91,5 +127,4 @@ class AccountStepper extends StatelessWidget{
       ),
     );
   }
-
 }

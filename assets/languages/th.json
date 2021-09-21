@@ -91,5 +91,15 @@
   "exitDialogContent": "คุณต้องการออกจากแอพหรือไม่?",
   "cancel": "ยกเลิก",
   "logoutCaps": "ออกจากระบบ",
-  "logoutDialogContent": "คุณแน่ใจว่าคุณต้องการที่จะออกจากระบบ?"
+  "logoutDialogContent": "คุณแน่ใจว่าคุณต้องการที่จะออกจากระบบ?",
+  "faqCaps": "คำถามที่พบบ่อย",
+  "faqFullForm": "คำถามที่พบบ่อย",
+  "welcomeToCaps": "ยินดีต้อนรับสู่",
+  "rememberMe": "จดจำฉัน",
+  "loginCaps": "เข้าสู่ระบบ",
+  "signup": "ลงชื่อ",
+  "forgotPass": "ลืมรหัสผ่าน",
+  "forgotPassSuggestionTxt": "ใส่หมายเลขโทรศัพท์มือถือที่ลงทะเบียนของคุณ\nเพื่อรับรหัสผ่านใหม่",
+  "sendCaps": "ส่ง",
+  "continueNotCaps": "ดำเนินการต่อ"
 }

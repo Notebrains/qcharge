@@ -94,7 +94,7 @@ class Finish extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(36, Sizes.dimen_30.h, 36, 20),
               child: Button(
                 text: TranslationConstants.finish.t(context),
-                bgColor: Colors.white,
+                bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                 onPressed: () {
                   onTap();
                 },

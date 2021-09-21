@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:qcharge_flutter/presentation/widgets/button.dart';
 
 const double MARGIN_NORMAL = 16;
 const double CHIP_BORDER_RADIUS = 30;
@@ -32,7 +35,6 @@ class HorizontalStepper extends StatefulWidget {
   final TextStyle textStyle;
   final Color leftBtnColor;
   final Color rightBtnColor;
-  final Type type;
   final VoidCallback onComplete;
   final Color btnTextColor;
 
@@ -43,7 +45,6 @@ class HorizontalStepper extends StatefulWidget {
     required this.unSelectedColor,
     required this.selectedOuterCircleColor,
     required this.textStyle,
-    this.type = Type.TOP,
     required this.leftBtnColor,
     required this.rightBtnColor,
     required this.btnTextColor,
@@ -58,7 +59,6 @@ class HorizontalStepper extends StatefulWidget {
         circleRadius: circleRadius,
         selectedOuterCircleColor: selectedOuterCircleColor,
         textStyle: textStyle,
-        type: type,
         leftBtnColor: leftBtnColor,
         rightBtnColor: rightBtnColor,
         onComplete: onComplete,
@@ -72,7 +72,6 @@ class _HorizontalStepperState extends State<StatefulWidget> {
   final Color unSelectedColor;
   final double circleRadius;
   final TextStyle textStyle;
-  final Type type;
   final Color leftBtnColor;
   final Color rightBtnColor;
   final VoidCallback onComplete;
@@ -89,7 +88,6 @@ class _HorizontalStepperState extends State<StatefulWidget> {
     required this.unSelectedColor,
     required this.selectedOuterCircleColor,
     required this.textStyle,
-    required this.type,
     required this.leftBtnColor,
     required this.rightBtnColor,
     required this.onComplete,
@@ -98,13 +96,14 @@ class _HorizontalStepperState extends State<StatefulWidget> {
 
   @override
   void initState() {
+    super.initState();
+
     _controller = PageController();
     _controller.addListener(() {
       if (!steps[currentStep].isValid) {
         _controller.jumpToPage(currentStep);
       }
     });
-    super.initState();
   }
 
   void changeStatus(int index) {
@@ -135,7 +134,7 @@ class _HorizontalStepperState extends State<StatefulWidget> {
     return steps.length - 1 == index;
   }
 
-  void _goToNextPage() {
+  void goToNextPage() {
     if (_isLast(currentStep)) {
       onComplete.call();
     }
@@ -158,21 +157,10 @@ class _HorizontalStepperState extends State<StatefulWidget> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Column(
-      children: type == Type.TOP ? _getTopTypeWidget(width) : _getBottomTypeWidget(width),
+      children: _getTopTypeWidget(width),
     );
   }
 
-  List<Widget> _getBottomTypeWidget(double width) {
-    return [
-      _getPageWidgets(),
-      _getIndicatorWidgets(width),
-      SizedBox(
-        height: MARGIN_SMALL,
-      ),
-      _getTitleWidgets(),
-      _getButtons()
-    ];
-  }
 
   Widget _getPageWidgets() {
     return Expanded(
@@ -222,80 +210,12 @@ class _HorizontalStepperState extends State<StatefulWidget> {
 
   Widget _getButtons() {
     return Visibility(
-      visible: false,
-      child: Container(
-        padding: const EdgeInsets.all(
-          MARGIN_NORMAL,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: GestureDetector(
-                onTap: () => _goToPreviousPage(),
-                child: Container(
-                  padding: const EdgeInsets.all(
-                    MARGIN_NORMAL,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "BACK",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: btnTextColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: leftBtnColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(
-                        CHIP_BORDER_RADIUS,
-                      ),
-                      topLeft: Radius.circular(
-                        CHIP_BORDER_RADIUS,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => steps[currentStep].isValid ? _goToNextPage() : null,
-                child: Container(
-                  padding: const EdgeInsets.all(
-                    MARGIN_NORMAL,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "NEXT",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: btnTextColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: steps[currentStep].isValid ? rightBtnColor : Colors.grey,
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(
-                        CHIP_BORDER_RADIUS,
-                      ),
-                      topRight: Radius.circular(
-                        CHIP_BORDER_RADIUS,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
+      visible: steps[currentStep].title == TranslationConstants.success.t(context),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 34, right: 34, bottom: 100),
+        child: Button(text: TranslationConstants.getStarted.t(context),
+          bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
+          onPressed: () => steps[currentStep].isValid ? goToNextPage() : null,
         ),
       ),
     );

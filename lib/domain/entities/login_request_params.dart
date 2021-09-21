@@ -1,14 +1,14 @@
 class LoginRequestParams {
-  final String userName;
+  final String mobile;
   final String password;
 
   LoginRequestParams({
-    required this.userName,
+    required this.mobile,
     required this.password,
   });
 
   Map<String, dynamic> toJson() => {
-        'username': userName,
+        'mobile': mobile,
         'password': password,
       };
 }

@@ -5,7 +5,7 @@ import '../../common/extensions/size_extensions.dart';
 
 class Button extends StatelessWidget {
   final String text;
-  final Color bgColor;
+  final List<Color> bgColor;
   final Function() onPressed;
 
   const Button({
@@ -24,10 +24,7 @@ class Button extends StatelessWidget {
         borderRadius: BorderRadius.all(
           Radius.circular(5),
         ),
-        gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft, colors: [
-          Color(0xFFEFE07D),
-          Color(0xFFB49839),
-        ]),
+        gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft, colors: bgColor),
       ),
       padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
       margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),

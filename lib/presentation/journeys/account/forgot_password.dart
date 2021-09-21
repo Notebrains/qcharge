@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_animator/widgets/sliding_entrances/slide_in_up.dart';
-import 'package:lottie/lottie.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:qcharge_flutter/di/get_it.dart';
+import 'package:qcharge_flutter/presentation/blocs/login/forgot_pass_cubit.dart';
+import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
-import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_if_ic_round.dart';
 
@@ -18,16 +20,33 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State {
-  String email = '';
+  TextEditingController _controller = TextEditingController();
+  String mobile = '';
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
+  
+  late ForgotPasswordCubit forgotPasswordCubit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    forgotPasswordCubit = getItInstance<ForgotPasswordCubit>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    forgotPasswordCubit.close();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: appBarHome(context),
-
       body: Form(
         key: _key,
         autovalidateMode: AutovalidateMode.always,
@@ -52,7 +71,10 @@ class _ForgotPasswordState extends State {
               SlideInUp(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 12),
-                  child: IfIconRound(hint: TranslationConstants.email.t(context), icon: Icons.phone_android_rounded),
+                  child: IfIconRound(hint: TranslationConstants.mobNo.t(context), icon: Icons.phone_android_sharp,
+                    controller: _controller,
+                    textInputType: TextInputType.phone,
+                  ),
                 ),
                 preferences: AnimationPreferences(autoPlay: AnimationPlayStates.Forward, duration: Duration(milliseconds: 750)),
               ),
@@ -61,13 +83,38 @@ class _ForgotPasswordState extends State {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 36, right: 36, top: 24),
                   child: Button(text: TranslationConstants.sendCaps.t(context),
-                    bgColor: Colors.amber,
+                    bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                     onPressed: () {
+                      if (_controller.text.isEmpty) {
+                        edgeAlert(context, title: 'Warning', description: 'Please enter mobile number', gravity: Gravity.top);
+                      } else {
+                        BlocProvider.of<ForgotPasswordCubit>(context).forgotPassword(
+                          _controller.text ?? '',
+                        );
+                      }
+
 
                     },
                   ),
                 ),
                 preferences: AnimationPreferences(autoPlay: AnimationPlayStates.Forward, duration: Duration(milliseconds: 800)),
+              ),
+
+
+              BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
+                buildWhen: (previous, current) => current is ForgotPasswordError,
+                builder: (context, state) {
+                  if (state is ForgotPasswordError)
+                    return Text(
+                      state.message.t(context),
+                      style: TextStyle(color: Colors.black),
+                    );
+                  return const SizedBox.shrink();
+                },
+                listenWhen: (previous, current) => current is ForgotPasswordSuccess,
+                listener: (context, state) {
+                  //Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial,(route) => false,);
+                },
               ),
             ],
           ),
@@ -81,7 +128,7 @@ class _ForgotPasswordState extends State {
     if (_key.currentState.validate()) {
       // No any error in validation
       _key.currentState.save();
-      print(" Email $email ");
+      print(" mobile $mobile ");
       fetchDataApi(context);
     } else {
       // validation error

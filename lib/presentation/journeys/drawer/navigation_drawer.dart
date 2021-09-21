@@ -98,12 +98,6 @@ class NavigationDrawer extends StatelessWidget {
                   },
                 ),
 
-                 NavigationExpandedListItem(
-                  title: TranslationConstants.language.t(context),
-                  children: Languages.languages.map((e) => e.value).toList(),
-                  onPressed: (index) => _onLanguageSelected(index, context),
-                ),
-
                 NavigationListItem(
                   title: TranslationConstants.logout.t(context),
                   onPressed: () {
@@ -127,6 +121,12 @@ class NavigationDrawer extends StatelessWidget {
                 ),*/
 
                 /*
+
+                 NavigationExpandedListItem(
+                  title: TranslationConstants.language.t(context),
+                  children: Languages.languages.map((e) => e.value).toList(),
+                  onPressed: (index) => _onLanguageSelected(index, context),
+                ),
 
 
                 NavigationListItem(

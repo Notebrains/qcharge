@@ -1,13 +1,19 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:qcharge_flutter/data/models/car_brand_model.dart';
+import 'package:qcharge_flutter/data/models/forgot_pass_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
 
 import '../../domain/entities/app_error.dart';
 import '../../domain/repositories/authentication_repository.dart';
 import '../core/unathorised_exception.dart';
 import '../data_sources/authentication_local_data_source.dart';
 import '../data_sources/authentication_remote_data_source.dart';
-import '../models/request_token_model.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
@@ -18,35 +24,17 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     this._authenticationLocalDataSource,
   );
 
-  Future<Either<AppError, RequestTokenModel>> _getRequestToken() async {
-    try {
-      final response = await _authenticationRemoteDataSource.getRequestToken();
-      return Right(response);
-    } on SocketException {
-      return Left(AppError(AppErrorType.network));
-    } on Exception {
-      return Left(AppError(AppErrorType.api));
-    }
-  }
 
   @override
   Future<Either<AppError, bool>> loginUser(Map<String, dynamic> body) async {
-    final requestTokenEitherResponse = await _getRequestToken();
-    final token1 = requestTokenEitherResponse
-        .getOrElse(() => RequestTokenModel())
-        .requestToken;
-
     try {
-      body.putIfAbsent('request_token', () => token1);
-      final validateWithLoginToken =
-          await _authenticationRemoteDataSource.validateWithLogin(body);
-      final sessionId = await _authenticationRemoteDataSource
-          .createSession(validateWithLoginToken.toJson());
-      if (sessionId != null) {
-        await _authenticationLocalDataSource.saveSessionId(sessionId);
-        return Right(true);
-      }
-      return Left(AppError(AppErrorType.sessionDenied));
+      //body.putIfAbsent('mobile', () => '9732508414');
+      //body.putIfAbsent('password', () => '12345678');
+      final login = await _authenticationRemoteDataSource.doLogin(body);
+
+      await _authenticationLocalDataSource.saveSessionId('login');
+      return Right(true);
+
     } on SocketException {
       return Left(AppError(AppErrorType.network));
     } on UnauthorisedException {
@@ -55,6 +43,50 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       return Left(AppError(AppErrorType.api));
     }
   }
+
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> verifyUser(Map<String, dynamic> body) async {
+    try {
+      final response = await _authenticationRemoteDataSource.doVerifyUser(body);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on UnauthorisedException {
+      return Left(AppError(AppErrorType.unauthorised));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> sendOtp(Map<String, dynamic> body) async {
+    try {
+      final response = await _authenticationRemoteDataSource.doSendOtp(body);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+
+  @override
+  Future<Either<AppError, RegisterApiResModel>> registerUser(Map<String, dynamic> body) async {
+    try {
+      final register = await _authenticationRemoteDataSource.doRegister(body);
+      return Right(register);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on UnauthorisedException {
+      return Left(AppError(AppErrorType.unauthorised));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
 
   @override
   Future<Either<AppError, void>> logoutUser() async {
@@ -67,5 +99,79 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     }
     print(await _authenticationLocalDataSource.getSessionId());
     return Right(Unit);
+  }
+
+
+  @override
+  Future<Either<AppError, List<CarBrandModelResponse>>> getCarBrand() async {
+    try {
+      final response = await _authenticationRemoteDataSource.getCarBrand();
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    }on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+
+  @override
+  Future<Either<AppError, List<CarBrandModelResponse>>> getCarModel(String id) async {
+    try {
+      final response = await _authenticationRemoteDataSource.getCarModel(id);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    }on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, HomeCardApiResModel>> getHomeCardData() async {
+    try {
+      final response = await _authenticationRemoteDataSource.callHomeCardApi();
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    }on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, ProfileApiResModel>> getProfile(String userId) async {
+    try {
+      final response = await _authenticationRemoteDataSource.getProfile(userId);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    }on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, TopUpApiResModel>> getTopUp(String userId) async {
+    try {
+      final response = await _authenticationRemoteDataSource.getTopUp(userId);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    }on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, ForgotPassApiResModel>> getForgotPassword(String mobile) async {
+    try {
+      final response = await _authenticationRemoteDataSource.getForgotPass(mobile);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    }on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:qcharge_flutter/presentation/libraries/flutter_toast.dart';
 
@@ -22,6 +23,14 @@ void showToast(BuildContext context, String message) {
       ),
   );
 }
+
+String parseHtmlString(String htmlString) {
+  final document = parse(htmlString);
+  final String parsedString = parse(document.body!.text).documentElement!.text;
+
+  return parsedString;
+}
+
 
 String convertStrToDoubleStr(String value) => value.isNotEmpty ? double.parse(value).toStringAsFixed(2).toString(): '0';
 

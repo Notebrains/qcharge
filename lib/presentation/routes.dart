@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/journeys/account/account_stepper.dart';
 import 'package:qcharge_flutter/presentation/journeys/account/forgot_password.dart';
 import 'package:qcharge_flutter/presentation/journeys/faqs/faqs.dart';
@@ -7,7 +8,7 @@ import 'package:qcharge_flutter/presentation/journeys/review/add_review.dart';
 import 'journeys/profile/profile.dart';
 import 'journeys/review/review.dart';
 import 'journeys/setting/setting.dart';
-import 'journeys/home_screen/bottom_nav_bar.dart';
+import 'journeys/home_screen/home_nav_bar.dart';
 
 import '../common/constants/route_constants.dart';
 import 'journeys/account/login_screen.dart';
@@ -17,13 +18,13 @@ class Routes {
         RouteList.initial: (context) => LoginScreen(),
         RouteList.registration: (context) => AccountStepper(),
         RouteList.forgotPassword: (context) => ForgotPassword(),
-        RouteList.home_screen: (context) => BottomNavbar(),
+        RouteList.home_screen: (context) => HomeNavbar(),
         RouteList.add_review: (context) => AddReview(),
         RouteList.review: (context) => Review(),
         RouteList.profile: (context) => Profile(),
         RouteList.setting: (context) => Setting(),
         RouteList.faq: (context) => Faqs(),
 
-        RouteList.activity: (context) => Activity(screenTitle: '',),
+        RouteList.activity: (context) => Activity(screenTitle: '', model: HomeCardApiResModel(),),
       };
 }

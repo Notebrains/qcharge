@@ -85,7 +85,7 @@ class Start extends StatelessWidget {
               padding: const EdgeInsets.only(left: 36, right: 36, bottom: 70),
               child: Button(
                 text: TranslationConstants.start.t(context),
-                bgColor: Colors.white,
+                bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                 onPressed: () {
                   onTap();
                 },

@@ -9,9 +9,9 @@ class IcIfRow extends StatelessWidget {
   final FontWeight fontWeight;
   final String icon;
   final Color icColor;
-  final String initialTxtValue;
   final String hint;
   final TextInputType textInputType;
+  final TextEditingController? controller;
 
   const IcIfRow({
     Key? key,
@@ -21,9 +21,9 @@ class IcIfRow extends StatelessWidget {
     required this.fontWeight,
     required this.icon,
     required this.icColor,
-    required this.initialTxtValue,
     required this.hint,
     required this.textInputType,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -43,12 +43,12 @@ class IcIfRow extends StatelessWidget {
 
         Container(
           height: 50,
-          width: Sizes.dimen_190.w,
+          width: Sizes.dimen_230.w,
           margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
           child: TextFormField(
-            initialValue: initialTxtValue,
             autocorrect: true,
             keyboardType: textInputType,
+            controller: controller,
             //validator: validator,
             //onSaved: onSaved,
             decoration: InputDecoration(
