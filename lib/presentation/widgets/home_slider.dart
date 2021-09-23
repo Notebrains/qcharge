@@ -1,16 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
+import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
 
-final List<String> imgList = [
-  'assets/images/home_screen_6.png',
-  'assets/images/activity_screen_layer_1.png',
-  'assets/images/activity_screen_layer_2.png',
-  'assets/images/profile_screen_13.png',
-  'assets/images/promotion_screen_1.png',
-];
+final List<String> imgList = [];
 
 class HomeSliderCarouselWithIndicator extends StatefulWidget {
+  final HomeBannerApiResModel model;
+
+  const HomeSliderCarouselWithIndicator({Key? key, required this.model}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _CarouselWithIndicatorState();
@@ -23,6 +24,12 @@ class _CarouselWithIndicatorState extends State<HomeSliderCarouselWithIndicator>
 
   @override
   Widget build(BuildContext context) {
+    imgList.clear();
+    for(int i =0; i<widget.model.response!.length; i++){
+      imgList.add(widget.model.response![i].image!);
+    }
+
+
     return Scaffold(
       body: Column(children: [
         Expanded(
@@ -69,9 +76,12 @@ class _CarouselWithIndicatorState extends State<HomeSliderCarouselWithIndicator>
   }
 
   final List<Widget> imageSliders = imgList
-      .map((item) => ClipRRect(
+      .map((item) => cachedNetImgWithRadius(Strings.imgUrlMeeting, double.infinity, double.infinity, 5),
+
+      /*ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
             child: Image.asset(item, fit: BoxFit.cover, width: double.infinity),
-          ))
+          ),*/
+  )
       .toList();
 }

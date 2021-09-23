@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
+import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/blocs/register/car_model_cubit.dart';
@@ -21,6 +25,7 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
+  late File? xFile = File('');
   bool isEnabled = true ;
   String carBrandId = '', carModelId = '';
   late TextEditingController? _mobileController, _passwordController, _firstNameController, _lastNameController, _emailController,
@@ -111,6 +116,16 @@ class _RegisterFormState extends State<RegisterForm> {
     BlocProvider.of<CarModelCubit>(context).loadCarModel('1');
   }
 
+  Future getImage() async {
+    final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
+
+    setState(() {
+      xFile = File(imageFile!.path);
+      print('Image Path $xFile');
+    });
+  }
+
+
   @override
   void dispose() {
     _mobileController?.dispose();
@@ -134,8 +149,44 @@ class _RegisterFormState extends State<RegisterForm> {
         physics: BouncingScrollPhysics(),
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 45),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 45,
+                    backgroundColor : Colors.grey.shade700,
+                    child: ClipOval(
+                      child: new SizedBox(
+                        width: 80.0,
+                        height: 80.0,
+                        child: Image.file(
+                          xFile!,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 60.0),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.add_photo_alternate_rounded,
+                        size: 30.0,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        getImage();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
             Container(
-              margin: const EdgeInsets.fromLTRB(8, 60, 8, 0),
+              margin: const EdgeInsets.fromLTRB(8, 16, 8, 0),
               child: IcIfRow(txt: 'Full name *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_6.png', icColor: Colors.white,
                 hint: 'Enter first name *', textInputType: TextInputType.text,

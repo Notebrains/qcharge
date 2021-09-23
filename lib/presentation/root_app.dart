@@ -9,6 +9,7 @@ import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/language/language_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/loading/loading_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/theme/theme_cubit.dart';
+import 'package:qcharge_flutter/presentation/journeys/home_screen/home_nav_bar.dart';
 
 import 'app_localizations.dart';
 import 'blocs/login/login_cubit.dart';
@@ -102,6 +103,8 @@ class _RootAppState extends State<RootApp> {
                   return LoadingScreen(
                     screen: child!,
                   );
+
+                  //return HomeNavbar();
                 },
                 initialRoute: RouteList.initial,
                 onGenerateRoute: (RouteSettings settings) {

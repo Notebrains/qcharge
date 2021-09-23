@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/languages.dart';
+import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
 import '../../../common/constants/route_constants.dart';
@@ -50,7 +51,9 @@ class NavigationDrawer extends StatelessWidget {
               ),
 
               TextButton(
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.of(context).pushNamed(RouteList.initial);
+                },
                 style: ElevatedButton.styleFrom(
                   onPrimary: Colors.black,
                   primary: AppColor.border,
@@ -79,15 +82,22 @@ class NavigationDrawer extends StatelessWidget {
                 NavigationListItem(
                   title: TranslationConstants.newsAndUpdate.t(context),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    //Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeCards(
+                        screenTitle:  TranslationConstants.newsAndUpdate.t(context),
+                        urlEndpoint: 'activity', //change here
+                      ),
+                      ),
+                    );
                   },
                 ),
 
                 NavigationListItem(
                   title: TranslationConstants.faq.t(context),
                   onPressed: () {
-                    //Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(RouteList.faq);
+                    Navigator.of(context).pushNamed(RouteList.update_profile);
                   },
                 ),
 
@@ -98,15 +108,8 @@ class NavigationDrawer extends StatelessWidget {
                   },
                 ),
 
-                NavigationListItem(
-                  title: TranslationConstants.logout.t(context),
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        RouteList.initial, (route) => false);
-                  },
-                ),
 
-                /*BlocListener<LoginCubit, LoginState>(
+                BlocListener<LoginCubit, LoginState>(
                   listenWhen: (previous, current) => current is LogoutSuccess,
                   listener: (context, state) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
@@ -118,7 +121,7 @@ class NavigationDrawer extends StatelessWidget {
                       BlocProvider.of<LoginCubit>(context).logout();
                     },
                   ),
-                ),*/
+                ),
 
                 /*
 

@@ -17,18 +17,16 @@ PreferredSizeWidget appBarHome(BuildContext context) {
     backgroundColor: AppColor.grey,
     elevation: 3,
     actions: <Widget>[
-      Image.asset(
-        'assets/icons/pngs/eng_lang.jpg',
-        fit: BoxFit.contain,
-        width: 18,
-        height: 18,
+      Icon(
+          Icons.language,
+          size: 22,
       ),
 
       ValueListenableBuilder(
         builder: (context, String lang, child) {
           return Center(
             child: Padding(
-              padding: const EdgeInsets.only(right: 12,),
+              padding: const EdgeInsets.only(right: 12, bottom: 5),
               child: PopupMenuButton<String>(
                 icon: Center(
                   child: Txt(txt: lang, txtColor: Colors.white, txtSize: 14, fontWeight: FontWeight.bold, padding: 0, onTap: () {}),
@@ -50,8 +48,7 @@ PreferredSizeWidget appBarHome(BuildContext context) {
                           height: 40,
                         ),
 
-                        title: Text(
-                          choice,
+                        title: Text(choice,
                           style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.white),
                         ),
                       ),

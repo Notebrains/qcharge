@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
 import 'package:qcharge_flutter/domain/entities/no_params.dart';
@@ -8,12 +9,12 @@ import '../entities/app_error.dart';
 import '../repositories/authentication_repository.dart';
 import 'usecase.dart';
 
-class HomeCard extends UseCase<HomeCardApiResModel, NoParams> {
+class HomeCard extends UseCase<HomeCardApiResModel, String> {
   final AuthenticationRepository _authenticationRepository;
 
   HomeCard(this._authenticationRepository);
 
   @override
-  Future<Either<AppError, HomeCardApiResModel>> call(NoParams params) async =>
-      _authenticationRepository.getHomeCardData();
+  Future<Either<AppError, HomeCardApiResModel>> call(String contentEndpoint) async =>
+      _authenticationRepository.getHomeCardData(contentEndpoint);
 }

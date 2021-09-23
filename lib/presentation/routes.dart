@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/journeys/account/account_stepper.dart';
 import 'package:qcharge_flutter/presentation/journeys/account/forgot_password.dart';
-import 'package:qcharge_flutter/presentation/journeys/faqs/faqs.dart';
-import 'package:qcharge_flutter/presentation/journeys/home_screen/activity.dart';
+import 'package:qcharge_flutter/presentation/journeys/contents/faqs.dart';
+import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
 import 'package:qcharge_flutter/presentation/journeys/review/add_review.dart';
+import 'journeys/account/update_profile.dart';
 import 'journeys/profile/profile.dart';
 import 'journeys/review/review.dart';
 import 'journeys/setting/setting.dart';
@@ -25,6 +26,7 @@ class Routes {
         RouteList.setting: (context) => Setting(),
         RouteList.faq: (context) => Faqs(),
 
-        RouteList.activity: (context) => Activity(screenTitle: '', model: HomeCardApiResModel(),),
+        RouteList.activity: (context) => HomeCards(screenTitle: '', urlEndpoint: "",),
+        RouteList.update_profile: (context) => UpdateProfile(),
       };
 }

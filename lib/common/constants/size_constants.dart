@@ -34,13 +34,16 @@ class Sizes {
   static const double dimen_110 = 110;
   static const double dimen_120 = 120;
   static const double dimen_130 = 130;
+  static const double dimen_135 = 135;
   static const double dimen_140 = 140;
   static const double dimen_150 = 150;
   static const double dimen_160 = 160;
   static const double dimen_170 = 170;
   static const double dimen_180 = 180;
+  static const double dimen_185 = 185;
   static const double dimen_190 = 190;
   static const double dimen_200 = 200;
+  static const double dimen_210 = 210;
   static const double dimen_230 = 230;
   static const double dimen_250 = 250;
   static const double dimen_280 = 280;

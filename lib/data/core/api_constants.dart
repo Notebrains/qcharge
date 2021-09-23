@@ -14,7 +14,10 @@ class ApiConstants {
   static const String carModel = "model";
   static const String activity = "activity";
   static const String profile = "profile";
+  static const String faq = "faq";
   static const String topUp = "profile"; //change here
+  static const String cmsHomeBanner = "cms";
+  static const String updateProfile = "updateprofile";
 
 
   //previous app

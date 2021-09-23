@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Activity List"
-/// response : [{"activity_id":1,"slug":"activity","title":"Activity","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/activity/slide1-1630069229.jpg","body":"<p>test description</p>","status":1}]
+/// response : [{"id":1,"slug":"activity","title":"Activity","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/activity/slide1-1630069229.jpg","body":"<p>test description</p>","status":1}]
 
 class HomeCardApiResModel {
   HomeCardApiResModel({
@@ -42,7 +42,7 @@ class HomeCardApiResModel {
 
 }
 
-/// activity_id : 1
+/// id : 1
 /// slug : "activity"
 /// title : "Activity"
 /// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/activity/slide1-1630069229.jpg"
@@ -51,13 +51,13 @@ class HomeCardApiResModel {
 
 class Response {
   Response({
-      int? activityId, 
+      int? id, 
       String? slug, 
       String? title, 
       String? image, 
       String? body, 
       int? status,}){
-    _activityId = activityId;
+    _id = id;
     _slug = slug;
     _title = title;
     _image = image;
@@ -66,21 +66,21 @@ class Response {
 }
 
   Response.fromJson(dynamic json) {
-    _activityId = json['activity_id'];
+    _id = json['id'];
     _slug = json['slug'];
     _title = json['title'];
     _image = json['image'];
     _body = json['body'];
     _status = json['status'];
   }
-  int? _activityId;
+  int? _id;
   String? _slug;
   String? _title;
   String? _image;
   String? _body;
   int? _status;
 
-  int? get activityId => _activityId;
+  int? get id => _id;
   String? get slug => _slug;
   String? get title => _title;
   String? get image => _image;
@@ -89,7 +89,7 @@ class Response {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['activity_id'] = _activityId;
+    map['id'] = _id;
     map['slug'] = _slug;
     map['title'] = _title;
     map['image'] = _image;

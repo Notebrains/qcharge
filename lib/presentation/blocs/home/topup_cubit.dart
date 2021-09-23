@@ -23,8 +23,8 @@ class TopUpCubit extends Cubit<TopUpState> {
   }) : super(TopUpInitial());
 
 
-  void initiateTopUp(String mobile) async {
-    final Either<AppError, TopUpApiResModel> eitherResponse = await topUp('2');
+  void initiateTopUp(String userId) async {
+    final Either<AppError, TopUpApiResModel> eitherResponse = await topUp(userId);
 
     emit(eitherResponse.fold((l) {
       var message = getErrorMessage(l.appErrorType);

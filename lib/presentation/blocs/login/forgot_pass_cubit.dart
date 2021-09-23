@@ -21,11 +21,12 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   void initiateForgotPassword(String mobile) async {
     final Either<AppError, ForgotPassApiResModel> eitherResponse = await forgotPassword('9564636037');
 
-    emit(eitherResponse.fold((l) {
-      var message = getErrorMessage(l.appErrorType);
-      print(message);
-      return ForgotPasswordError(message);
-    },
+    emit(eitherResponse.fold(
+          (l) {
+                var message = getErrorMessage(l.appErrorType);
+                print(message);
+                return ForgotPasswordError(message);
+              },
           (r) => ForgotPasswordSuccess(r),
     ));
   }

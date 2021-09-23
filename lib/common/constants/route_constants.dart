@@ -16,6 +16,7 @@ class RouteList {
   static const String setting = '/setting';
   static const String profile = '/profile';
   static const String faq = '/faq';
+  static const String update_profile = '/update_profile';
 
 
 }

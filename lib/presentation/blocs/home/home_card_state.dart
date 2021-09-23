@@ -1,5 +1,6 @@
 part of 'home_card_cubit.dart';
 
+
 abstract class HomeCardState extends Equatable {
   const HomeCardState();
 

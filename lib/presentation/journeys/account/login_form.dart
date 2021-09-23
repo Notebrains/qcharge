@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/ic_if_row.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
-import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_if_ic_round.dart';
 
 import '../../../common/constants/route_constants.dart';
@@ -14,6 +13,9 @@ import '../../../common/extensions/size_extensions.dart';
 import '../../../common/extensions/string_extensions.dart';
 import '../../blocs/login/login_cubit.dart';
 import '../../widgets/button.dart';
+
+//
+//
 
 
 class LoginForm extends StatefulWidget {
@@ -46,6 +48,8 @@ class _LoginFormState extends State<LoginForm> {
             (_passwordController?.text.isNotEmpty ?? false);
       });
     });
+
+    checkIfUserLogin();
   }
 
   @override
@@ -213,6 +217,14 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
     );
+  }
+
+  void checkIfUserLogin() async {
+    final sessionId = await AuthenticationLocalDataSourceImpl().getSessionId();
+    print('------ : $sessionId');
+    if (sessionId != '' && sessionId != null) {
+      Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
+    }
   }
 
 }

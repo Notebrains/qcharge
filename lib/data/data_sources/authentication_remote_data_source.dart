@@ -1,12 +1,15 @@
 import 'package:qcharge_flutter/data/core/api_constants.dart';
 import 'package:qcharge_flutter/data/models/car_brand_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/car_brand_model.dart';
+import 'package:qcharge_flutter/data/models/faq_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/forgot_pass_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/login_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/subscription_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
 
 import '../core/api_client.dart';
@@ -16,7 +19,7 @@ abstract class AuthenticationRemoteDataSource {
   Future<LoginApiResModel> doLogin(Map<String, dynamic> requestBody);
   Future<StatusMessageApiResModel> doVerifyUser(Map<String, dynamic> requestBody);
   Future<StatusMessageApiResModel> doSendOtp(Map<String, dynamic> requestBody);
-  Future<HomeCardApiResModel> callHomeCardApi();
+  Future<HomeBannerApiResModel> callHomeBannerApi();
   Future<RegisterApiResModel> doRegister(Map<String, dynamic> requestBody);
   Future<List<CarBrandModelResponse>> getCarBrand();
   Future<List<CarBrandModelResponse>> getCarModel(String id);
@@ -24,6 +27,10 @@ abstract class AuthenticationRemoteDataSource {
   Future<ProfileApiResModel> getProfile(String userId);
   Future<TopUpApiResModel> getTopUp(String userId);
   Future<ForgotPassApiResModel> getForgotPass(String mobile);
+  Future<FaqApiResModel> getFaq();
+  Future<HomeCardApiResModel> callHomeCardApi(String contentEndpoint);
+  Future<StatusMessageApiResModel> updateProfile(Map<String, dynamic> body);
+  Future<SubscriptionApiResModel> doSubscription(String userId);
 }
 
 class AuthenticationRemoteDataSourceImpl
@@ -108,10 +115,10 @@ class AuthenticationRemoteDataSourceImpl
   }
 
   @override
-  Future<HomeCardApiResModel> callHomeCardApi() async{
-    final response = await _client.post(ApiConstants.activity,);
-    print('Home Card Api Res: $response');
-    return HomeCardApiResModel.fromJson(response);
+  Future<HomeBannerApiResModel> callHomeBannerApi() async{
+    final response = await _client.post(ApiConstants.cmsHomeBanner,);
+    print('Home Banner Api Res: $response');
+    return HomeBannerApiResModel.fromJson(response);
   }
 
 
@@ -149,6 +156,40 @@ class AuthenticationRemoteDataSourceImpl
     );
     print('Profile res: $response');
     return ForgotPassApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<FaqApiResModel> getFaq() async {
+    final response = await _client.post(ApiConstants.activity,);
+    print('Faq Api Res: $response');
+    return FaqApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<HomeCardApiResModel> callHomeCardApi(String contentEndpoint) async {
+    final response = await _client.post(contentEndpoint);
+    print('Home card api res: $response');
+    return HomeCardApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> updateProfile(Map<String, dynamic> requestBody) async {
+    final response = await _client.post(
+      ApiConstants.updateProfile,
+      params: requestBody,
+    );
+    print("Update profile response: $response");
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<SubscriptionApiResModel> doSubscription(String requestBody) async {
+    final response = await _client.post(
+      ApiConstants.updateProfile, //change here
+      //params: requestBody,
+    );
+    print("Update profile response: $response");
+    return SubscriptionApiResModel.fromJson(response);
   }
 
 

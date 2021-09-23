@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
-import 'package:qcharge_flutter/presentation/blocs/home/home_card_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home.dart';
 import 'package:qcharge_flutter/presentation/journeys/map_screen/map_screen.dart';
@@ -21,32 +22,37 @@ class HomeNavbar extends StatefulWidget {
 
 class _HomeNavbarState extends State<HomeNavbar> {
   String page = 'Home';
-  late HomeCardCubit _homeCardCubit;
+  late HomeBannerCubit _homeBannerCubit;
   late ProfileCubit _profileCubit;
+  late TopUpCubit _topUpCubit;
+
 
   @override
   void initState() {
     super.initState();
+    _homeBannerCubit = getItInstance<HomeBannerCubit>();
+    _profileCubit = _homeBannerCubit.profileCubit;
+    _topUpCubit = _homeBannerCubit.topUpCubit;
 
-    _homeCardCubit = getItInstance<HomeCardCubit>();
-    _homeCardCubit.initiateHomeCard();
-    _profileCubit = _homeCardCubit.profileCubit;
+    _homeBannerCubit.initiateHomeBanner();
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    _homeCardCubit.close();
+    _homeBannerCubit.close();
     _profileCubit.close();
+    _topUpCubit.close();
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => _homeCardCubit,),
+        BlocProvider(create: (context) => _homeBannerCubit,),
         BlocProvider(create: (context) => _profileCubit,),
+        BlocProvider(create: (context) => _topUpCubit,),
       ],
       child: WillPopScope(
         onWillPop: onWillPop,

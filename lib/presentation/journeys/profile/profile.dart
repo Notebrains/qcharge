@@ -5,7 +5,7 @@ import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
-import 'package:qcharge_flutter/presentation/blocs/home/home_card_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
