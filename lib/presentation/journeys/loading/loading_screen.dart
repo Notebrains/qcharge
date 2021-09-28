@@ -22,11 +22,11 @@ class LoadingScreen extends StatelessWidget {
             if (shouldShow)
               Container(
                 decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.7),
+                    color: Colors.black,
                 ),
                 child: Center(
                   child: LoadingCircle(
-                    size: Sizes.dimen_200.w,
+                    size: Sizes.dimen_250.w,
                   ),
                 ),
               ),

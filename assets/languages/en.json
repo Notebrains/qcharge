@@ -51,7 +51,7 @@
   "date": "Date:",
   "time": "Time:",
   "amount": "Amount:",
-  "topup": "TOP UP",
+  "topUpCaps": "TOP UP",
   "selectTopUpMethod": "Select Top Up Method",
   "thaiQr": "THAI QR",
   "creditDebitCard": "CREDIT/DEBIT CARD",

@@ -53,7 +53,7 @@ class TranslationConstants {
   static const String chargingHistory = 'chargingHistory';
   static const String date = 'date';
   static const String time = 'time';
-  static const String amount = 'amount:';
+  static const String amount = 'amount';
   static const String topUpCaps = 'topUpCaps';
   static const String selectTopUpMethod = 'selectTopUpMethod';
   static const String thaiQr = 'thaiQr';

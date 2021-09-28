@@ -5,7 +5,11 @@ import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
 
-final List<String> imgList = [];
+final List<String> imgList = [
+  'assets/images/home_screen_6.png',
+  'assets/images/promotion_screen_1.png',
+  'assets/images/activity_screen_layer_1.png',
+];
 
 class HomeSliderCarouselWithIndicator extends StatefulWidget {
   final HomeBannerApiResModel model;
@@ -24,10 +28,10 @@ class _CarouselWithIndicatorState extends State<HomeSliderCarouselWithIndicator>
 
   @override
   Widget build(BuildContext context) {
-    imgList.clear();
+/*    imgList.clear();
     for(int i =0; i<widget.model.response!.length; i++){
       imgList.add(widget.model.response![i].image!);
-    }
+    }*/
 
 
     return Scaffold(
@@ -76,12 +80,12 @@ class _CarouselWithIndicatorState extends State<HomeSliderCarouselWithIndicator>
   }
 
   final List<Widget> imageSliders = imgList
-      .map((item) => cachedNetImgWithRadius(Strings.imgUrlMeeting, double.infinity, double.infinity, 5),
+      .map((item) =>
+      /*cachedNetImgWithRadius(item, double.infinity, double.infinity, 5),*/
 
-      /*ClipRRect(
+      ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
             child: Image.asset(item, fit: BoxFit.cover, width: double.infinity),
-          ),*/
-  )
-      .toList();
+          ),
+  ).toList();
 }

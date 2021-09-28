@@ -13,7 +13,9 @@ class LoadingCircle extends StatelessWidget {
       width: size,
       height: size,
       child: Lottie.asset(
-        'assets/animations/lottiefiles/charge.json',
+        'assets/animations/lottiefiles/3_line_loading.json',
+        width: size,
+        height: size,
         repeat: true,
         animate: true,
       ),

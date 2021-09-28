@@ -149,44 +149,47 @@ class _RegisterFormState extends State<RegisterForm> {
         physics: BouncingScrollPhysics(),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 45),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CircleAvatar(
-                    radius: 45,
-                    backgroundColor : Colors.grey.shade700,
-                    child: ClipOval(
-                      child: new SizedBox(
-                        width: 80.0,
-                        height: 80.0,
-                        child: Image.file(
-                          xFile!,
-                          fit: BoxFit.fill,
+            Visibility(
+              visible: false,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 45),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircleAvatar(
+                      radius: 45,
+                      backgroundColor : Colors.grey.shade700,
+                      child: ClipOval(
+                        child: new SizedBox(
+                          width: 80.0,
+                          height: 80.0,
+                          child: Image.file(
+                            xFile!,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 60.0),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.add_photo_alternate_rounded,
-                        size: 30.0,
-                        color: Colors.white,
+                    Padding(
+                      padding: EdgeInsets.only(top: 60.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.add_photo_alternate_rounded,
+                          size: 30.0,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          getImage();
+                        },
                       ),
-                      onPressed: () {
-                        getImage();
-                      },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 
             Container(
-              margin: const EdgeInsets.fromLTRB(8, 16, 8, 0),
+              margin: const EdgeInsets.fromLTRB(8, 45, 8, 0),
               child: IcIfRow(txt: 'Full name *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_6.png', icColor: Colors.white,
                 hint: 'Enter first name *', textInputType: TextInputType.text,
@@ -256,8 +259,10 @@ class _RegisterFormState extends State<RegisterForm> {
                 itemSelected: optionItemSelected,
                 onOptionSelected: (OptionItem optionItem) {
                   print('----Car brand: ${optionItem.title}');
+                  //BlocProvider.of<CarModelCubit>(context).loadCarModel(optionItem.id);
                   setState(() {
                     carBrandId = optionItem.id;
+                    optionItemSelected.title = optionItem.title;
                   });
                 },
                 dropListModel: carBrandDropDownList,
@@ -274,10 +279,9 @@ class _RegisterFormState extends State<RegisterForm> {
                   try{
                     print('----Car model: ${optionItem.title}');
 
-                    BlocProvider.of<CarModelCubit>(context).loadCarModel(optionItem.id);
-
                     setState(() {
                       carModelId = optionItem.id;
+                      optionItemSelected2.title = optionItem.title;
                     });
                   } catch (e){
                     print('---- : $e');
@@ -414,7 +418,25 @@ class _RegisterFormState extends State<RegisterForm> {
                 if (state is RegisterSuccess) {
                   if (state.model.userId != null) {
                     widget.isProcessCompleted();
+
+                    edgeAlert(
+                      context,
+                      duration: 2,
+                      icon: Icons.light_mode_rounded,
+                      title: 'Note',
+                      description: 'Registration Successful',
+                      gravity: Gravity.top,
+                    );
                   }
+
+                  edgeAlert(
+                    context,
+                    duration: 2,
+                    icon: Icons.light_mode_rounded,
+                    title: 'Note',
+                    description: 'Something went wrong. Please try again',
+                    gravity: Gravity.top,
+                  );
                 }
               },
             ),

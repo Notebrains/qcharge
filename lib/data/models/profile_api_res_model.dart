@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Profile Details."
-/// response : {"name":"Alamgir Alam","email":"alamgira@mridayaitservices.com","mobile":"9732508414","current_membership_plan":"Unavailable","vehicles":[{"vehicle_id":2,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFGH123456"},{"vehicle_id":12,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"}]}
+/// response : {"name":"Kiron Mondal","email":"alamgira@mridayaitservices.com","mobile":"9732508414","wallet":"0","collect_point":"50","image":"https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png","current_membership_plan":"Unavailable","vehicles":[{"vehicle_id":2,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFGH123456"},{"vehicle_id":12,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"}]}
 
 class ProfileApiResModel {
   ProfileApiResModel({
@@ -37,9 +37,12 @@ class ProfileApiResModel {
 
 }
 
-/// name : "Alamgir Alam"
+/// name : "Kiron Mondal"
 /// email : "alamgira@mridayaitservices.com"
 /// mobile : "9732508414"
+/// wallet : "0"
+/// collect_point : "50"
+/// image : "https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png"
 /// current_membership_plan : "Unavailable"
 /// vehicles : [{"vehicle_id":2,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFGH123456"},{"vehicle_id":12,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"}]
 
@@ -48,11 +51,17 @@ class Response {
       String? name, 
       String? email, 
       String? mobile, 
+      String? wallet, 
+      String? collectPoint, 
+      String? image, 
       String? currentMembershipPlan, 
       List<Vehicles>? vehicles,}){
     _name = name;
     _email = email;
     _mobile = mobile;
+    _wallet = wallet;
+    _collectPoint = collectPoint;
+    _image = image;
     _currentMembershipPlan = currentMembershipPlan;
     _vehicles = vehicles;
 }
@@ -61,6 +70,9 @@ class Response {
     _name = json['name'];
     _email = json['email'];
     _mobile = json['mobile'];
+    _wallet = json['wallet'];
+    _collectPoint = json['collect_point'];
+    _image = json['image'];
     _currentMembershipPlan = json['current_membership_plan'];
     if (json['vehicles'] != null) {
       _vehicles = [];
@@ -72,12 +84,18 @@ class Response {
   String? _name;
   String? _email;
   String? _mobile;
+  String? _wallet;
+  String? _collectPoint;
+  String? _image;
   String? _currentMembershipPlan;
   List<Vehicles>? _vehicles;
 
   String? get name => _name;
   String? get email => _email;
   String? get mobile => _mobile;
+  String? get wallet => _wallet;
+  String? get collectPoint => _collectPoint;
+  String? get image => _image;
   String? get currentMembershipPlan => _currentMembershipPlan;
   List<Vehicles>? get vehicles => _vehicles;
 
@@ -86,6 +104,9 @@ class Response {
     map['name'] = _name;
     map['email'] = _email;
     map['mobile'] = _mobile;
+    map['wallet'] = _wallet;
+    map['collect_point'] = _collectPoint;
+    map['image'] = _image;
     map['current_membership_plan'] = _currentMembershipPlan;
     if (_vehicles != null) {
       map['vehicles'] = _vehicles?.map((v) => v.toJson()).toList();

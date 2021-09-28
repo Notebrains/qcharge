@@ -39,7 +39,7 @@ class HomeCardDetails extends StatelessWidget {
                 padding: EdgeInsets.all(22.0),
                 child: Icon(
                   Icons.arrow_back_ios_outlined,
-                  color: AppColor.primary_color,
+                  color: Colors.white,
                   size: 22,
                 ),
               ),

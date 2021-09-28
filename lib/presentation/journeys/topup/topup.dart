@@ -26,6 +26,11 @@ class _TopUpState extends State<TopUp> {
   bool isTopUpBtnSelected = false;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
@@ -33,7 +38,7 @@ class _TopUpState extends State<TopUp> {
       body: BlocBuilder<TopUpCubit, TopUpState>(
         builder: (BuildContext context, state) {
           if (state is TopUpSuccess) {
-            print('---- : ${state.model.response!.name}');
+            //print('---- : ${state.model.response!.name}');
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
@@ -85,7 +90,7 @@ class _TopUpState extends State<TopUp> {
                               Padding(
                                 padding: const EdgeInsets.only(right: 12),
                                 child: Txt(
-                                  txt: '0',
+                                  txt: '0.00',
                                   txtColor: Colors.white,
                                   txtSize: 12,
                                   fontWeight: FontWeight.normal,
@@ -129,7 +134,7 @@ class _TopUpState extends State<TopUp> {
                     ),
                   ),
 
-                  isTopUpBtnSelected? TopUpBanking(): TopUpHistory(),
+                  isTopUpBtnSelected? TopUpBanking() : TopUpHistory(response: state.model.response!,),
                 ],
               ),
             );
@@ -141,4 +146,5 @@ class _TopUpState extends State<TopUp> {
       ),
     );
   }
+
 }

@@ -6,8 +6,10 @@ import 'package:qcharge_flutter/data/models/forgot_pass_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/login_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/map_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/station_details_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/subscription_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
@@ -25,12 +27,14 @@ abstract class AuthenticationRemoteDataSource {
   Future<List<CarBrandModelResponse>> getCarModel(String id);
   Future<bool> deleteSession(String sessionId);
   Future<ProfileApiResModel> getProfile(String userId);
-  Future<TopUpApiResModel> getTopUp(String userId);
+  Future<TopUpApiResModel> getTopUp(Map<String, dynamic> requestBody);
   Future<ForgotPassApiResModel> getForgotPass(String mobile);
   Future<FaqApiResModel> getFaq();
   Future<HomeCardApiResModel> callHomeCardApi(String contentEndpoint);
   Future<StatusMessageApiResModel> updateProfile(Map<String, dynamic> body);
   Future<SubscriptionApiResModel> doSubscription(String userId);
+  Future<MapApiResModel> getMapLoc();
+  Future<StationDetailsApiResModel> getStationDetails(String stationId);
 }
 
 class AuthenticationRemoteDataSourceImpl
@@ -135,12 +139,10 @@ class AuthenticationRemoteDataSourceImpl
   }
 
   @override
-  Future<TopUpApiResModel> getTopUp(String userId) async{
+  Future<TopUpApiResModel> getTopUp(Map<String, dynamic> requestBody) async{
     final response = await _client.post(
         ApiConstants.topUp,
-        params: {
-          'user_id': userId,
-        }
+        params: requestBody,
     );
     print('Profile res: $response');
     return TopUpApiResModel.fromJson(response);
@@ -190,6 +192,25 @@ class AuthenticationRemoteDataSourceImpl
     );
     print("Update profile response: $response");
     return SubscriptionApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<MapApiResModel> getMapLoc() async {
+    final response = await _client.post(ApiConstants.mapLoc,);
+    print('Map Loc Api Res Model: $response');
+    return MapApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StationDetailsApiResModel> getStationDetails(String stationId) async {
+    final response = await _client.post(
+        ApiConstants.mapLocDetails,
+        params: {
+          'station_id': stationId,
+        }
+    );
+    print('station details res: $response');
+    return StationDetailsApiResModel.fromJson(response);
   }
 
 

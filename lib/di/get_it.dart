@@ -6,6 +6,8 @@ import 'package:qcharge_flutter/domain/usecases/get_car_brand.dart';
 import 'package:qcharge_flutter/domain/usecases/get_car_model.dart';
 import 'package:qcharge_flutter/domain/usecases/home_banner.dart';
 import 'package:qcharge_flutter/domain/usecases/home_card_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/map_station_details_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/map_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/profile_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/register_user.dart';
 import 'package:qcharge_flutter/domain/usecases/send_otp.dart';
@@ -16,6 +18,8 @@ import 'package:qcharge_flutter/domain/usecases/verify_user.dart';
 import 'package:qcharge_flutter/presentation/blocs/contents/faq_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_card_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/map_station_details_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/subscription_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
@@ -148,6 +152,16 @@ Future init() async {
 
   getItInstance.registerLazySingleton<TopUpCubit>(() => TopUpCubit(topUp: getItInstance()));
 
+  getItInstance.registerLazySingleton<MapUsecase>(() => MapUsecase(getItInstance()));
+
+  getItInstance.registerLazySingleton<MapStationDetailsUsecase>(() => MapStationDetailsUsecase(getItInstance()));
+
+  getItInstance.registerLazySingleton<MapCubit>(() => MapCubit(mapUsecase: getItInstance()));
+
+  getItInstance.registerLazySingleton<MapStationDetailsCubit>(
+    () => MapStationDetailsCubit(mapStationDetailsUsecase: getItInstance()),
+  );
+
   getItInstance.registerFactory(
     () => HomeCardCubit(
       loadingCubit: getItInstance(),
@@ -161,6 +175,7 @@ Future init() async {
       profileCubit: getItInstance(),
       loadingCubit: getItInstance(),
       topUpCubit: getItInstance(),
+      mapCubit: getItInstance(),
     ),
   );
 
@@ -182,7 +197,6 @@ Future init() async {
     ),
   );
 
-  
   getItInstance.registerLazySingleton<Subscription>(() => Subscription(getItInstance()));
 
   getItInstance.registerFactory(

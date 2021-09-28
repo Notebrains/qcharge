@@ -5,8 +5,8 @@ import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
-import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/login/login_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -43,16 +43,19 @@ class Profile extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(top: 24, bottom: 24),
                               child: cachedNetImgWithRadius(
-                                Strings.imgUrlNotFoundYellowAvatar,
+                                state.model.response!.image!,
                                 110,
                                 110,
                                 30,
                               ),
                             ),
 
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 30,),
+                            Visibility(
+                              visible: false,
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 20),
+                                child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 30,),
+                              ),
                             ),
                           ],
                         ),
@@ -78,11 +81,11 @@ class Profile extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(left: 24),
                                 child: ImgTxtRow(
-                                  txt: TranslationConstants.member.t(context),
+                                  txt: state.model.response!.currentMembershipPlan! == 'Unavailable'? 'Non-member' : 'Member',
                                   txtColor: AppColor.app_txt_white,
                                   txtSize: 14,
                                   fontWeight: FontWeight.normal,
-                                  icon: 'assets/icons/pngs/account_Register_6.png',
+                                  icon: 'assets/icons/pngs/app_logo.png',
                                   icColor: AppColor.app_txt_white,
                                 ),
                               ),
@@ -91,6 +94,7 @@ class Profile extends StatelessWidget {
                         )
                       ],
                     ),
+
                     Padding(
                       padding: EdgeInsets.only(bottom: 12),
                       child: Txt(
@@ -110,13 +114,13 @@ class Profile extends StatelessWidget {
                       height: 25,
                       margin: EdgeInsets.only(bottom: 3),
                       child: LiquidLinearProgressIndicator(
-                        value: 0.5,
+                        value: double.parse(state.model.response!.collectPoint!)/1000,
                         backgroundColor: AppColor.grey,
                         valueColor: AlwaysStoppedAnimation(AppColor.border),
                         borderColor: Colors.grey,
                         borderWidth: 1.0,
                         borderRadius: 6.0,
-                        //center: Text("Loading..."),
+                        center: Text('50 points', style: TextStyle(color: Colors.white24),),
                       ),
                     ),
 
@@ -145,11 +149,12 @@ class Profile extends StatelessWidget {
 
 
                     Padding(
-                      padding: const EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.only(top: 22),
                       child: TextFormField(
-                        initialValue: state.model.response!.name!,
+                        initialValue: state.model.response!.email!,
                         autocorrect: true,
                         keyboardType: TextInputType.emailAddress,
+                        readOnly: true,
                         //validator: validator,
                         //onSaved: onSaved,
                         decoration: InputDecoration(
@@ -175,6 +180,7 @@ class Profile extends StatelessWidget {
                         initialValue: state.model.response!.mobile!,
                         autocorrect: true,
                         keyboardType: TextInputType.phone,
+                        readOnly: true,
                         //validator: validator,
                         //onSaved: onSaved,
                         decoration: InputDecoration(
@@ -197,13 +203,14 @@ class Profile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: TextFormField(
-                        initialValue: TranslationConstants.carBrand.t(context),
+                        initialValue: state.model.response!.vehicles![0].brand,
                         autocorrect: true,
                         keyboardType: TextInputType.text,
                         //validator: validator,
                         //onSaved: onSaved,
+                        readOnly: true,
                         decoration: InputDecoration(
-                          hintText: 'Car Brand',
+                          hintText: 'Honda',
                           contentPadding: EdgeInsets.only(top: 15),
                           prefixIcon: Padding(
                             padding: EdgeInsets.only(top: 12, bottom: 12, right: 18),
@@ -221,13 +228,14 @@ class Profile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: TextFormField(
-                        initialValue: TranslationConstants.carModel.t(context),
+                        initialValue: state.model.response!.vehicles![0].model,
                         autocorrect: true,
                         keyboardType: TextInputType.text,
+                        readOnly: true,
                         //validator: validator,
                         //onSaved: onSaved,
                         decoration: InputDecoration(
-                          hintText: TranslationConstants.profile.t(context),
+                          //hintText: TranslationConstants.profile.t(context),
                           contentPadding: EdgeInsets.only(top: 15, left: 16),
                           prefixIcon: Padding(
                             padding: EdgeInsets.only(top: 8, bottom: 8, right: 16),
@@ -242,15 +250,21 @@ class Profile extends StatelessWidget {
                       ),
                     ),
 
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 56, top: 34),
-                      child: Button(
-                        text: TranslationConstants.logoutCaps.t(context),
-                        bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
-                        onPressed: () {
-                          Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial, (route) => false);
+                    BlocListener<LoginCubit, LoginState>(
+                      listenWhen: (previous, current) => current is LogoutSuccess,
+                      listener: (context, state) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            RouteList.initial, (route) => false);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 56, top: 34),
+                        child: Button(
+                          text: TranslationConstants.logoutCaps.t(context),
+                          bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
+                          onPressed: () {
+                            BlocProvider.of<LoginCubit>(context).logout();
 
-                          /*showDialog(
+                            /*showDialog(
                         context: context,
                         builder: (BuildContext context) => CupertinoAlertDialog(
                               title: new Text("LOGOUT ?"),
@@ -280,7 +294,8 @@ class Profile extends StatelessWidget {
                               ],
                             ),
                     );*/
-                        },
+                          },
+                        ),
                       ),
                     ),
                   ],

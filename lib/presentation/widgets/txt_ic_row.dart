@@ -6,7 +6,7 @@ class ImgTxtRow extends StatelessWidget {
   final double txtSize;
   final FontWeight fontWeight;
   final String icon;
-  final Color icColor;
+  final Color? icColor;
 
   const ImgTxtRow({
     Key? key,

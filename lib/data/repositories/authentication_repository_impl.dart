@@ -6,8 +6,10 @@ import 'package:qcharge_flutter/data/models/faq_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/forgot_pass_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/map_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/station_details_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/subscription_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
@@ -148,9 +150,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<Either<AppError, TopUpApiResModel>> getTopUp(String userId) async {
+  Future<Either<AppError, TopUpApiResModel>> getTopUp(Map<String, dynamic> params) async {
     try {
-      final response = await _authenticationRemoteDataSource.getTopUp(userId);
+      final response = await _authenticationRemoteDataSource.getTopUp(params);
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));
@@ -211,6 +213,30 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<Either<AppError, SubscriptionApiResModel>> getSubscription(String userId) async {
     try {
       final response = await _authenticationRemoteDataSource.doSubscription(userId);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, MapApiResModel>> getMapLocations() async {
+    try {
+      final response = await _authenticationRemoteDataSource.getMapLoc();
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StationDetailsApiResModel>> getStationDetailsOnMap(String stationId) async {
+    try {
+      final response = await _authenticationRemoteDataSource.getStationDetails(stationId);
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));

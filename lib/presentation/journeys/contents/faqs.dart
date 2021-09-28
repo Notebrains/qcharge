@@ -4,9 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
-import 'package:qcharge_flutter/domain/usecases/faq_usecase.dart';
 import 'package:qcharge_flutter/presentation/blocs/contents/faq_cubit.dart';
-import 'package:qcharge_flutter/presentation/blocs/loading/loading_cubit.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
@@ -24,7 +22,7 @@ class _FaqsState extends State<Faqs> {
   void initState() {
     super.initState();
     faqCubit = getItInstance<FaqCubit>();
-
+    faqCubit.initiateFaq();
   }
 
   @override
@@ -129,41 +127,26 @@ class _FaqsState extends State<Faqs> {
     ),
 
     ItemModel(
-        headerItem: 'What is Flutter?',
+        headerItem: 'Why use Q Charge?',
         description:
-        "Flutter is Google’s portable UI toolkit for crafting beautiful, natively compiled applications for mobile, web, and desktop from a single codebase. Flutter works with existing code, is used by developers and organizations around the world, and is free and open source.",
+        "Q Charge is Google’s portable UI toolkit for crafting beautiful, natively compiled applications for mobile, web, and desktop from a single codebase. Flutter works with existing code, is used by developers and organizations around the world, and is free and open source.",
+        colorsItem: AppColor.app_txt_amber_light,
+        img: 'assets/icons/pngs/account_register_2.png'
+    ),
+
+
+    ItemModel(
+        headerItem: 'What makes Q Charge unique?',
+        description:
+        "Q Charge is different than most other options for building mobile apps because it doesn’t rely on web browser technology nor the set of widgets that ship with each device.",
         colorsItem: AppColor.app_txt_amber_light,
         img: 'assets/icons/pngs/account_register_2.png'
     ),
 
     ItemModel(
-        headerItem: 'Who is Flutter for?',
+        headerItem: 'Who uses Q Charge?',
         description:
-        "For developers, Flutter lowers the bar to entry for building apps. It speeds app development and reduces the cost and complexity of app production across platforms.",
-        colorsItem: AppColor.app_txt_amber_light,
-        img: 'assets/icons/pngs/account_register_2.png'
-    ),
-
-    ItemModel(
-        headerItem: 'What makes Flutter unique?',
-        description:
-        "Flutter is different than most other options for building mobile apps because it doesn’t rely on web browser technology nor the set of widgets that ship with each device.",
-        colorsItem: AppColor.app_txt_amber_light,
-        img: 'assets/icons/pngs/account_register_2.png'
-    ),
-
-    ItemModel(
-        headerItem: 'Who uses Flutter?',
-        description:
-        "Developers inside and outside of Google use Flutter to build beautiful natively-compiled apps for iOS and Android. To learn about some of these apps, visit the showcase.",
-        colorsItem: AppColor.app_txt_amber_light,
-        img: 'assets/icons/pngs/account_register_2.png'
-    ),
-
-    ItemModel(
-        headerItem: 'What kinds of apps can I build with Flutter?',
-        description:
-        "Apps that need to deliver highly branded designs are particularly well suited for Flutter. However, you can also create pixel-perfect experiences that match the Android and iOS design languages with Flutter.",
+        "Developers inside and outside of Google use Q Charge to build beautiful natively-compiled apps for iOS and Android. To learn about some of these apps, visit the showcase.",
         colorsItem: AppColor.app_txt_amber_light,
         img: 'assets/icons/pngs/account_register_2.png'
     ),

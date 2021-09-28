@@ -4,6 +4,8 @@ import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/map_station_details_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
@@ -25,14 +27,18 @@ class _HomeNavbarState extends State<HomeNavbar> {
   late HomeBannerCubit _homeBannerCubit;
   late ProfileCubit _profileCubit;
   late TopUpCubit _topUpCubit;
+  late MapCubit _mapCubit;
+  late MapStationDetailsCubit _mapStationDetailsCubit;
 
 
   @override
   void initState() {
     super.initState();
     _homeBannerCubit = getItInstance<HomeBannerCubit>();
+    _mapStationDetailsCubit = getItInstance<MapStationDetailsCubit>();
     _profileCubit = _homeBannerCubit.profileCubit;
     _topUpCubit = _homeBannerCubit.topUpCubit;
+    _mapCubit = _homeBannerCubit.mapCubit;
 
     _homeBannerCubit.initiateHomeBanner();
   }
@@ -44,6 +50,8 @@ class _HomeNavbarState extends State<HomeNavbar> {
     _homeBannerCubit.close();
     _profileCubit.close();
     _topUpCubit.close();
+    _mapCubit.close();
+    _mapStationDetailsCubit.close();
   }
 
   @override
@@ -53,6 +61,8 @@ class _HomeNavbarState extends State<HomeNavbar> {
         BlocProvider(create: (context) => _homeBannerCubit,),
         BlocProvider(create: (context) => _profileCubit,),
         BlocProvider(create: (context) => _topUpCubit,),
+        BlocProvider(create: (context) => _mapCubit,),
+        BlocProvider(create: (context) => _mapStationDetailsCubit,),
       ],
       child: WillPopScope(
         onWillPop: onWillPop,

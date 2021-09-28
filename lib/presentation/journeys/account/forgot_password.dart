@@ -115,8 +115,12 @@ class _ForgotPasswordState extends State {
                           },
                           listenWhen: (previous, current) => current is ForgotPasswordSuccess,
                           listener: (context, state) {
+                            //'Password has send to your email. Please get your new password from email and login.',
                             //Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial,(route) => false,);
-                            print('---- : ${state.props}');
+                            if (state is ForgotPasswordSuccess) {
+                              //print('---- : ${state.model.message}');
+                              edgeAlert(context, title: 'Note', description: state.model.message!, gravity: Gravity.top);
+                            } else edgeAlert(context, title: 'Warning', description: 'Could not send the password. Please enter registered mobile number.', gravity: Gravity.top);
                           },
                         ),
                       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
+import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -13,13 +14,15 @@ import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 
 class TopUpBanking extends StatefulWidget {
+
+  const TopUpBanking({Key? key}) : super(key: key);
+
   @override
   _TopUpBankingState createState() => _TopUpBankingState();
 }
 
 class _TopUpBankingState extends State<TopUpBanking> {
   bool isTopUpBankingTabSelected = false;
-
 
   @override
   Widget build(BuildContext context) {

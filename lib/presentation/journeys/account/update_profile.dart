@@ -7,11 +7,9 @@ import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/update_profile_cubit.dart';
-import 'package:qcharge_flutter/presentation/blocs/register/car_model_cubit.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/ic_if_row.dart';
-import 'package:qcharge_flutter/presentation/blocs/register/car_brand_cubit.dart';
 
 class UpdateProfile extends StatefulWidget {
 
@@ -78,8 +76,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
       });
     });
 
-    BlocProvider.of<CarBrandCubit>(context).loadCarBrand();
-    BlocProvider.of<CarModelCubit>(context).loadCarModel('1');
+    //BlocProvider.of<CarBrandCubit>(context).loadCarBrand();
+    //BlocProvider.of<CarModelCubit>(context).loadCarModel('1');
   }
 
   Future getImage() async {

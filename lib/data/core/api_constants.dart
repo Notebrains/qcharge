@@ -15,9 +15,11 @@ class ApiConstants {
   static const String activity = "activity";
   static const String profile = "profile";
   static const String faq = "faq";
-  static const String topUp = "profile"; //change here
+  static const String topUp = "topuphistory";
   static const String cmsHomeBanner = "cms";
   static const String updateProfile = "updateprofile";
+  static const String mapLoc = "evstations";
+  static const String mapLocDetails = "evstations/details";
 
 
   //previous app

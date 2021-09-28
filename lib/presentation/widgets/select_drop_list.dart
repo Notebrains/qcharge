@@ -178,8 +178,8 @@ class DropListModel {
 }
 
 class OptionItem {
-  final String id;
-  final String title;
+  String id;
+  String title;
 
   OptionItem({required this.id, required this.title});
 }

@@ -51,7 +51,7 @@
   "date": "วันที่:",
   "time": "เวลา:",
   "amount": "จำนวน:",
-  "topup": "เติม",
+  "topUpCaps": "เติม",
   "selectTopUpMethod": "เลือกวิธีการเติมเงิน",
   "thaiQr": "THAI QR",
   "creditDebitCard": "เครดิต/เดบิต การ์ด",

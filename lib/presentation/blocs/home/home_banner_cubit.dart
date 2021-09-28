@@ -11,6 +11,7 @@ import 'package:qcharge_flutter/domain/entities/verify_otp_req_params.dart';
 import 'package:qcharge_flutter/domain/usecases/home_banner.dart';
 import 'package:qcharge_flutter/domain/usecases/send_otp.dart';
 import 'package:qcharge_flutter/domain/usecases/verify_user.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
 
@@ -25,12 +26,14 @@ class HomeBannerCubit extends Cubit<HomeBannerState> {
   final ProfileCubit profileCubit;
   final TopUpCubit topUpCubit;
   final LoadingCubit loadingCubit;
+  final MapCubit mapCubit;
 
   HomeBannerCubit({
     required this.homeBanner,
     required this.profileCubit,
     required this.topUpCubit,
     required this.loadingCubit,
+    required this.mapCubit,
   }) : super(HomeBannerInitial());
 
   void initiateHomeBanner() async {
@@ -50,7 +53,8 @@ class HomeBannerCubit extends Cubit<HomeBannerState> {
       print('---- user id 1: $userId'),
       if (userId != null) {
         profileCubit.initiateProfile(userId),
-        topUpCubit.initiateTopUp(userId),
+        mapCubit.initiateMap(),
+        topUpCubit.initiateTopUp(userId, '2021-09'),
       }
     });
 

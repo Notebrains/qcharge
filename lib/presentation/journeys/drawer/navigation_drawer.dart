@@ -14,7 +14,6 @@ import '../../blocs/login/login_cubit.dart';
 import '../../themes/theme_color.dart';
 import '../../widgets/app_dialog.dart';
 import '../../widgets/logo.dart';
-import 'navigation_expanded_list_item.dart';
 import 'navigation_list_item.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -43,7 +42,7 @@ class NavigationDrawer extends StatelessWidget {
                 child: Txt(
                   txt: TranslationConstants.hello.t(context),
                   txtColor: Colors.white,
-                  txtSize: 22,
+                  txtSize: 24,
                   fontWeight: FontWeight.bold,
                   padding: 0,
                   onTap: () {},
@@ -52,7 +51,7 @@ class NavigationDrawer extends StatelessWidget {
 
               TextButton(
                 onPressed: (){
-                  Navigator.of(context).pushNamed(RouteList.initial);
+                  //Navigator.of(context).pushNamed(RouteList.update_profile);
                 },
                 style: ElevatedButton.styleFrom(
                   onPrimary: Colors.black,
@@ -63,7 +62,7 @@ class NavigationDrawer extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                 ),
-                child: Txt(txt: TranslationConstants.updateProfile.t(context), txtColor: Colors.black, txtSize: 12, fontWeight: FontWeight.bold,
+                child: Txt(txt: TranslationConstants.updateProfile.t(context), txtColor: Colors.black, txtSize: 13, fontWeight: FontWeight.bold,
                     padding: 0, onTap: (){},
                 ),
               ),
@@ -87,7 +86,7 @@ class NavigationDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) => HomeCards(
                         screenTitle:  TranslationConstants.newsAndUpdate.t(context),
-                        urlEndpoint: 'activity', //change here
+                        urlEndpoint: 'news', //change here
                       ),
                       ),
                     );
@@ -97,7 +96,7 @@ class NavigationDrawer extends StatelessWidget {
                 NavigationListItem(
                   title: TranslationConstants.faq.t(context),
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RouteList.update_profile);
+                    Navigator.of(context).pushNamed(RouteList.faq);
                   },
                 ),
 
