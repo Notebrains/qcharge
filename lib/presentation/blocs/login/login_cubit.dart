@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qcharge_flutter/data/models/login_api_res_model.dart';
 
 import '../../../common/constants/translation_constants.dart';
 import '../../../domain/entities/app_error.dart';
@@ -26,7 +27,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void initiateLogin(String mobile, String password) async {
     loadingCubit.show();
-    final Either<AppError, bool> eitherResponse = await loginUser(
+    final Either<AppError, LoginApiResModel> eitherResponse = await loginUser(
       LoginRequestParams(
         mobile: mobile,
         password: password,
@@ -39,14 +40,11 @@ class LoginCubit extends Cubit<LoginState> {
         print(message);
         return LoginError(message);
       },
-      (r) => LoginSuccess(),
+      (r) => LoginSuccess(r),
     ));
     loadingCubit.hide();
   }
 
-  void initiateGuestLogin() async {
-    emit(LoginSuccess());
-  }
 
   void logout() async {
     await logoutUser(NoParams());

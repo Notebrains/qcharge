@@ -3,6 +3,7 @@ import 'package:qcharge_flutter/data/models/faq_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/forgot_pass_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/login_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/map_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
@@ -15,7 +16,7 @@ import 'package:qcharge_flutter/domain/entities/car_brand_entity.dart';
 import '../entities/app_error.dart';
 
 abstract class AuthenticationRepository {
-  Future<Either<AppError, bool>> loginUser(Map<String, dynamic> params);
+  Future<Either<AppError, LoginApiResModel>> loginUser(Map<String, dynamic> params);
   Future<Either<AppError, void>> logoutUser();
   Future<Either<AppError, RegisterApiResModel>> registerUser(Map<String, dynamic> params);
   Future<Either<AppError, StatusMessageApiResModel>> verifyUser(Map<String, dynamic> params);

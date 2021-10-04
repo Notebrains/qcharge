@@ -201,16 +201,24 @@ class _LoginFormState extends State<LoginForm> {
             BlocConsumer<LoginCubit, LoginState>(
               buildWhen: (previous, current) => current is LoginError,
               builder: (context, state) {
-                if (state is LoginError)
+                if (state is LoginError){
+                  //edgeAlert(context, title: 'Warning!', description: 'Please check your mobile no. and password and try again', gravity: Gravity.top);
                   return Text(
                     state.message.t(context),
                     style: TextStyle(color: Colors.black),
                   );
+                }
                 return const SizedBox.shrink();
               },
               listenWhen: (previous, current) => current is LoginSuccess,
               listener: (context, state) {
-                Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
+                if (state is LoginSuccess) {
+                  if(state.model.status == 1){
+                    Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
+                  } else edgeAlert(context, title: 'Warning!', description: state.model.message! , gravity: Gravity.top);
+                }
+
+
               },
             ),
           ],

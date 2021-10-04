@@ -9,7 +9,14 @@ abstract class LoginState extends Equatable {
 
 class LoginInitial extends LoginState {}
 
-class LoginSuccess extends LoginState {}
+class LoginSuccess extends LoginState {
+  final LoginApiResModel model;
+
+  LoginSuccess(this.model);
+
+  @override
+  List<Object> get props => [model];
+}
 
 class LogoutSuccess extends LoginState {}
 

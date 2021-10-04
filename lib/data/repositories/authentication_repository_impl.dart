@@ -6,6 +6,7 @@ import 'package:qcharge_flutter/data/models/faq_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/forgot_pass_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/login_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/map_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
@@ -30,18 +31,17 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   );
 
   @override
-  Future<Either<AppError, bool>> loginUser(Map<String, dynamic> body) async {
+  Future<Either<AppError, LoginApiResModel>> loginUser(Map<String, dynamic> body) async {
     try {
       //body.putIfAbsent('mobile', () => '9732508414');
       //body.putIfAbsent('password', () => '12345678');
       final login = await _authenticationRemoteDataSource.doLogin(body);
-
-      await _authenticationLocalDataSource.saveSessionId(login.response!.userId.toString());
-      return Right(true);
+      if (login.status == 1) {
+        await _authenticationLocalDataSource.saveSessionId(login.response!.userId.toString());
+      }
+      return Right(login);
     } on SocketException {
       return Left(AppError(AppErrorType.network));
-    } on UnauthorisedException {
-      return Left(AppError(AppErrorType.unauthorised));
     } on Exception {
       return Left(AppError(AppErrorType.api));
     }

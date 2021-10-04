@@ -6,7 +6,7 @@ import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   final List<Response> locationList;
-  final Function(String value) onTap;
+  final Function(int index) onTap;
 
   CustomSearchDelegate({required this.locationList, required this.onTap,});
 
@@ -91,7 +91,9 @@ class CustomSearchDelegate extends SearchDelegate {
                       color: AppColor.grey,
                       borderRadius: BorderRadius.circular(3.0),
                     ),
-                    child: Image.asset('assets/icons/pngs/map__type_1.png'),
+                    child: suggestionList[index].type == 'Ac'?
+                    Image.asset('assets/icons/pngs/map__type_1.png') :
+                    Image.asset('assets/icons/pngs/map__type_12.png'),
                   ),
                 ),
                 Expanded(
@@ -102,24 +104,22 @@ class CustomSearchDelegate extends SearchDelegate {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 12),
-                        child: Txt(
-                          txt: '${suggestionList[index].stationName}  (Type-${suggestionList[index].type})',
-                          txtColor: Colors.white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.bold,
-                          padding: 0,
-                          onTap: () {},
+                        child: Text(
+                          '${suggestionList[index].stationName}  (Type-${suggestionList[index].type})',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color:  Colors.white),
+                          maxLines: 8,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 12, bottom: 3),
-                        child: Txt(
-                          txt: '${suggestionList[index].city}, ${suggestionList[index].state}, ${suggestionList[index].country}, ${suggestionList[index].zipcode},',
-                          txtColor: Colors.white,
-                          txtSize: 11,
-                          fontWeight: FontWeight.normal,
-                          padding: 0,
-                          onTap: () {},
+                        child: Text(
+                          '${suggestionList[index].city}, ${suggestionList[index].state}, ${suggestionList[index].country}, ${suggestionList[index].zipcode},',
+                          style: TextStyle( fontSize: 12, color: Colors.white),
+                          maxLines: 8,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
 
@@ -135,7 +135,7 @@ class CustomSearchDelegate extends SearchDelegate {
               ],
             ),
             onTap: () {
-              onTap(suggestionList[index].stationId.toString());
+              onTap(index);
               close(context, null);
             },
           ),

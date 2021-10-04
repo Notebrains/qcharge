@@ -416,7 +416,8 @@ class _RegisterFormState extends State<RegisterForm> {
                 );*/
 
                 if (state is RegisterSuccess) {
-                  if (state.model.userId != null) {
+
+                  if (state.model.status == 1 && state.model.response!.userId != null) {
                     widget.isProcessCompleted();
 
                     edgeAlert(
@@ -427,16 +428,16 @@ class _RegisterFormState extends State<RegisterForm> {
                       description: 'Registration Successful',
                       gravity: Gravity.top,
                     );
+                  } else {
+                    edgeAlert(
+                      context,
+                      duration: 2,
+                      icon: Icons.light_mode_rounded,
+                      title: 'Note',
+                      description: state.model.message!,
+                      gravity: Gravity.top,
+                    );
                   }
-
-                  edgeAlert(
-                    context,
-                    duration: 2,
-                    icon: Icons.light_mode_rounded,
-                    title: 'Note',
-                    description: 'Something went wrong. Please try again',
-                    gravity: Gravity.top,
-                  );
                 }
               },
             ),

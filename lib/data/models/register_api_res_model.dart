@@ -1,10 +1,69 @@
-/// user_id : 7
-/// name : "Imdadul Haque"
-/// email : "imdadul@gmail.com"
-/// mobile : "7980363195"
-/// access_token : "STA1cmdKZGVyOTdMRUVkUU9JZThneUtGOXVRYmd0Q0xYRWpscXZuRHZqZkNSUGg2eFBpM3R1QVFWVTE561360838c564c"
+/// status : 1
+/// message : "User Data"
+/// response : {"user_id":13,"name":"Imdadul Haque","email":"imdadsul@gmail.com","mobile":"7980363195s","access_token":"R1NCQVRMdlFRd0JXTFZESkI1bXRMWExWMGxIQjMxaFgzcWxNdHRTR2hkRzI5SHpIRjRROVFnQnpRN0xX61542cf613eb9"}
 
 class RegisterApiResModel {
+  RegisterApiResModel({
+      int? status, 
+      String? message, 
+      Response? response,}){
+    _status = status;
+    _message = message;
+    _response = response;
+}
+
+  RegisterApiResModel.fromJson(dynamic json) {
+    _status = json['status'];
+    _message = json['message'];
+    _response = json['response'] != null ? Response.fromJson(json['response']) : null;
+  }
+  int? _status;
+  String? _message;
+  Response? _response;
+
+  int? get status => _status;
+  String? get message => _message;
+  Response? get response => _response;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['status'] = _status;
+    map['message'] = _message;
+    if (_response != null) {
+      map['response'] = _response?.toJson();
+    }
+    return map;
+  }
+
+}
+
+/// user_id : 13
+/// name : "Imdadul Haque"
+/// email : "imdadsul@gmail.com"
+/// mobile : "7980363195s"
+/// access_token : "R1NCQVRMdlFRd0JXTFZESkI1bXRMWExWMGxIQjMxaFgzcWxNdHRTR2hkRzI5SHpIRjRROVFnQnpRN0xX61542cf613eb9"
+
+class Response {
+  Response({
+      int? userId, 
+      String? name, 
+      String? email, 
+      String? mobile, 
+      String? accessToken,}){
+    _userId = userId;
+    _name = name;
+    _email = email;
+    _mobile = mobile;
+    _accessToken = accessToken;
+}
+
+  Response.fromJson(dynamic json) {
+    _userId = json['user_id'];
+    _name = json['name'];
+    _email = json['email'];
+    _mobile = json['mobile'];
+    _accessToken = json['access_token'];
+  }
   int? _userId;
   String? _name;
   String? _email;
@@ -17,29 +76,8 @@ class RegisterApiResModel {
   String? get mobile => _mobile;
   String? get accessToken => _accessToken;
 
-  RegisterApiResModel({
-      int? userId, 
-      String? name, 
-      String? email, 
-      String? mobile, 
-      String? accessToken}){
-    _userId = userId;
-    _name = name;
-    _email = email;
-    _mobile = mobile;
-    _accessToken = accessToken;
-}
-
-  RegisterApiResModel.fromJson(dynamic json) {
-    _userId = json['user_id'];
-    _name = json['name'];
-    _email = json['email'];
-    _mobile = json['mobile'];
-    _accessToken = json['access_token'];
-  }
-
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
+    final map = <String, dynamic>{};
     map['user_id'] = _userId;
     map['name'] = _name;
     map['email'] = _email;
