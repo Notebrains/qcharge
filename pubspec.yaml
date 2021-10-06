@@ -36,6 +36,7 @@ dependencies:
   geocoding: ^2.0.0
   flutter_polyline_points: ^1.0.0
   #my2c2psdk: ^0.0.4
+  url_launcher: ^6.0.12
 
   flutter_localizations:
     sdk: flutter
