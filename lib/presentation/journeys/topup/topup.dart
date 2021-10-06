@@ -134,7 +134,7 @@ class _TopUpState extends State<TopUp> {
                     ),
                   ),
 
-                  isTopUpBtnSelected? TopUpBanking() : TopUpHistory(response: state.model.response!,),
+                  isTopUpBtnSelected? TopUpBanking() : TopUpHistory(response: state.model.response,),
                 ],
               ),
             );

@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/update_profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
+import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
+import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
 import 'package:qcharge_flutter/presentation/widgets/ic_if_row.dart';
 
 class UpdateProfile extends StatefulWidget {
@@ -114,39 +117,29 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 45),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          CircleAvatar(
-                            radius: 45,
-                            backgroundColor : Colors.grey.shade700,
-                            child: ClipOval(
-                              child: new SizedBox(
-                                width: 80.0,
-                                height: 80.0,
-                                child: Image.file(
-                                  xFile!,
-                                  fit: BoxFit.fill,
-                                ),
+                    InkWell(
+                      onTap: (){
+                        getImage();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 80),
+                        child: Stack(
+                          alignment: AlignmentDirectional.bottomEnd,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24, bottom: 24),
+                              child: setImage(xFile!.path),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: Icon(
+                                Icons.camera_alt_rounded,
+                                color: AppColor.app_txt_amber_light,
+                                size: 30,
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 60.0),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.add_photo_alternate_rounded,
-                                size: 30.0,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                getImage();
-                              },
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
 
@@ -204,9 +197,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       ),
                     ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(left: 45, right: 45),
-                      child: Button(text: TranslationConstants.register.t(context),
+                    Container(
+                      width: 270,
+                      padding: const EdgeInsets.only(right: 6, top: 45),
+                      child: Button(text: 'UPDATE',
                         bgColor: isEnabled? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Colors.grey.shade400, Colors.grey.shade400],
                         onPressed: () {
                           if (_mobileController!.text.isEmpty) {
@@ -264,6 +258,20 @@ class _UpdateProfileState extends State<UpdateProfile> {
               );
             }),
       ),
+    );
+  }
+
+  setImage(String path){
+    print('----path : $path');
+    if (path.isEmpty) {
+      return cachedNetImgWithRadius(
+        Strings.imgUrlNotFoundYellowAvatar,
+        110,
+        110,
+        60,
+      );
+    } else return ClipOval(
+      child: Image.file(File(xFile!.path), width: 110, height: 110,),
     );
   }
 }

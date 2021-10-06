@@ -10,14 +10,10 @@ class Strings {
       'https://media3.s-nbcnews.com/i/newscms/2016_32/1149295/laundry-stock-today-160808-tease_8816217b49c15bf3fc07bbcd6558c2db.jpg';
   static const String imgUrlOffer =
       'https://static.vecteezy.com/system/resources/thumbnails/002/151/987/small/limited-time-offer-rgb-color-icon-vector.jpg';
-  static const String imgUrlTestCategoryDetailsPng =
-      'https://lordteeshirt.com/wp-content/uploads/2020/09/Pretty-Farm-Tractor-Riding-Dirty-Classic-Womens-T-shirt.png';
-  static const String imgUrlTestSupplyProduct = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtZh8Z1-U7JuJaAze4y9LwAfdtTaxkg0qsNpBlEPNU6ljybFBbRIViTRYBgRGor2e2CE0&usqp=CAU';
-  static const String imgUrlFirebaseBulkOrder = 'https://firebasestorage.googleapis.com/v0/b/tlt-customer-b6c9a.appspot.com/o/bulk_img.jpg?alt=media&token=b8f97250-6567-4d19-8e81-993f9e63d77f';
-  static const String imgUrlNotFound = 'https://png.pngtree.com/png-vector/20190215/ourmid/pngtree-picture-icon-graphic-design-template-vector-png-image_530828.jpg';
+  static const String imgUrlCar = 'https://vehicle.img.symfio.de/1600x,q90/vehicle/H6UK4b/5fabd906174fe240eb35b036/5fabde0563e3f2.50504021.jpeg';
+ static const String imgUrlNotFound = 'https://png.pngtree.com/png-vector/20190215/ourmid/pngtree-picture-icon-graphic-design-template-vector-png-image_530828.jpg';
   static const String imgUrlNotFoundYellowAvatar = 'https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png';
   static const String imgUrlEmptyCart = 'https://i.pinimg.com/originals/2e/ac/fa/2eacfa305d7715bdcd86bb4956209038.png';
-  static const String imgUrlVoucherCode = 'https://static.thenounproject.com/png/2513410-200.png';
   static const String imgUrlNoDataFound =
       'https://lh3.googleusercontent.com/proxy/GC609xFJ-SW1vcy2535M7zpSnQFOhZ0L7VTTVJ6RoRz4SG6FiWKFpMwP4_uonkXrxJHn0vcAh01yG2YT86p_G8kU6qHcoTdvGxuyV_Q';
   static const String imgUrlMeeting = 'https://www.davincimeetingrooms.com/Content/Assets/ImageLinkWidget/dmr-home-page-image.png';

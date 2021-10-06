@@ -141,7 +141,7 @@ class _MapScreenState extends State<MapScreen> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: isViewAllAcStation? AppColor.border: Colors.transparent,
-                                    width: 1,
+                                    width: 0.4,
                                   ),
                                   borderRadius: BorderRadius.circular(3.0),
                                 ),
@@ -212,7 +212,7 @@ class _MapScreenState extends State<MapScreen> {
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: isViewAllDcStation? AppColor.border : Colors.transparent,
-                                    width: 1,
+                                    width: 0.3,
                                   ),
                                   borderRadius: BorderRadius.circular(3.0),
                                 ),
@@ -269,7 +269,7 @@ class _MapScreenState extends State<MapScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 5, left: 5),
+                        padding: const EdgeInsets.only(right: 12, left: 5),
                         child: FloatingActionButton(
                           heroTag: '17',
                           onPressed: () async {
@@ -703,9 +703,9 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void setMarkers(List<Response> response) async {
-    print('---- isViewAllAcStation, isViewAllDcStation: $isViewAllAcStation , $isViewAllDcStation');
+    //print('---- isViewAllAcStation, isViewAllDcStation: $isViewAllAcStation , $isViewAllDcStation');
     for (int i = 0; i < response.length; i++) {
-      print('---- :  ${response[i].type}');
+      //print('---- :  ${response[i].type}');
       if (isViewAllAcStation && response[i].type == 'Ac') {
         addMarkers(response, i);
       } else if (isViewAllDcStation && response[i].type == 'Dc') {
@@ -717,7 +717,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void addMarkers(List<Response> response, int i) {
-    print('---- Position: $i');
     double markerLat = double.parse(response[i].latitude!);
     double markerLong = double.parse(response[i].longitude!);
 
@@ -725,7 +724,7 @@ class _MapScreenState extends State<MapScreen> {
       //totalDistance = Geolocator.distanceBetween(_currentPosition.latitude, _currentPosition.longitude, markerLat, markerLong);
       //double totalDistance = _coordinateDistance(22.608355, 88.426884, markerLat, markerLong);
       double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);
-      print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
+      //print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
 
       markers.add(
         Marker(

@@ -78,7 +78,8 @@ class _FaqsState extends State<Faqs> {
                                         color: Colors.white,
                                         fontSize: 13,
                                         letterSpacing: 0.2,
-                                        height: 1.3),
+                                        height: 1.3,
+                                    ),
                                   ),
                                 ),
                                 headerBuilder: (BuildContext context, bool isExpanded) {
@@ -118,6 +119,7 @@ class _FaqsState extends State<Faqs> {
   }
 
   List<ItemModel> itemData = <ItemModel>[
+
     ItemModel(
         headerItem: 'What is Q Charge?',
         description:
@@ -133,7 +135,6 @@ class _FaqsState extends State<Faqs> {
         colorsItem: AppColor.app_txt_amber_light,
         img: 'assets/icons/pngs/account_register_2.png'
     ),
-
 
     ItemModel(
         headerItem: 'What makes Q Charge unique?',

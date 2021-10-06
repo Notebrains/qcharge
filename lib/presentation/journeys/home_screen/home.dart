@@ -5,7 +5,9 @@ import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/demo/poly_map.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
+import 'package:qcharge_flutter/presentation/journeys/home_screen/call_center.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
+import 'package:qcharge_flutter/presentation/journeys/subscription/subscription.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_card_list.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_slider.dart';
@@ -62,7 +64,7 @@ class Home extends StatelessWidget{
                         ),
 
                         HomeCardList(title: TranslationConstants.callCenter.t(context), img: 'assets/images/home_screen_7.png', onTap: (){
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()),);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => CallCenter()),);
                         },
                         ),
                       ],

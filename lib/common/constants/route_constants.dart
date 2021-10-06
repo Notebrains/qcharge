@@ -15,8 +15,9 @@ class RouteList {
   static const String call_center = '/call_center';
   static const String setting = '/setting';
   static const String profile = '/profile';
+  static const String cars = '/cars';
+  static const String subscription = '/subscription';
+  static const String subscription_details = '/subscription_details';
   static const String faq = '/faq';
   static const String update_profile = '/update_profile';
-
-
 }

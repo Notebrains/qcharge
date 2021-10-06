@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
@@ -8,14 +7,15 @@ import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
+import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_txt_txt_row.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
-import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 
+
 class TopUpHistory extends StatefulWidget {
-  final Response response;
+  final Response? response;
 
   const TopUpHistory({Key? key, required this.response}) : super(key: key);
 
@@ -32,8 +32,8 @@ class _TopUpHistoryState extends State<TopUpHistory> {
   void initState() {
     super.initState();
 
-    //cubit = getItInstance<TopUpCubit>();
-    //BlocProvider.of<TopUpCubit>(context).initiateTopUp('2', '2021-09');
+    // cubit = getItInstance<TopUpCubit>();
+    // BlocProvider.of<TopUpCubit>(context).initiateTopUp('2', '2021-09');
   }
 
   @override
@@ -46,7 +46,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
   @override
   Widget build(BuildContext context) {
     return SlideInUp(
-      child: Column(
+      child: widget.response != null ?  Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -138,8 +138,8 @@ class _TopUpHistoryState extends State<TopUpHistory> {
                   ),
 
                   Visibility(
-                    visible: isTopUpTabSelected? widget.response.topupHistory!.length>0? true: false
-                        : widget.response.chargingHistory!.length> 0? true: false,
+                    visible: isTopUpTabSelected? widget.response!.topupHistory!.length>0? true: false
+                        : widget.response!.chargingHistory!.length> 0? true: false,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: TxtTxtTxtRow(
@@ -155,14 +155,14 @@ class _TopUpHistoryState extends State<TopUpHistory> {
 
                   Expanded(
                     child: ListView.builder(
-                      itemCount: isTopUpTabSelected? widget.response.topupHistory!.length: widget.response.chargingHistory!.length,
+                      itemCount: isTopUpTabSelected? widget.response!.topupHistory!.length: widget.response!.chargingHistory!.length,
                       itemBuilder: (context, position) {
                         return FadeIn(
                           child: TxtTxtTxtRow(
-                            text1: widget.response.topupHistory![position].date!,
-                            text2: widget.response.topupHistory![position].time!,
-                            text3: isTopUpTabSelected? widget.response.topupHistory![position].amount! :
-                            widget.response.chargingHistory![position].price!,
+                            text1: widget.response!.topupHistory![position].date!,
+                            text2: widget.response!.topupHistory![position].time!,
+                            text3: isTopUpTabSelected? widget.response!.topupHistory![position].amount! :
+                            widget.response!.chargingHistory![position].price!,
                             size: 12,
                             fontWeight: FontWeight.normal,
                           ),
@@ -174,10 +174,9 @@ class _TopUpHistoryState extends State<TopUpHistory> {
               )
           ),
         ],
-      ),
+      ) : NoDataFound(txt: 'No Data Found', onRefresh: (){}),
     );
   }
-
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -188,7 +187,6 @@ class _TopUpHistoryState extends State<TopUpHistory> {
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
         currentDate = pickedDate;
-
       });
   }
 }

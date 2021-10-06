@@ -51,7 +51,7 @@ class NavigationDrawer extends StatelessWidget {
 
               TextButton(
                 onPressed: (){
-                  //Navigator.of(context).pushNamed(RouteList.update_profile);
+                  Navigator.of(context).pushNamed(RouteList.update_profile);
                 },
                 style: ElevatedButton.styleFrom(
                   onPrimary: Colors.black,
@@ -63,7 +63,9 @@ class NavigationDrawer extends StatelessWidget {
                   ),
                 ),
                 child: Txt(txt: TranslationConstants.updateProfile.t(context), txtColor: Colors.black, txtSize: 13, fontWeight: FontWeight.bold,
-                    padding: 0, onTap: (){},
+                    padding: 0, onTap: (){
+                    Navigator.of(context).pushNamed(RouteList.update_profile);
+                  },
                 ),
               ),
             ],

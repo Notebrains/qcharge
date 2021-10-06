@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
-import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
-import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/login/login_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
@@ -16,6 +15,8 @@ import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart'
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
+
+import 'cars.dart';
 
 class Profile extends StatelessWidget {
   @override
@@ -49,12 +50,15 @@ class Profile extends StatelessWidget {
                                 30,
                               ),
                             ),
-
                             Visibility(
                               visible: false,
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 20),
-                                child: Icon(Icons.camera_alt_rounded, color: Colors.white, size: 30,),
+                                child: Icon(
+                                  Icons.camera_alt_rounded,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
                               ),
                             ),
                           ],
@@ -78,16 +82,23 @@ class Profile extends StatelessWidget {
                                 color: Colors.white,
                                 height: 1,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 24),
-                                child: ImgTxtRow(
-                                  txt: state.model.response!.currentMembershipPlan! == 'Unavailable'? 'Non-member' : 'Member',
-                                  txtColor: AppColor.app_txt_white,
-                                  txtSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                  icon: 'assets/icons/pngs/app_logo.png',
-                                  icColor: AppColor.app_txt_white,
+                              InkWell(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 24),
+                                  child: ImgTxtRow(
+                                    txt: state.model.response!.currentMembershipPlan! == 'Unavailable'
+                                        ? 'Subscribe Now'
+                                        : 'Member',
+                                    txtColor: AppColor.app_txt_white,
+                                    txtSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                    icon: 'assets/icons/pngs/app_logo.png',
+                                    icColor: AppColor.app_txt_white,
+                                  ),
                                 ),
+                                onTap: () {
+                                  Navigator.pushNamed(context, RouteList.subscription);
+                                },
                               ),
                             ],
                           ),
@@ -114,13 +125,16 @@ class Profile extends StatelessWidget {
                       height: 25,
                       margin: EdgeInsets.only(bottom: 3),
                       child: LiquidLinearProgressIndicator(
-                        value: double.parse(state.model.response!.collectPoint!)/1000,
+                        value: double.parse(state.model.response!.collectPoint!) / 1000,
                         backgroundColor: AppColor.grey,
                         valueColor: AlwaysStoppedAnimation(AppColor.border),
                         borderColor: Colors.grey,
                         borderWidth: 1.0,
                         borderRadius: 6.0,
-                        center: Text('50 points', style: TextStyle(color: Colors.white24),),
+                        center: Text(
+                          '50 points',
+                          style: TextStyle(color: Colors.white24),
+                        ),
                       ),
                     ),
 
@@ -135,7 +149,6 @@ class Profile extends StatelessWidget {
                           padding: 0,
                           onTap: () {},
                         ),
-
                         Txt(
                           txt: TranslationConstants.vip1.t(context),
                           txtColor: Colors.white,
@@ -146,7 +159,6 @@ class Profile extends StatelessWidget {
                         ),
                       ],
                     ),
-
 
                     Padding(
                       padding: const EdgeInsets.only(top: 22),
@@ -173,7 +185,6 @@ class Profile extends StatelessWidget {
                       ),
                     ),
 
-
                     Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: TextFormField(
@@ -199,62 +210,54 @@ class Profile extends StatelessWidget {
                       ),
                     ),
 
-
-                    Padding(
+                    Container(
+                      width: double.infinity,
                       padding: const EdgeInsets.only(top: 16),
-                      child: TextFormField(
-                        initialValue: state.model.response!.vehicles![0].brand,
-                        autocorrect: true,
-                        keyboardType: TextInputType.text,
-                        //validator: validator,
-                        //onSaved: onSaved,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: 'Honda',
-                          contentPadding: EdgeInsets.only(top: 15),
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.only(top: 12, bottom: 12, right: 18),
-                            child: Image.asset(
-                              'assets/icons/pngs/profile_screen_8_car.png',
-                              width: 15,
-                              height: 15,
-                            ),
-                          ),
-                          hintStyle: TextStyle(color: Colors.grey),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(width: 1.0, color: Colors.white70),
                         ),
                       ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: TextFormField(
-                        initialValue: state.model.response!.vehicles![0].model,
-                        autocorrect: true,
-                        keyboardType: TextInputType.text,
-                        readOnly: true,
-                        //validator: validator,
-                        //onSaved: onSaved,
-                        decoration: InputDecoration(
-                          //hintText: TranslationConstants.profile.t(context),
-                          contentPadding: EdgeInsets.only(top: 15, left: 16),
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.only(top: 8, bottom: 8, right: 16),
-                            child: Image.asset(
-                              'assets/icons/pngs/account_Register_11.png',
-                              width: 15,
-                              height: 15,
+                      child: InkWell(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              'assets/icons/pngs/profile_screen_8_car.png',
+                              width: 26,
+                              height: 26,
+                              color: Colors.white,
                             ),
-                          ),
-                          hintStyle: TextStyle(color: Colors.grey),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8, top: 8, bottom: 14),
+                              child: Text(
+                                '   My Cars      ',
+                                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
+                                maxLines: 4,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Icon(Icons.keyboard_arrow_right_rounded),
+                          ],
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Cars(
+                                carList: state.model.response!.vehicles!,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
 
                     BlocListener<LoginCubit, LoginState>(
                       listenWhen: (previous, current) => current is LogoutSuccess,
                       listener: (context, state) {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            RouteList.initial, (route) => false);
+                        Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial, (route) => false);
                       },
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 56, top: 34),
@@ -303,66 +306,12 @@ class Profile extends StatelessWidget {
               ),
             );
           } else {
-            return NoDataFound(txt: 'No Data Found', onRefresh: (){
-            },);
+            return NoDataFound(
+              txt: 'No Data Found',
+              onRefresh: () {},
+            );
           }
         },
-      ),
-    );
-  }
-}
-
-class _AnimatedLiquidLinearProgressIndicator extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() =>
-      _AnimatedLiquidLinearProgressIndicatorState();
-}
-
-class _AnimatedLiquidLinearProgressIndicatorState
-    extends State<_AnimatedLiquidLinearProgressIndicator>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 10),
-    );
-
-    _animationController.addListener(() => setState(() {}));
-    _animationController.repeat();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final percentage = _animationController.value * 100;
-    return Center(
-      child: Container(
-        width: double.infinity,
-        height: 75.0,
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: LiquidLinearProgressIndicator(
-          value: _animationController.value,
-          backgroundColor: Colors.white,
-          valueColor: AlwaysStoppedAnimation(Colors.blue),
-          borderRadius: 12.0,
-          center: Text(
-            "${percentage.toStringAsFixed(0)}%",
-            style: TextStyle(
-              color: Colors.lightBlueAccent,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
       ),
     );
   }
