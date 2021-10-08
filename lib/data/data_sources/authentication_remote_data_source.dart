@@ -32,7 +32,7 @@ abstract class AuthenticationRemoteDataSource {
   Future<FaqApiResModel> getFaq();
   Future<HomeCardApiResModel> callHomeCardApi(String contentEndpoint);
   Future<StatusMessageApiResModel> updateProfile(Map<String, dynamic> body);
-  Future<SubscriptionApiResModel> doSubscription(String userId);
+  Future<SubscriptionApiResModel> doSubscription();
   Future<MapApiResModel> getMapLoc();
   Future<StationDetailsApiResModel> getStationDetails(String stationId);
 }
@@ -185,12 +185,12 @@ class AuthenticationRemoteDataSourceImpl
   }
 
   @override
-  Future<SubscriptionApiResModel> doSubscription(String requestBody) async {
+  Future<SubscriptionApiResModel> doSubscription() async {
     final response = await _client.post(
-      ApiConstants.updateProfile, //change here
+      ApiConstants.subscription, //change here
       //params: requestBody,
     );
-    print("Update profile response: $response");
+    print("subscription response: $response");
     return SubscriptionApiResModel.fromJson(response);
   }
 

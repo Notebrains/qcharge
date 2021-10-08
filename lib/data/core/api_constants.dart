@@ -20,6 +20,7 @@ class ApiConstants {
   static const String updateProfile = "updateprofile";
   static const String mapLoc = "evstations";
   static const String mapLocDetails = "evstations/details";
+  static const String subscription = "vipclassplans";
 
 
   //previous app

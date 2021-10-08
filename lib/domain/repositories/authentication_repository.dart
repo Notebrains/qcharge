@@ -30,7 +30,7 @@ abstract class AuthenticationRepository {
   Future<Either<AppError, FaqApiResModel>> getFaqData();
   Future<Either<AppError, HomeCardApiResModel>> getHomeCardData(String contentEndpoint);
   Future<Either<AppError, StatusMessageApiResModel>> updateProfile(Map<String, dynamic> params);
-  Future<Either<AppError, SubscriptionApiResModel>> getSubscription(String userId);
+  Future<Either<AppError, SubscriptionApiResModel>> getSubscription();
   Future<Either<AppError, MapApiResModel>> getMapLocations();
   Future<Either<AppError, StationDetailsApiResModel>> getStationDetailsOnMap(String stationId);
 

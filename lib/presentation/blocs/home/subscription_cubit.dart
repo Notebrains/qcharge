@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/data/models/subscription_api_res_model.dart';
+import 'package:qcharge_flutter/domain/entities/no_params.dart';
 import 'package:qcharge_flutter/domain/usecases/subscription_usecase.dart';
 
 import '../../../common/constants/translation_constants.dart';
@@ -20,11 +21,9 @@ class SubscriptionCubit extends Cubit<SubscriptionState> {
     required this.loadingCubit,
   }) : super(SubscriptionInitial());
 
-  void initiateSubscription(
-      String firstName,
-      ) async {
+  void initiateSubscription() async {
     loadingCubit.show();
-    final Either<AppError, SubscriptionApiResModel> eitherResponse = await subscriptionUser('');
+    final Either<AppError, SubscriptionApiResModel> eitherResponse = await subscriptionUser(NoParams());
 
     emit(eitherResponse.fold(
           (l) {

@@ -210,9 +210,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<Either<AppError, SubscriptionApiResModel>> getSubscription(String userId) async {
+  Future<Either<AppError, SubscriptionApiResModel>> getSubscription() async {
     try {
-      final response = await _authenticationRemoteDataSource.doSubscription(userId);
+      final response = await _authenticationRemoteDataSource.doSubscription();
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));

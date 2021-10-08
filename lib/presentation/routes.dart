@@ -4,8 +4,7 @@ import 'package:qcharge_flutter/presentation/journeys/account/forgot_password.da
 import 'package:qcharge_flutter/presentation/journeys/contents/faqs.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
 import 'package:qcharge_flutter/presentation/journeys/subscription/subscription_details.dart';
-import 'journeys/account/update_profile.dart';
-import 'journeys/profile/cars.dart';
+import 'journeys/profile/update_profile.dart';
 import 'journeys/profile/profile.dart';
 import 'journeys/setting/setting.dart';
 import 'journeys/home_screen/home_nav_bar.dart';
@@ -28,6 +27,6 @@ class Routes {
         RouteList.update_profile: (context) => UpdateProfile(),
         //RouteList.cars: (context) => Cars(),
         RouteList.subscription: (context) => Subscription(),
-        RouteList.subscription_details: (context) => SubscriptionDetails(),
+        //RouteList.subscription_details: (context) => SubscriptionDetails(details: '',),
       };
 }
