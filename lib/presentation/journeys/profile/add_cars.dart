@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/update_profile_cubit.dart';
@@ -189,7 +190,8 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                     Container(
                       width: 270,
                       padding: const EdgeInsets.only(right: 6, top: 45),
-                      child: Button(text: widget.screenTitle == 'Add Car'?  'SAVE' : 'UPDATE',
+                      child: Button(text: widget.screenTitle == TranslationConstants.addCar.t(context) ?
+                      TranslationConstants.save.t(context) : TranslationConstants.updateCar.t(context),
                         bgColor: isEnabled? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Colors.grey.shade400, Colors.grey.shade400],
                         onPressed: () {
                           if(_carLicencePlateController!.text.isEmpty){

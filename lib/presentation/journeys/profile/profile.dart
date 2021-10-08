@@ -87,8 +87,8 @@ class Profile extends StatelessWidget {
                                   padding: const EdgeInsets.only(left: 24),
                                   child: ImgTxtRow(
                                     txt: state.model.response!.currentMembershipPlan! == 'Unavailable'
-                                        ? 'Subscribe Now'
-                                        : 'Member',
+                                        ? TranslationConstants.subscribeNow.t(context)
+                                        : TranslationConstants.member.t(context),
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 14,
                                     fontWeight: FontWeight.normal,
@@ -132,7 +132,7 @@ class Profile extends StatelessWidget {
                         borderWidth: 1.0,
                         borderRadius: 6.0,
                         center: Text(
-                          '50 points',
+                          '${state.model.response!.collectPoint!} points',
                           style: TextStyle(color: Colors.white24),
                         ),
                       ),
@@ -231,7 +231,7 @@ class Profile extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 8, top: 8, bottom: 14),
                               child: Text(
-                                '   My Cars      ',
+                                '   ${TranslationConstants.myCar.t(context)}      ',
                                 style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
                                 maxLines: 4,
                                 softWrap: false,
@@ -307,7 +307,7 @@ class Profile extends StatelessWidget {
             );
           } else {
             return NoDataFound(
-              txt: 'No Data Found',
+              txt: TranslationConstants.noDataFound.t(context),
               onRefresh: () {},
             );
           }

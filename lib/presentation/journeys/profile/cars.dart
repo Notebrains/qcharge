@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
@@ -22,7 +24,7 @@ class _CarsState extends State<Cars> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarIcBack(context, 'My Cars'),
+      appBar: appBarIcBack(context, TranslationConstants.myCar.t(context)),
       body: Container(
         padding: const EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 12),
         child: Expanded(
@@ -82,7 +84,7 @@ class _CarsState extends State<Cars> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => AddOrUpdateCar(
-                                          screenTitle: 'Update Car',
+                                          screenTitle: TranslationConstants.updateCar.t(context),
                                           carName: widget.carList[position].carName!,
                                           carBrand: widget.carList[position].brand!,
                                           carChargingType: 'Ac',
@@ -128,7 +130,7 @@ class _CarsState extends State<Cars> {
                           Padding(
                             padding: const EdgeInsets.only(left: 12, top: 12),
                             child: Text(
-                              'Name: ${widget.carList[position].carName!}',
+                              '${TranslationConstants.name.t(context)}: ${widget.carList[position].carName!}',
                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white),
                               maxLines: 1,
                               softWrap: false,
@@ -138,7 +140,7 @@ class _CarsState extends State<Cars> {
                           Padding(
                             padding: const EdgeInsets.only(left: 12, top: 6),
                             child: Text(
-                              'Brand: ${widget.carList[position].brand!}',
+                              '${TranslationConstants.brand.t(context)}: ${widget.carList[position].brand!}',
                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white),
                               maxLines: 1,
                               softWrap: false,
@@ -148,7 +150,7 @@ class _CarsState extends State<Cars> {
                           Padding(
                             padding: const EdgeInsets.only(left: 12, top: 6),
                             child: Text(
-                              'Model: ${widget.carList[position].model!}',
+                              '${TranslationConstants.model.t(context)}: ${widget.carList[position].model!}',
                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white),
                               maxLines: 1,
                               softWrap: false,
@@ -158,7 +160,7 @@ class _CarsState extends State<Cars> {
                           Padding(
                             padding: const EdgeInsets.only(left: 12, top: 6),
                             child: Text(
-                              'Licence Plate: ${widget.carList[position].carLisensePlate!}',
+                              '${TranslationConstants.licencePlate.t(context)}: ${widget.carList[position].carLisensePlate!}',
                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white),
                               maxLines: 2,
                               softWrap: false,
@@ -183,17 +185,17 @@ class _CarsState extends State<Cars> {
             context,
             MaterialPageRoute(
               builder: (context) => AddOrUpdateCar(
-                screenTitle: 'Add Car',
-                carName: 'Car Name *',
-                carBrand: 'Car Brand *',
+                screenTitle: TranslationConstants.addCar.t(context),
+                carName: '${TranslationConstants.name.t(context)} *',
+                carBrand: '${TranslationConstants.carBrand.t(context)} *',
                 carChargingType: 'Car Charging Type *',
-                carModel: 'Car Model *',
-                carLicencePlate: 'Car Licence Plate *',
+                carModel: '${TranslationConstants.carModel.t(context)} *',
+                carLicencePlate: '${TranslationConstants.carLicencePlate.t(context)} *',
               ),
             ),
           );
         },
-        label: Text('Add Car'),
+        label: Text(TranslationConstants.addCar.t(context)),
         icon: Icon(Icons.add_circle_rounded),
       ),
     );

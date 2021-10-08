@@ -3,6 +3,7 @@ import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_animator/widgets/sliding_entrances/slide_in_up.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
@@ -64,7 +65,7 @@ class _SubscriptionState extends State {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 50, left: 30, right: 30, bottom: 24),
                           child: Text(
-                            'Subscription Plans',
+                            TranslationConstants.subscribePlan.t(context),
                             textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColor.app_txt_amber_light),
                           ),
@@ -132,7 +133,7 @@ class _SubscriptionState extends State {
                                             Padding(
                                               padding: const EdgeInsets.only(bottom: 3),
                                               child: Text(
-                                                'Details',
+                                                TranslationConstants.details.t(context),
                                                 style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10, color: AppColor.app_txt_amber_light),
                                                 maxLines: 4,
                                                 softWrap: false,
@@ -173,11 +174,11 @@ class _SubscriptionState extends State {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 36, right: 36, top: 24),
                           child: Button(
-                            text: 'SUBSCRIBE',
+                            text: TranslationConstants.subscribeCaps.t(context),
                             bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                             onPressed: () {
                               if (subscriptionId.isEmpty) {
-                                edgeAlert(context, title: 'Warning!', description: 'Please one of the Subscription', gravity: Gravity.top);
+                                edgeAlert(context, title: 'Warning!', description: 'Please choose one of the Subscription', gravity: Gravity.top);
                               } else {
                                 //BlocProvider.of<SubscriptionCubit>(context).initiateSubscription();
                               }
@@ -207,7 +208,7 @@ class _SubscriptionState extends State {
                   ),
                 );
               } else {
-                return NoDataFound(txt: 'No Data Found', onRefresh: (){
+                return NoDataFound(txt: TranslationConstants.noDataFound.t(context), onRefresh: (){
                   setState(() {
 
                   });

@@ -101,5 +101,21 @@
   "forgotPass": "ลืมรหัสผ่าน",
   "forgotPassSuggestionTxt": "ใส่หมายเลขโทรศัพท์มือถือที่ลงทะเบียนของคุณ\nเพื่อรับรหัสผ่านใหม่",
   "sendCaps": "ส่ง",
-  "continueNotCaps": "ดำเนินการต่อ"
+  "continueNotCaps": "ดำเนินการต่อ",
+  "subscription": "สมัครสมาชิก",
+  "subscribeNow": "สมัครสมาชิกตอนนี้",
+  "subscribePlan": "แผนการสมัครสมาชิก",
+  "subscribeCaps": "ติดตาม",
+  "showChangePass": "แสดง เปลี่ยนรหัสผ่าน",
+  "hideChangePass": "ซ่อน เปลี่ยนรหัสผ่าน",
+  "myCar": "รถของฉัน",
+  "addCar": "เพิ่มรถ",
+  "save": "บันทึก",
+  "name": "ชื่อ",
+  "details": "รายละเอียด",
+  "noDataFound": "ไม่พบข้อมูล",
+  "model": "แบบอย่าง",
+  "brand": "ยี่ห้อ",
+  "licencePlate": "ป้ายทะเบียน",
+  "updateCar": "อัพเดทรถ"
 }

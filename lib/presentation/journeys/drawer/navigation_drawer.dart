@@ -26,7 +26,6 @@ class NavigationDrawer extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-
       children: [
         Container(
           padding: EdgeInsets.fromLTRB(Sizes.dimen_40.w, 36, 24, 36),
@@ -48,9 +47,8 @@ class NavigationDrawer extends StatelessWidget {
                   onTap: () {},
                 ),
               ),
-
               TextButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pushNamed(RouteList.update_profile);
                 },
                 style: ElevatedButton.styleFrom(
@@ -62,8 +60,13 @@ class NavigationDrawer extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                 ),
-                child: Txt(txt: TranslationConstants.updateProfile.t(context), txtColor: Colors.black, txtSize: 13, fontWeight: FontWeight.bold,
-                    padding: 0, onTap: (){
+                child: Txt(
+                  txt: TranslationConstants.updateProfile.t(context),
+                  txtColor: Colors.black,
+                  txtSize: 13,
+                  fontWeight: FontWeight.bold,
+                  padding: 0,
+                  onTap: () {
                     Navigator.of(context).pushNamed(RouteList.update_profile);
                   },
                 ),
@@ -71,10 +74,11 @@ class NavigationDrawer extends StatelessWidget {
             ],
           ),
         ),
-
         Expanded(
           child: Container(
-            padding: EdgeInsets.only(left: Sizes.dimen_24.w,),
+            padding: EdgeInsets.only(
+              left: Sizes.dimen_24.w,
+            ),
             width: Sizes.dimen_350.w,
             color: Colors.black,
             child: ListView(
@@ -86,35 +90,38 @@ class NavigationDrawer extends StatelessWidget {
                     //Navigator.of(context).pop();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeCards(
-                        screenTitle:  TranslationConstants.newsAndUpdate.t(context),
-                        urlEndpoint: 'news', //change here
-                      ),
+                      MaterialPageRoute(
+                        builder: (context) => HomeCards(
+                          screenTitle: TranslationConstants.newsAndUpdate.t(context),
+                          urlEndpoint: 'news', //change here
+                        ),
                       ),
                     );
                   },
                 ),
-
+                NavigationListItem(
+                  title: TranslationConstants.subscribePlan.t(context),
+                  onPressed: () {
+                    //Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(RouteList.subscription);
+                  },
+                ),
                 NavigationListItem(
                   title: TranslationConstants.faq.t(context),
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteList.faq);
                   },
                 ),
-
                 NavigationListItem(
                   title: TranslationConstants.setting.t(context),
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteList.setting);
                   },
                 ),
-
-
                 BlocListener<LoginCubit, LoginState>(
                   listenWhen: (previous, current) => current is LogoutSuccess,
                   listener: (context, state) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        RouteList.initial, (route) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial, (route) => false);
                   },
                   child: NavigationListItem(
                     title: TranslationConstants.logout.t(context),
@@ -178,12 +185,10 @@ class NavigationDrawer extends StatelessWidget {
                     ),
                   );
                 }),*/
-
               ],
             ),
           ),
         ),
-
         Container(
           color: Colors.black,
           width: Sizes.dimen_350.w,
@@ -192,12 +197,14 @@ class NavigationDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: Sizes.dimen_50.w, top: Sizes.dimen_8.h,),
+                padding: EdgeInsets.only(
+                  left: Sizes.dimen_50.w,
+                  top: Sizes.dimen_8.h,
+                ),
                 child: Logo(
                   height: Sizes.dimen_16.h,
                 ),
               ),
-
               Padding(
                 padding: EdgeInsets.only(
                   left: Sizes.dimen_40.w,
@@ -210,12 +217,9 @@ class NavigationDrawer extends StatelessWidget {
                   txtSize: 16,
                   fontWeight: FontWeight.normal,
                   padding: 0,
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                 ),
               ),
-
             ],
           ),
         )

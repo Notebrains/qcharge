@@ -101,5 +101,23 @@
   "forgotPass": "Forgot Password",
   "forgotPassSuggestionTxt": "Enter your registered mobile number\nto get a new password",
   "sendCaps": "SEND",
-  "continueNotCaps": "Continue"
+  "continueNotCaps": "Continue",
+  "subscription": "Subscription",
+  "subscribeNow": "Subscribe Now",
+  "subscribePlan": "Subscription Plan",
+  "subscribeCaps": "SUBSCRIBE",
+  "showChangePass": "Show Change Password",
+  "hideChangePass": "Hide Change Password",
+  "myCar": "My Cars",
+  "addCar": "Add Car",
+  "save": "SAVE",
+  "details": "Details",
+  "noDataFound": "No Data Found",
+  "model": "Model",
+  "name": "Name",
+  "brand": "Brand",
+  "licencePlate": "Licence Plate",
+  "updateCar": "Update Car"
+
+
 }

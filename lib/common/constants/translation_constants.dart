@@ -104,4 +104,21 @@ class TranslationConstants {
   static const String forgotPass = 'forgotPass';
   static const String forgotPassSuggestionTxt = 'forgotPassSuggestionTxt';
   static const String sendCaps = 'sendCaps';
+  static const String subscription = 'subscription';
+  static const String subscribeNow = 'subscribeNow';
+  static const String subscribePlan = 'subscribePlan';
+  static const String subscribeCaps = 'subscribeCaps';
+  static const String showChangePass = 'showChangePass';
+  static const String hideChangePass = 'hideChangePass';
+  static const String myCar = 'myCar';
+  static const String addCar = 'addCar';
+  static const String save = 'save';
+  static const String details = 'details';
+  static const String noDataFound = 'noDataFound';
+  static const String model = 'model';
+  static const String brand = 'brand';
+  static const String licencePlate = 'licencePlate';
+  static const String updateCar = 'updateCar';
+  static const String name = 'name';
+
 }
