@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Profile Details."
-/// response : {"name":"Kiron Mondal","email":"alamgira@mridayaitservices.com","mobile":"9732508414","wallet":"0","collect_point":"50","image":"https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png","current_membership_plan":"Unavailable","vehicles":[{"vehicle_id":2,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFGH123456"},{"vehicle_id":12,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"}]}
+/// response : {"name":"Alamgir Alam","email":"alamgira@mridayaitservices.com","mobile":"9732508414","wallet":"0","collect_point":"50","image":"https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png","current_membership_plan":"Unavailable","vehicles":[{"vehicle_id":18,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFG1234"},{"vehicle_id":19,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"},{"vehicle_id":20,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"},{"vehicle_id":21,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2221","car_lisense_plate":"ZASA1231"},{"vehicle_id":22,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"}]}
 
 class ProfileApiResModel {
   ProfileApiResModel({
@@ -37,14 +37,14 @@ class ProfileApiResModel {
 
 }
 
-/// name : "Kiron Mondal"
+/// name : "Alamgir Alam"
 /// email : "alamgira@mridayaitservices.com"
 /// mobile : "9732508414"
 /// wallet : "0"
 /// collect_point : "50"
 /// image : "https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png"
 /// current_membership_plan : "Unavailable"
-/// vehicles : [{"vehicle_id":2,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFGH123456"},{"vehicle_id":12,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"}]
+/// vehicles : [{"vehicle_id":18,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFG1234"},{"vehicle_id":19,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"},{"vehicle_id":20,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"},{"vehicle_id":21,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2221","car_lisense_plate":"ZASA1231"},{"vehicle_id":22,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234"}]
 
 class Response {
   Response({
@@ -116,11 +116,11 @@ class Response {
 
 }
 
-/// vehicle_id : 2
+/// vehicle_id : 18
 /// brand : "Honda"
 /// model : "ABCD1234"
 /// car_name : "ABCD123"
-/// car_lisense_plate : "EFGH123456"
+/// car_lisense_plate : "EFG1234"
 
 class Vehicles {
   Vehicles({

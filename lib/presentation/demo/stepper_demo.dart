@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/presentation/libraries/stepper.dart';
 
@@ -101,14 +102,16 @@ class BottomStepper extends StatelessWidget {
             selectedOuterCircleColor: const Color(0xFF40A8F4),
             btnTextColor: Colors.indigo,
             circleRadius: 30,
-            onComplete: () {
+            onComplete: (PageController controller) {
               print("completed");
             },
             textStyle: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
               decoration: null,
-            )),
+            ),
+          isValid: true,
+        ),
       ),
       appBar: AppBar(
         title: Text("Bottom Stepper"),
@@ -161,14 +164,16 @@ class TopStepper extends StatelessWidget {
             rightBtnColor: const Color(0xFF4FE2C0),
             selectedOuterCircleColor: const Color(0xFF40A8F4),
             circleRadius: 30,
-            onComplete: () {
+          isValid: true,
+            onComplete: (PageController controller) {
               print("completed");
             },
             textStyle: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
               decoration: null,
-            ), btnTextColor: Colors.indigo,),
+            ), btnTextColor: Colors.indigo,
+        ),
       ),
       appBar: AppBar(
         title: Text("Top Stepper"),
@@ -243,18 +248,21 @@ class StepperValidationState extends State<StepperValidation> {
 
             circleRadius: 30,
             btnTextColor: Colors.indigo,
-            onComplete: () {
+            onComplete: (PageController controller) {
               print("completed");
             },
             textStyle: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
               decoration: null,
-            )),
+            ),
+
+          isValid: true,
+        ),
       ),
       appBar: AppBar(
         title: Text("Stepper State"),
       ),
     );
   }
-}
+}*/

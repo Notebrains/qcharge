@@ -100,7 +100,7 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
                   ),
                 ),
               )
-          )
+          ),
         ],
       ),
     );

@@ -4,8 +4,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
+import 'package:qcharge_flutter/domain/entities/add_update_cars_params.dart';
 import 'package:qcharge_flutter/domain/entities/register_request_params.dart';
 import 'package:qcharge_flutter/domain/entities/update_profile_params.dart';
+import 'package:qcharge_flutter/domain/usecases/add_update_car_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/register_user.dart';
 import 'package:qcharge_flutter/domain/usecases/update_profile_usecase.dart';
 
@@ -14,26 +16,41 @@ import '../../../domain/entities/app_error.dart';
 import '../../../domain/usecases/logout_user.dart';
 import '../loading/loading_cubit.dart';
 
-part 'update_profile_state.dart';
+part 'add_update_car_state.dart';
 
-class UpdateProfileCubit extends Cubit<UpdateProfileState> {
-  final UpdateProfileUser updateProfileUser;
+class AddUpdateCarCubit extends Cubit<AddUpdateCarState> {
+  final AddUpdateCarUsecase addUpdateCarUsecase;
   final LoadingCubit loadingCubit;
 
-  UpdateProfileCubit({
-    required this.updateProfileUser,
+  AddUpdateCarCubit({
+    required this.addUpdateCarUsecase,
     required this.loadingCubit,
-  }) : super(UpdateProfileInitial());
+  }) : super(AddUpdateCarInitial());
 
-  void initiateUpdateProfile(
-      String userId,
-      String password,
+  void initiateAddUpdateCar(
+      String userID,
+      String brand,
+      String model,
+      String carName,
+      String carLicencePlate,
+      String vehicleId,
+      String type,
+      String image,
       ) async {
     loadingCubit.show();
-    final Either<AppError, StatusMessageApiResModel> eitherResponse = await updateProfileUser(
-      UpdateProfileParams(
-        userId: userId,
-        password: password,
+
+    print('---- : $userID , $brand, $model, $carName, $carLicencePlate, $vehicleId, $type, $image,');
+
+    final Either<AppError, StatusMessageApiResModel> eitherResponse = await addUpdateCarUsecase(
+      AddUpdateCarParams(
+        userID: userID,
+        brand: brand,
+        model: model,
+        carName: carName,
+        carLicencePlate: carLicencePlate,
+        vehicleId: vehicleId,
+        type: type,
+        image: image,
       ),
     );
 
@@ -41,9 +58,9 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
           (l) {
         var message = getErrorMessage(l.appErrorType);
         print(message);
-        return UpdateProfileError(message);
+        return AddUpdateCarError(message);
       },
-          (r) => UpdateProfileSuccess(r),
+          (r) => AddUpdateCarSuccess(r),
     ));
     loadingCubit.hide();
   }

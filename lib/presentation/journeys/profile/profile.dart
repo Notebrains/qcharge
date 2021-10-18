@@ -27,7 +27,6 @@ class Profile extends StatelessWidget {
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (BuildContext context, state) {
           if (state is ProfileSuccess) {
-            print('---- : ${state.model.response!.name}');
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Padding(

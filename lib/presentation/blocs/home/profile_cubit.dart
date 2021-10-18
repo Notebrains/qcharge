@@ -19,7 +19,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
 
   void initiateProfile(String userId) async {
-    print('---- user id 2: $userId');
     final Either<AppError, ProfileApiResModel> eitherResponse = await profile(userId);
 
     emit(eitherResponse.fold((l) {

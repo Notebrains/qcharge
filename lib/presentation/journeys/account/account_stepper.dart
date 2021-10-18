@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
-import 'package:qcharge_flutter/presentation/demo/stepper_demo.dart';
-import 'package:qcharge_flutter/presentation/journeys/account/register_form.dart';
 import 'package:qcharge_flutter/presentation/journeys/account/register_screen.dart';
 import 'package:qcharge_flutter/presentation/journeys/account/terms_condition.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/libraries/stepper.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
-import 'package:qcharge_flutter/presentation/widgets/select_drop_list.dart';
 
 import 'success.dart';
 import 'verify.dart';
@@ -27,6 +24,8 @@ class _AccountStepperState extends State<AccountStepper> {
 
   @override
   Widget build(BuildContext context) {
+
+    ValueNotifier<int> _counter = ValueNotifier<int> (0);
 
     return Scaffold(
       appBar: appBarHome(context),
@@ -52,9 +51,16 @@ class _AccountStepperState extends State<AccountStepper> {
             ),
           ),
 
+          ValueListenableBuilder(
+              valueListenable: _counter,
+              builder: (context, value, child){
+                return Text('');
+              },
+          ),
+
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+              padding: const EdgeInsets.all(16),
               child: HorizontalStepper(
                 selectedColor: AppColor.border,
                 unSelectedColor: Colors.grey.shade400,
@@ -63,7 +69,6 @@ class _AccountStepperState extends State<AccountStepper> {
                 selectedOuterCircleColor: AppColor.border,
                 circleRadius: 24,
                 onComplete: () {
-                  print("onComplete called");
                   if (isTermConditionStepComplete && isVerifyStepComplete && isRegisterStepComplete) {
                     Navigator.of(context).pushNamed(RouteList.initial);
                   } else if(!isTermConditionStepComplete){
@@ -103,6 +108,7 @@ class _AccountStepperState extends State<AccountStepper> {
                     ),
                     isValid: true,
                   ),
+
                   HorizontalStep(
                     title: TranslationConstants.register.t(context),
                     widget: RegisterScreen(isProcessCompleted: (){
@@ -114,6 +120,7 @@ class _AccountStepperState extends State<AccountStepper> {
                     ),
                     isValid: true,
                   ),
+
                   HorizontalStep(
                     title: TranslationConstants.success.t(context),
                     widget: AccountSuccess(),

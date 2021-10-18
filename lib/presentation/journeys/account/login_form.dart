@@ -14,9 +14,6 @@ import '../../../common/extensions/string_extensions.dart';
 import '../../blocs/login/login_cubit.dart';
 import '../../widgets/button.dart';
 
-//
-//
-
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -28,7 +25,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   late TextEditingController? _mobileController, _passwordController;
   bool enableSignIn = false;
-  bool isRememberMeChecked = true;
+  //bool isRememberMeChecked = true;
 
   @override
   void initState() {
@@ -96,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
               textInputType: TextInputType.visiblePassword,
             ),
 
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.only(left: 16,),
               child: CheckboxListTile(
                 activeColor: Colors.amber,
@@ -111,7 +108,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
                 controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
               ),
-            ),
+            ),*/
 
             Padding(
               padding: const EdgeInsets.only(left: 36, right: 36, top: 12),

@@ -34,4 +34,8 @@ abstract class AuthenticationRepository {
   Future<Either<AppError, MapApiResModel>> getMapLocations();
   Future<Either<AppError, StationDetailsApiResModel>> getStationDetailsOnMap(String stationId);
 
+  Future<Either<AppError, StatusMessageApiResModel>> deleteCar(String vehicleId);
+
+  Future<Either<AppError, StatusMessageApiResModel>> addUpdateCar(Map<String, dynamic> params);
+
 }

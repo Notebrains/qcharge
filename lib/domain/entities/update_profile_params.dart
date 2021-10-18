@@ -1,14 +1,14 @@
 class UpdateProfileParams {
-  final String mobile;
+  final String userId;
   final String password;
 
   UpdateProfileParams({
-    required this.mobile,
+    required this.userId,
     required this.password,
   });
 
   Map<String, dynamic> toJson() => {
-    'mobile': mobile,
+    'user_id': userId,
     'password': password,
   };
 }

@@ -25,10 +25,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
   final AuthenticationLocalDataSource _authenticationLocalDataSource;
 
-  AuthenticationRepositoryImpl(
-    this._authenticationRemoteDataSource,
-    this._authenticationLocalDataSource,
-  );
+  AuthenticationRepositoryImpl(this._authenticationRemoteDataSource,
+      this._authenticationLocalDataSource,);
 
   @override
   Future<Either<AppError, LoginApiResModel>> loginUser(Map<String, dynamic> body) async {
@@ -139,7 +137,6 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   @override
   Future<Either<AppError, ProfileApiResModel>> getProfile(String userId) async {
     try {
-      print('---- user id 3: $userId');
       final response = await _authenticationRemoteDataSource.getProfile(userId);
       return Right(response);
     } on SocketException {
@@ -237,6 +234,30 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<Either<AppError, StationDetailsApiResModel>> getStationDetailsOnMap(String stationId) async {
     try {
       final response = await _authenticationRemoteDataSource.getStationDetails(stationId);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> deleteCar(String vehicleId) async {
+    try {
+      final response = await _authenticationRemoteDataSource.deleteCar(vehicleId);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> addUpdateCar(Map<String, dynamic> params) async {
+    try {
+      final response = await _authenticationRemoteDataSource.addUpdateCar(params);
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));

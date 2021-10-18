@@ -361,7 +361,12 @@ class _RegisterFormState extends State<RegisterForm> {
                   print('---- Car data loaded: ${state.carBrandEntity[0].name}');
                   var dataList = state.carBrandEntity;
                   for(int i =0; i<dataList.length; i++){
-                    carBrandDropDownList = DropListModel([OptionItem(id: dataList[i].brandId.toString(), title: dataList[i].name.toString())]);
+                    carBrandDropDownList.listOptionItems.add(
+                      OptionItem(
+                        id: dataList[i].brandId.toString(),
+                        title: dataList[i].name.toString(),
+                      ),
+                    );
                   }
 
                   setState(() {
@@ -387,9 +392,9 @@ class _RegisterFormState extends State<RegisterForm> {
                   print('---- Car data loaded: ${state.carModelEntity[0].name}');
                   var dataList = state.carModelEntity;
                   for(int i =0; i<dataList.length; i++){
-                    carModelDropDownList = DropListModel([
+                    carModelDropDownList.listOptionItems.add(
                       OptionItem(id: dataList[i].id.toString(), title: dataList[i].name.toString()),
-                    ]);
+                    );
                   }
 
                   setState(() {

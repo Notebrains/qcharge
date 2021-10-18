@@ -11,6 +11,8 @@ import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_if_ic_round.dart';
 
+
+
 class ForgotPassword extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -22,7 +24,7 @@ class _ForgotPasswordState extends State {
   TextEditingController _controller = TextEditingController();
   String mobile = '';
   GlobalKey<FormState> _key = new GlobalKey();
-  bool _validate = false;
+  //bool _validate = false;
 
   late ForgotPasswordCubit forgotPasswordCubit;
 

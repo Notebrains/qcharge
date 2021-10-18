@@ -31,6 +31,20 @@ String parseHtmlString(String htmlString) {
   return parsedString;
 }
 
+/*
+
+String convertImgToBase64(File file) {
+  final bytes = File(xFile!.path).readAsBytesSync();
+  base64Image =  "data:image/png;base64,"+ base64Encode(bytes);
+  print("----base64 img : $base64Image");
+
+  return base64Image;
+}
+
+
+*/
+
+
 
 String convertStrToDoubleStr(String value) => value.isNotEmpty ? double.parse(value).toStringAsFixed(2).toString(): '0';
 

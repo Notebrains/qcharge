@@ -18,9 +18,12 @@ class ApiConstants {
   static const String topUp = "topuphistory";
   static const String cmsHomeBanner = "cms";
   static const String updateProfile = "updateprofile";
+  static const String changePassword = "changepassword";
   static const String mapLoc = "evstations";
   static const String mapLocDetails = "evstations/details";
   static const String subscription = "vipclassplans";
+  static const String deleteCar = "deletevehicles";
+  static const String addEditVehicles = "addeditmorevehicles";
 
 
   //previous app

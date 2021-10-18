@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
+import 'package:qcharge_flutter/domain/usecases/add_update_car_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/delete_car_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/faq_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/forgot_pass_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/get_car_brand.dart';
@@ -16,6 +18,8 @@ import 'package:qcharge_flutter/domain/usecases/topup_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/update_profile_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/verify_user.dart';
 import 'package:qcharge_flutter/presentation/blocs/contents/faq_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/add_update_car_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/delete_car_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_card_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
@@ -203,6 +207,24 @@ Future init() async {
     () => SubscriptionCubit(
       loadingCubit: getItInstance(),
       subscriptionUser: getItInstance(),
+    ),
+  );
+
+  getItInstance.registerLazySingleton<DeleteCarUsecase>(() => DeleteCarUsecase(getItInstance()));
+
+  getItInstance.registerFactory(
+    () => DeleteCarCubit(
+      deleteCarUsecase: getItInstance(),
+      loadingCubit: getItInstance(),
+    ),
+  );
+
+  getItInstance.registerLazySingleton<AddUpdateCarUsecase>(() => AddUpdateCarUsecase(getItInstance()));
+
+  getItInstance.registerFactory(
+    () => AddUpdateCarCubit(
+      addUpdateCarUsecase: getItInstance(),
+      loadingCubit: getItInstance(),
     ),
   );
 }

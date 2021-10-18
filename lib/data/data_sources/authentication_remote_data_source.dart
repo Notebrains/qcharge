@@ -35,6 +35,10 @@ abstract class AuthenticationRemoteDataSource {
   Future<SubscriptionApiResModel> doSubscription();
   Future<MapApiResModel> getMapLoc();
   Future<StationDetailsApiResModel> getStationDetails(String stationId);
+
+  Future<StatusMessageApiResModel> deleteCar(String vehicleId);
+
+  Future<StatusMessageApiResModel> addUpdateCar(Map<String, dynamic> params);
 }
 
 class AuthenticationRemoteDataSourceImpl
@@ -211,6 +215,28 @@ class AuthenticationRemoteDataSourceImpl
     );
     print('station details res: $response');
     return StationDetailsApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> deleteCar(String vehicleId) async {
+    final response = await _client.post(
+        ApiConstants.deleteCar,
+        params: {
+          'vehicle_id': vehicleId,
+        }
+    );
+    print('Delete car res: $response');
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> addUpdateCar(Map<String, dynamic> params) async {
+    final response = await _client.post(
+      ApiConstants.addEditVehicles,
+      params: params,
+    );
+    print("Add Update Car response: $response");
+    return StatusMessageApiResModel.fromJson(response);
   }
 
 

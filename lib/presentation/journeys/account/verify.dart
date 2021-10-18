@@ -191,8 +191,5 @@ class _VerifyState extends State<Verify> {
         },
       ),
     );
-
-
-
   }
 }
