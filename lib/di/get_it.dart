@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:qcharge_flutter/domain/usecases/add_update_car_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/bill_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/cancel_subscription_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/delete_car_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/faq_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/forgot_pass_usecase.dart';
@@ -11,23 +13,30 @@ import 'package:qcharge_flutter/domain/usecases/home_card_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/map_station_details_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/map_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/profile_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/purchase_subscription_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/register_user.dart';
 import 'package:qcharge_flutter/domain/usecases/send_otp.dart';
 import 'package:qcharge_flutter/domain/usecases/subscription_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/topup_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/update_profile_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/verify_user.dart';
+import 'package:qcharge_flutter/domain/usecases/wallet_recharge_usecase.dart';
 import 'package:qcharge_flutter/presentation/blocs/contents/faq_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/add_update_car_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/bill_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/cancel_subscription_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/delete_car_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_card_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_station_details_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/purchase_subscription_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/stepper_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/subscription_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/update_profile_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/wallet_recharge_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/login/forgot_pass_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/register/car_model_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/register/register_cubit.dart';
@@ -227,4 +236,43 @@ Future init() async {
       loadingCubit: getItInstance(),
     ),
   );
+
+  getItInstance.registerLazySingleton<CancelSubscription>(() => CancelSubscription(getItInstance()));
+
+  getItInstance.registerFactory(
+    () => CancelSubscriptionCubit (
+      subscriptionUser: getItInstance(),
+      loadingCubit: getItInstance(),
+    ),
+  );
+
+
+  getItInstance.registerLazySingleton<PurchaseSubscriptionUsecase>(() => PurchaseSubscriptionUsecase(getItInstance()));
+
+  getItInstance.registerFactory(
+    () => PurchaseSubscriptionCubit (
+      subscriptionUser: getItInstance(),
+      loadingCubit: getItInstance(),
+    ),
+  );
+
+  getItInstance.registerLazySingleton<WalletRechargeUsecase>(() => WalletRechargeUsecase(getItInstance()));
+
+  getItInstance.registerFactory(
+    () => WalletRechargeCubit (
+      walletRechargeUsecase: getItInstance(),
+      loadingCubit: getItInstance(),
+    ),
+  );
+
+  getItInstance.registerLazySingleton<BillUsecase>(() => BillUsecase(getItInstance()));
+
+  getItInstance.registerFactory(
+    () => BillCubit (
+      billUsecase: getItInstance(),
+      loadingCubit: getItInstance(),
+    ),
+  );
+
+  getItInstance.registerFactory(() => StepperCubit(StepperInitial()),);
 }

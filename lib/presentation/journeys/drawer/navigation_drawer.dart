@@ -112,12 +112,7 @@ class NavigationDrawer extends StatelessWidget {
                     Navigator.of(context).pushNamed(RouteList.faq);
                   },
                 ),
-                NavigationListItem(
-                  title: TranslationConstants.setting.t(context),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(RouteList.setting);
-                  },
-                ),
+
                 BlocListener<LoginCubit, LoginState>(
                   listenWhen: (previous, current) => current is LogoutSuccess,
                   listener: (context, state) {
@@ -132,6 +127,12 @@ class NavigationDrawer extends StatelessWidget {
                 ),
 
                 /*
+                NavigationListItem(
+                  title: TranslationConstants.setting.t(context),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(RouteList.setting);
+                  },
+                ),
 
                  NavigationExpandedListItem(
                   title: TranslationConstants.language.t(context),

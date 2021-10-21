@@ -1,4 +1,5 @@
 import 'package:qcharge_flutter/data/core/api_constants.dart';
+import 'package:qcharge_flutter/data/models/bill_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/car_brand_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/car_brand_model.dart';
 import 'package:qcharge_flutter/data/models/faq_api_res_model.dart';
@@ -32,13 +33,23 @@ abstract class AuthenticationRemoteDataSource {
   Future<FaqApiResModel> getFaq();
   Future<HomeCardApiResModel> callHomeCardApi(String contentEndpoint);
   Future<StatusMessageApiResModel> updateProfile(Map<String, dynamic> body);
-  Future<SubscriptionApiResModel> doSubscription();
+  Future<SubscriptionApiResModel> doSubscription(String userId);
   Future<MapApiResModel> getMapLoc();
   Future<StationDetailsApiResModel> getStationDetails(String stationId);
 
   Future<StatusMessageApiResModel> deleteCar(String vehicleId);
 
   Future<StatusMessageApiResModel> addUpdateCar(Map<String, dynamic> params);
+
+  Future<StatusMessageApiResModel> cancelSubscription(Map<String, dynamic> params);
+
+  Future<StatusMessageApiResModel> purchaseSubscription(Map<String, dynamic> params);
+
+  Future<StatusMessageApiResModel> walletRecharge(Map<String, dynamic> params);
+
+  Future<BillApiResModel> getBills(String userId);
+
+  Future<StatusMessageApiResModel> doChargingCalculation(Map<String, dynamic> params);
 }
 
 class AuthenticationRemoteDataSourceImpl
@@ -166,7 +177,7 @@ class AuthenticationRemoteDataSourceImpl
 
   @override
   Future<FaqApiResModel> getFaq() async {
-    final response = await _client.post(ApiConstants.activity,);
+    final response = await _client.post(ApiConstants.faq,);
     print('Faq Api Res: $response');
     return FaqApiResModel.fromJson(response);
   }
@@ -189,10 +200,12 @@ class AuthenticationRemoteDataSourceImpl
   }
 
   @override
-  Future<SubscriptionApiResModel> doSubscription() async {
+  Future<SubscriptionApiResModel> doSubscription(String userId) async {
     final response = await _client.post(
       ApiConstants.subscription, //change here
-      //params: requestBody,
+      params: {
+        'user_id' : userId,
+      },
     );
     print("subscription response: $response");
     return SubscriptionApiResModel.fromJson(response);
@@ -236,6 +249,58 @@ class AuthenticationRemoteDataSourceImpl
       params: params,
     );
     print("Add Update Car response: $response");
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> cancelSubscription(Map<String, dynamic> params) async {
+    final response = await _client.post(
+        ApiConstants.cancelSubscription,
+        params: params
+    );
+    print('Cancel Subscription res: $response');
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> purchaseSubscription(Map<String, dynamic> params) async {
+    final response = await _client.post(
+        ApiConstants.purchaseSubscriptionPlan,
+        params: params
+    );
+    print('Purchase Subscription res: $response');
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> walletRecharge(Map<String, dynamic> params) async {
+    final response = await _client.post(
+        ApiConstants.walletRecharge,
+        params: params
+    );
+    print('Wallet Recharge res: $response');
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<BillApiResModel> getBills(String userId) async {
+    final response = await _client.post(
+        ApiConstants.chargingBilling,
+        params: {
+          'user_id' : userId,
+        }
+    );
+    print('Bill res: $response');
+    return BillApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> doChargingCalculation(Map<String, dynamic> params) async {
+    final response = await _client.post(
+        ApiConstants.chargingCalculation,
+        params: params
+    );
+    print('Do Charging Calculation: $response');
     return StatusMessageApiResModel.fromJson(response);
   }
 

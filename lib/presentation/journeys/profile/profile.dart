@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/login/login_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
+import 'package:qcharge_flutter/presentation/journeys/subscription/billing.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
+import 'package:qcharge_flutter/presentation/widgets/box_txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
@@ -37,30 +41,14 @@ class Profile extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Stack(
-                          alignment: AlignmentDirectional.bottomEnd,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 24, bottom: 24),
-                              child: cachedNetImgWithRadius(
-                                state.model.response!.image!,
-                                110,
-                                110,
-                                30,
-                              ),
-                            ),
-                            Visibility(
-                              visible: false,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 20),
-                                child: Icon(
-                                  Icons.camera_alt_rounded,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 24, bottom: 24),
+                          child: cachedNetImgWithRadius(
+                            state.model.response!.image!,
+                            110,
+                            110,
+                            30,
+                          ),
                         ),
                         Expanded(
                           child: Column(
@@ -87,7 +75,10 @@ class Profile extends StatelessWidget {
                                   child: ImgTxtRow(
                                     txt: state.model.response!.currentMembershipPlan! == 'Unavailable'
                                         ? TranslationConstants.subscribeNow.t(context)
-                                        : TranslationConstants.member.t(context),
+                                        : TranslationConstants.member.t(context) +
+                                            ' (' +
+                                            state.model.response!.currentMembershipPlan! +
+                                            ')',
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 14,
                                     fontWeight: FontWeight.normal,
@@ -155,6 +146,46 @@ class Profile extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           padding: 0,
                           onTap: () {},
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        BoxTxt(
+                            txt1: state.model.response!.currentMembershipPlan! != 'Unavailable'
+                                ? ' Active Plan >'
+                                : ' All Plans >',
+                            txt2: state.model.response!.currentMembershipPlan! != 'Unavailable'
+                                ? state.model.response!.currentMembershipPlan! : '',
+                            txt3: state.model.response!.currentMembershipPlan! != 'Unavailable'
+                                ? state.model.response!.currentMembershipPlanPrice! : 'View',
+                            rightPadding: 12,
+                            onTap: () {
+                              Navigator.pushNamed(context, RouteList.subscription);
+                            }),
+
+                        Visibility(
+                          visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
+                          child: BoxTxt(
+                              txt1: ' Due Bill >',
+                              txt2: 'Total',
+                              txt3: convertStrToDoubleStr(state.model.response!.dueBilling.toString()),
+                              rightPadding: 0,
+                              onTap: () async {
+                                await AuthenticationLocalDataSourceImpl().getSessionId().then((userId) => {
+                                  if (userId != null)
+                                    {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Billing(userId: userId),
+                                        ),
+                                      ),
+                                    }
+                                });
+                              }),
                         ),
                       ],
                     ),

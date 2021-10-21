@@ -33,6 +33,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       String brand,
       String carModel,
       String carLicencePlate,
+      String image,
       ) async {
     loadingCubit.show();
     final Either<AppError, RegisterApiResModel> eitherResponse = await registerUser(
@@ -47,6 +48,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         carLicencePlate: carLicencePlate,
         carModel: carModel,
         brand: brand,
+        image: image,
       ),
     );
 

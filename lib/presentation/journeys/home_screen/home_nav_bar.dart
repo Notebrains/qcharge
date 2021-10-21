@@ -8,6 +8,7 @@ import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_station_details_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/wallet_recharge_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home.dart';
 import 'package:qcharge_flutter/presentation/journeys/map_screen/map_screen.dart';
@@ -29,6 +30,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
   late TopUpCubit _topUpCubit;
   late MapCubit _mapCubit;
   late MapStationDetailsCubit _mapStationDetailsCubit;
+  late WalletRechargeCubit walletRechargeCubit;
 
 
   @override
@@ -39,6 +41,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
     _profileCubit = _homeBannerCubit.profileCubit;
     _topUpCubit = _homeBannerCubit.topUpCubit;
     _mapCubit = _homeBannerCubit.mapCubit;
+    walletRechargeCubit = getItInstance<WalletRechargeCubit>();
 
     _homeBannerCubit.initiateHomeBanner();
   }
@@ -52,6 +55,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
     _topUpCubit.close();
     _mapCubit.close();
     _mapStationDetailsCubit.close();
+    walletRechargeCubit.close();
   }
 
   @override
@@ -63,6 +67,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
         BlocProvider(create: (context) => _topUpCubit,),
         BlocProvider(create: (context) => _mapCubit,),
         BlocProvider(create: (context) => _mapStationDetailsCubit,),
+        BlocProvider(create: (context) =>  walletRechargeCubit,),
       ],
       child: WillPopScope(
         onWillPop: onWillPop,

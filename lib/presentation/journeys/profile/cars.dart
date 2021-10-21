@@ -74,7 +74,7 @@ class _CarsState extends State<Cars> {
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                   //placeholder: (context, url) => CircularProgressIndicator(),
-                                  imageUrl: Strings.imgUrlCar,
+                                  imageUrl: widget.carList[position].image!.isNotEmpty? widget.carList[position].image! : Strings.imgUrlCar,
                                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                                       Lottie.asset('assets/animations/lottiefiles/loading-dots.json', width: 100, height: 100),
                                 ),
@@ -113,7 +113,9 @@ class _CarsState extends State<Cars> {
                                                 vehicleId: widget.carList[position].vehicleId!.toString(),
                                                 carModel: widget.carList[position].model!,
                                                 carLicencePlate: widget.carList[position].carLisensePlate!,
-                                                carBrandId: '1',carModelId: '1',
+                                                carBrandId: widget.carList[position].brandId!.toString(),
+                                                carModelId: widget.carList[position].modelId!.toString(),
+                                                image: widget.carList[position].image!,
 
                                               ),
                                             ),
@@ -219,6 +221,7 @@ class _CarsState extends State<Cars> {
                 carLicencePlate: '',
                 carBrandId: '',
                 carModelId: '',
+                image: Strings.imgUrlCar,
               ),
             ),
           );

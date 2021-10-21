@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
+import 'package:qcharge_flutter/di/get_it.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/wallet_recharge_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -22,7 +24,24 @@ class TopUpBanking extends StatefulWidget {
 }
 
 class _TopUpBankingState extends State<TopUpBanking> {
+  late WalletRechargeCubit walletRechargeCubit;
+
   bool isTopUpBankingTabSelected = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    walletRechargeCubit = getItInstance<WalletRechargeCubit>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    walletRechargeCubit.close();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Vip Class Plans List"
-/// response : [{"id":1,"membership_name":"VIP 1","membership_price":"1500","charging_price":"4","stay_time_after_charge":"2","description":"test"},{"id":2,"membership_name":"VIP 2","membership_price":"3000","charging_price":"2","stay_time_after_charge":"5","description":"Test Check"}]
+/// response : [{"id":1,"membership_name":"VIP 1","membership_price":"1500","charging_price":"4","stay_time_after_charge":"2","description":"test","active_plan":0},{"id":2,"membership_name":"VIP 2","membership_price":"3000","charging_price":"2","stay_time_after_charge":"5","description":"Test Check","active_plan":0},{"id":3,"membership_name":"VIP 3","membership_price":"5000","charging_price":"5000","stay_time_after_charge":"23","description":"Monthly Subscription\r\nIncludes 500 message segments.\r\nSent & Received Segments Charged Each sent and received message segment is charged. What is a segment?\r\nDedicated US/CA/FR/GB Number One free the US, Canada, France or United Kingdom number included. Other countries are available starting at $4/mo USD.\r\nRollover Credits Any unused messaging credits roll over for 90 days.\r\nUnlimited Users & Contacts","active_plan":0}]
 
 class SubscriptionApiResModel {
   SubscriptionApiResModel({
@@ -48,6 +48,7 @@ class SubscriptionApiResModel {
 /// charging_price : "4"
 /// stay_time_after_charge : "2"
 /// description : "test"
+/// active_plan : 0
 
 class Response {
   Response({
@@ -56,13 +57,15 @@ class Response {
       String? membershipPrice, 
       String? chargingPrice, 
       String? stayTimeAfterCharge, 
-      String? description,}){
+      String? description, 
+      int? activePlan,}){
     _id = id;
     _membershipName = membershipName;
     _membershipPrice = membershipPrice;
     _chargingPrice = chargingPrice;
     _stayTimeAfterCharge = stayTimeAfterCharge;
     _description = description;
+    _activePlan = activePlan;
 }
 
   Response.fromJson(dynamic json) {
@@ -72,6 +75,7 @@ class Response {
     _chargingPrice = json['charging_price'];
     _stayTimeAfterCharge = json['stay_time_after_charge'];
     _description = json['description'];
+    _activePlan = json['active_plan'];
   }
   int? _id;
   String? _membershipName;
@@ -79,6 +83,7 @@ class Response {
   String? _chargingPrice;
   String? _stayTimeAfterCharge;
   String? _description;
+  int? _activePlan;
 
   int? get id => _id;
   String? get membershipName => _membershipName;
@@ -86,6 +91,7 @@ class Response {
   String? get chargingPrice => _chargingPrice;
   String? get stayTimeAfterCharge => _stayTimeAfterCharge;
   String? get description => _description;
+  int? get activePlan => _activePlan;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -95,6 +101,7 @@ class Response {
     map['charging_price'] = _chargingPrice;
     map['stay_time_after_charge'] = _stayTimeAfterCharge;
     map['description'] = _description;
+    map['active_plan'] = _activePlan;
     return map;
   }
 

@@ -5,7 +5,7 @@
  -keep class io.flutter.view.** { *; }
  -keep class io.flutter.** { *; }
  -keep class io.flutter.plugins.** { *; }
- #-keep class com.google.firebase.** { *; }
+ -keep class com.google.firebase.** { *; }
  #Optional for proguard, you may use your own proguard configuration.
  -dontusemixedcaseclassnames
  -dontpreverify

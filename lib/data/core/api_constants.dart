@@ -22,8 +22,13 @@ class ApiConstants {
   static const String mapLoc = "evstations";
   static const String mapLocDetails = "evstations/details";
   static const String subscription = "vipclassplans";
+  static const String cancelSubscription = "cancel-membership-plan";
+  static const String purchaseSubscriptionPlan = "purchase-membership-plan";
   static const String deleteCar = "deletevehicles";
   static const String addEditVehicles = "addeditmorevehicles";
+  static const String walletRecharge = "wallet-recharge";
+  static const String chargingBilling = "chargingbilling";
+  static const String chargingCalculation = "chargingcalculation";
 
 
   //previous app

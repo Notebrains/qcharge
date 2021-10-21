@@ -8,7 +8,7 @@ import 'package:qcharge_flutter/presentation/blocs/contents/faq_cubit.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
-import 'faq_model.dart';
+
 
 class Faqs extends StatefulWidget {
   @override
@@ -17,6 +17,7 @@ class Faqs extends StatefulWidget {
 
 class _FaqsState extends State<Faqs> {
   late FaqCubit faqCubit;
+  bool isExpanded = true;
 
   @override
   void initState() {
@@ -61,7 +62,7 @@ class _FaqsState extends State<Faqs> {
 
                     Expanded(
                       child: ListView.builder(
-                        itemCount: itemData.length,
+                        itemCount: state.model.response!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ExpansionPanelList(
                             animationDuration: Duration(milliseconds: 700),
@@ -69,11 +70,12 @@ class _FaqsState extends State<Faqs> {
                             elevation: 16,
                             children: [
                               ExpansionPanel(
-                                isExpanded: itemData[index].expanded,
+                                isExpanded: isExpanded,
                                 body: Container(
                                   padding: EdgeInsets.fromLTRB(16, 0, 16, 24),
                                   child: Text(
-                                    itemData[index].description,
+                                    state.model.response![index].answer!,
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 13,
@@ -83,12 +85,12 @@ class _FaqsState extends State<Faqs> {
                                   ),
                                 ),
                                 headerBuilder: (BuildContext context, bool isExpanded) {
-                                  return Container(
+                                  return Padding(
                                     padding: EdgeInsets.fromLTRB(12, 5, 12, 0),
                                     child: Text(
-                                      itemData[index].headerItem,
+                                      state.model.response![index].question!,
                                       style: TextStyle(
-                                        color: itemData[index].colorsItem,
+                                        color: Colors.white,
                                         fontSize: 16,
                                       ),
                                     ),
@@ -98,7 +100,9 @@ class _FaqsState extends State<Faqs> {
                             ],
                             expansionCallback: (int item, bool status) {
                               setState(() {
-                                itemData[index].expanded = !itemData[index].expanded;
+                                //itemData[index].expanded = !itemData[index].expanded;
+                                isExpanded? isExpanded = false : isExpanded = true;
+
                               });
                             },
                           );
@@ -117,40 +121,4 @@ class _FaqsState extends State<Faqs> {
       ),
     );
   }
-
-  List<ItemModel> itemData = <ItemModel>[
-
-    ItemModel(
-        headerItem: 'What is Q Charge?',
-        description:
-        "Android is a mobile operating system based on a modified version of the Linux kernel and other open source software, designed primarily for touchscreen mobile devices such as smartphones and tablets. ... Some well known derivatives include Android TV for televisions and Wear OS for wearables, both developed by Google.",
-        colorsItem: AppColor.app_txt_amber_light,
-        img: 'assets/icons/pngs/account_register_2.png'
-    ),
-
-    ItemModel(
-        headerItem: 'Why use Q Charge?',
-        description:
-        "Q Charge is Google’s portable UI toolkit for crafting beautiful, natively compiled applications for mobile, web, and desktop from a single codebase. Flutter works with existing code, is used by developers and organizations around the world, and is free and open source.",
-        colorsItem: AppColor.app_txt_amber_light,
-        img: 'assets/icons/pngs/account_register_2.png'
-    ),
-
-    ItemModel(
-        headerItem: 'What makes Q Charge unique?',
-        description:
-        "Q Charge is different than most other options for building mobile apps because it doesn’t rely on web browser technology nor the set of widgets that ship with each device.",
-        colorsItem: AppColor.app_txt_amber_light,
-        img: 'assets/icons/pngs/account_register_2.png'
-    ),
-
-    ItemModel(
-        headerItem: 'Who uses Q Charge?',
-        description:
-        "Developers inside and outside of Google use Q Charge to build beautiful natively-compiled apps for iOS and Android. To learn about some of these apps, visit the showcase.",
-        colorsItem: AppColor.app_txt_amber_light,
-        img: 'assets/icons/pngs/account_register_2.png'
-    ),
-
-  ];
 }

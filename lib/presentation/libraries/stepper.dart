@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:qcharge_flutter/di/get_it.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/stepper_cubit.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 
 const double MARGIN_NORMAL = 16;
@@ -67,6 +70,8 @@ class HorizontalStepper extends StatefulWidget {
 }
 
 class _HorizontalStepperState extends State<StatefulWidget> {
+  late StepperCubit cubit;
+
   final List<HorizontalStep> steps;
   final Color selectedColor;
   final Color unSelectedColor;
@@ -98,12 +103,21 @@ class _HorizontalStepperState extends State<StatefulWidget> {
   void initState() {
     super.initState();
 
+    cubit = getItInstance<StepperCubit>();
+
     _controller = PageController();
     _controller.addListener(() {
       if (!steps[currentStep].isValid) {
         _controller.jumpToPage(currentStep);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    cubit.close();
   }
 
   void changeStatus(int index) {
@@ -156,9 +170,17 @@ class _HorizontalStepperState extends State<StatefulWidget> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Column(
-      children: _getTopTypeWidget(width),
-    );
+    return BlocBuilder<StepperCubit, StepperState>(
+        bloc: cubit,
+        builder: (context, state) {
+          if (state is StepperOnNext) {
+            print('---- : next called 3');
+          }
+          return Column(
+            children: _getTopTypeWidget(width),
+          );
+        });
+
   }
 
 
@@ -204,7 +226,24 @@ class _HorizontalStepperState extends State<StatefulWidget> {
       ),
       _getTitleWidgets(),
       _getPageWidgets(),
-      _getButtons()
+      _getButtons(),
+
+      BlocConsumer<StepperCubit, StepperState>(
+        builder: (context, state) {
+          return const SizedBox.shrink();
+        },
+        listenWhen: (previous, current) => current is StepperOnNext,
+        listener: (context, state) {
+          //'Password has send to your email. Please get your new password from email and login.',
+          //Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial,(route) => false,);
+          if (state is StepperOnNext) {
+            print('---- : next called 2 ');
+            //edgeAlert(context, title: 'Note', description: 'On Next Called', gravity: Gravity.top);
+            goToNextPage();
+          }
+        },
+      ),
+
     ];
   }
 
@@ -215,7 +254,9 @@ class _HorizontalStepperState extends State<StatefulWidget> {
         padding: const EdgeInsets.only(left: 34, right: 34, bottom: 100),
         child: Button(text: TranslationConstants.getStarted.t(context),
           bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
-          onPressed: () => steps[currentStep].isValid ? goToNextPage() : null,
+          onPressed: () {
+            goToNextPage();
+          },
         ),
       ),
     );

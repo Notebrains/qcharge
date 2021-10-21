@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:io' as Io;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
@@ -31,6 +33,7 @@ class AddOrUpdateCar extends StatefulWidget {
   String carModelId;
   final String carLicencePlate;
   final String vehicleId;
+  String image;
 
   AddOrUpdateCar(
       {Key? key,
@@ -42,6 +45,7 @@ class AddOrUpdateCar extends StatefulWidget {
       required this.carModelId,
       required this.carLicencePlate,
       required this.vehicleId,
+      required this.image,
       })
       : super(key: key);
 
@@ -131,7 +135,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 8, bottom: 24, left: 16, right: 16),
-                          child: setImage(xFile!.path),
+                          child: setImage(xFile!.path, widget.image),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 28, right: 22),
@@ -410,19 +414,19 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
     );
   }
 
-  setImage(String path) {
-    print('----path : $path');
+  setImage(String path, String image) {
+    print('----path: $path');
     if (path.isEmpty) {
       return cachedNetImgWithRadius(
-        Strings.imgUrlCar,
+        image,
         double.infinity,
         200,
         4,
       );
     } else {
-      final bytes = File(xFile!.path).readAsBytesSync();
-      base64Image = "data:image/png;base64," + base64Encode(bytes);
-      print("----base64 img : $base64Image");
+      final bytes = File(path).readAsBytesSync();
+      base64Image = base64Encode(bytes);
+      print('-----base64Image:  $base64Image');
 
       return Image.file(
         File(xFile!.path),

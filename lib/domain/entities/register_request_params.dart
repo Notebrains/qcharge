@@ -10,10 +10,12 @@ class RegisterRequestParams {
   final String carModel;
   final String carName;
   final String carLicencePlate;
+  final String image;
 
   RegisterRequestParams({
     required this.firstName, required this.lastName, required this.mobile, required this.password, required this.confirmPassword,
-    required this.email, required this.brand, required this.carModel, required this.carName, required this.carLicencePlate
+    required this.email, required this.brand, required this.carModel, required this.carName, required this.carLicencePlate,
+    required this.image
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,5 +29,6 @@ class RegisterRequestParams {
         'model': carModel,
         'car_name': carName,
         'car_lisense_plate': carLicencePlate,
+        'image': image,
       };
 }

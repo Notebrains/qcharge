@@ -1,6 +1,6 @@
 /// status : 1
-/// message : "Activity List"
-/// response : [{"id":1,"slug":"activity","title":"Activity","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/activity/home_screen_6-1632390538.png","body":"<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>\r\n<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</p>","status":1}]
+/// message : "Faq List"
+/// response : [{"id":1,"question":"Test question","answer":"Test Answer","status":1,"expanded":true}]
 
 class FaqApiResModel {
   FaqApiResModel({
@@ -43,58 +43,51 @@ class FaqApiResModel {
 }
 
 /// id : 1
-/// slug : "activity"
-/// title : "Activity"
-/// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/activity/home_screen_6-1632390538.png"
-/// body : "<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>\r\n<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</p>"
+/// question : "Test question"
+/// answer : "Test Answer"
 /// status : 1
+/// expanded : true
 
 class Response {
   Response({
       int? id, 
-      String? slug, 
-      String? title, 
-      String? image, 
-      String? body, 
-      int? status,}){
+      String? question, 
+      String? answer, 
+      int? status, 
+      bool? expanded,}){
     _id = id;
-    _slug = slug;
-    _title = title;
-    _image = image;
-    _body = body;
+    _question = question;
+    _answer = answer;
     _status = status;
+    _expanded = expanded;
 }
 
   Response.fromJson(dynamic json) {
     _id = json['id'];
-    _slug = json['slug'];
-    _title = json['title'];
-    _image = json['image'];
-    _body = json['body'];
+    _question = json['question'];
+    _answer = json['answer'];
     _status = json['status'];
+    _expanded = json['expanded'];
   }
   int? _id;
-  String? _slug;
-  String? _title;
-  String? _image;
-  String? _body;
+  String? _question;
+  String? _answer;
   int? _status;
+  bool? _expanded;
 
   int? get id => _id;
-  String? get slug => _slug;
-  String? get title => _title;
-  String? get image => _image;
-  String? get body => _body;
+  String? get question => _question;
+  String? get answer => _answer;
   int? get status => _status;
+  bool? get expanded => _expanded;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;
-    map['slug'] = _slug;
-    map['title'] = _title;
-    map['image'] = _image;
-    map['body'] = _body;
+    map['question'] = _question;
+    map['answer'] = _answer;
     map['status'] = _status;
+    map['expanded'] = _expanded;
     return map;
   }
 

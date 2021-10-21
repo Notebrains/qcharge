@@ -109,6 +109,7 @@ class _VerifyState extends State<Verify> {
                       child: Button(text: TranslationConstants.verify.t(context),
                         bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                         onPressed: () {
+
                           if(_mobController!.text.isEmpty){
                             edgeAlert(context, title: 'Warning', description: 'Please enter mobile no.', gravity: Gravity.top);
                           } else if(_otpController!.text.isEmpty){

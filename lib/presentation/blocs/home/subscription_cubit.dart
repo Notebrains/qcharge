@@ -21,9 +21,9 @@ class SubscriptionCubit extends Cubit<SubscriptionState> {
     required this.loadingCubit,
   }) : super(SubscriptionInitial());
 
-  void initiateSubscription() async {
+  void initiateSubscription(String userId) async {
     loadingCubit.show();
-    final Either<AppError, SubscriptionApiResModel> eitherResponse = await subscriptionUser(NoParams());
+    final Either<AppError, SubscriptionApiResModel> eitherResponse = await subscriptionUser(userId);
 
     emit(eitherResponse.fold(
           (l) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:qcharge_flutter/data/models/bill_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/car_brand_model.dart';
 import 'package:qcharge_flutter/data/models/faq_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/forgot_pass_api_res_model.dart';
@@ -138,6 +139,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<Either<AppError, ProfileApiResModel>> getProfile(String userId) async {
     try {
       final response = await _authenticationRemoteDataSource.getProfile(userId);
+      if (response.status == 1) {
+        await _authenticationLocalDataSource.saveWalletBalance(response.response!.wallet!);
+      }
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));
@@ -207,9 +211,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<Either<AppError, SubscriptionApiResModel>> getSubscription() async {
+  Future<Either<AppError, SubscriptionApiResModel>> getSubscription(String userId) async {
     try {
-      final response = await _authenticationRemoteDataSource.doSubscription();
+      final response = await _authenticationRemoteDataSource.doSubscription(userId);
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));
@@ -258,6 +262,66 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<Either<AppError, StatusMessageApiResModel>> addUpdateCar(Map<String, dynamic> params) async {
     try {
       final response = await _authenticationRemoteDataSource.addUpdateCar(params);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> cancelSubscription(Map<String, dynamic> params) async {
+    try {
+      final response = await _authenticationRemoteDataSource.cancelSubscription(params);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> purchaseSubscription(Map<String, dynamic> params) async {
+    try {
+      final response = await _authenticationRemoteDataSource.purchaseSubscription(params);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> walletRecharge(Map<String, dynamic> params) async {
+    try {
+      final response = await _authenticationRemoteDataSource.walletRecharge(params);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, BillApiResModel>> getBills(String userId) async {
+    try {
+      final response = await _authenticationRemoteDataSource.getBills(userId);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> doChargingCalculation(Map<String, dynamic> params) async {
+    try {
+      final response = await _authenticationRemoteDataSource.doChargingCalculation(params);
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));

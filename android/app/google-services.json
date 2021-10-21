@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "210310094911",
+    "project_id": "qcharge-41c3a",
+    "storage_bucket": "qcharge-41c3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210310094911:android:a23a3458de8e574471988a",
+        "android_client_info": {
+          "package_name": "com.dev.qcharge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210310094911-q1v1v8vglo312ovkmh87i2inmjmtls7i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dev.qcharge",
+            "certificate_hash": "d53d917c39fd01bdd0c292cd90a7d81ba1396fa2"
+          }
+        },
+        {
+          "client_id": "210310094911-r9nj7lt69l8nbco9cu1polc6dcpj2h75.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_nmuQAIhwWfQQrQjIZrWbGrOdBhPjErs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210310094911-r9nj7lt69l8nbco9cu1polc6dcpj2h75.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

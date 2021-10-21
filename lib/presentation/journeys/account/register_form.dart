@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:qcharge_flutter/presentation/blocs/register/register_cubit.dart'
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
+import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
 import 'package:qcharge_flutter/presentation/widgets/ic_if_row.dart';
 import 'package:qcharge_flutter/presentation/widgets/select_drop_list.dart';
 import 'package:qcharge_flutter/presentation/blocs/register/car_brand_cubit.dart';
@@ -26,6 +28,7 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   late File? xFile = File('');
+  String base64Image = '';
   bool isEnabled = true ;
   String carBrandId = '', carModelId = '';
   late TextEditingController? _mobileController, _passwordController, _firstNameController, _lastNameController, _emailController,
@@ -125,6 +128,37 @@ class _RegisterFormState extends State<RegisterForm> {
     });
   }
 
+  setImage(String path) {
+    print('----path: $path');
+    if (path.isEmpty) {
+      return cachedNetImgWithRadius(
+        Strings.imgUrlNotFoundYellowAvatar,
+        110,
+        110,
+        30,
+      );
+    } else {
+      final bytes = File(path).readAsBytesSync();
+      base64Image = base64Encode(bytes);
+      print('-----base64Image:  $base64Image');
+
+      return CircleAvatar(
+        radius: 57,
+        backgroundColor : Colors.amber,
+        child: ClipOval(
+          child: SizedBox(
+            width: 111.0,
+            height: 111.0,
+            child: Image.file(
+              File(xFile!.path),
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
 
   @override
   void dispose() {
@@ -149,38 +183,25 @@ class _RegisterFormState extends State<RegisterForm> {
         physics: BouncingScrollPhysics(),
         child: Column(
           children: [
-            Visibility(
-              visible: false,
+            InkWell(
+              onTap: (){
+                getImage();
+              },
               child: Padding(
                 padding: const EdgeInsets.only(top: 45),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 45,
-                      backgroundColor : Colors.grey.shade700,
-                      child: ClipOval(
-                        child: new SizedBox(
-                          width: 80.0,
-                          height: 80.0,
-                          child: Image.file(
-                            xFile!,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
+                child: Stack(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8, bottom: 24),
+                      child: setImage(xFile!.path),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 60.0),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.add_photo_alternate_rounded,
-                          size: 30.0,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          getImage();
-                        },
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Icon(
+                        Icons.camera_alt_rounded,
+                        color: Colors.white,
+                        size: 30,
                       ),
                     ),
                   ],
@@ -189,7 +210,7 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
 
             Container(
-              margin: const EdgeInsets.fromLTRB(8, 45, 8, 0),
+              margin: const EdgeInsets.fromLTRB(8, 12, 8, 0),
               child: IcIfRow(txt: 'Full name *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_6.png', icColor: Colors.white,
                 hint: 'Enter first name *', textInputType: TextInputType.text,
@@ -325,6 +346,8 @@ class _RegisterFormState extends State<RegisterForm> {
                     edgeAlert(context, title: 'Warning', description: 'Please select car model', gravity: Gravity.top);
                   } else if(_carLicencePlateController!.text.isEmpty){
                     edgeAlert(context, title: 'Warning', description: 'Please enter car licence plate no.', gravity: Gravity.top);
+                  } else if(base64Image.isEmpty){
+                    edgeAlert(context, title: 'Warning', description: 'Please pick profile image.', gravity: Gravity.top);
                   } else {
                     if (isEnabled) {
                       BlocProvider.of<RegisterCubit>(context).initiateRegister(
@@ -338,6 +361,7 @@ class _RegisterFormState extends State<RegisterForm> {
                         carBrandId,
                         carModelId,
                         _carLicencePlateController?.text ?? '',
+                        base64Image,
                       );
                     }
                   }
