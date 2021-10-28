@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_card_cubit.dart';
@@ -105,7 +107,7 @@ class _HomeCardsState extends State<HomeCards> {
                   ),
                 );
               } else {
-                return NoDataFound(txt: 'No Data Found', onRefresh: (){});
+                return NoDataFound(txt: TranslationConstants.loadingCaps.t(context), onRefresh: (){});
               }
 
 

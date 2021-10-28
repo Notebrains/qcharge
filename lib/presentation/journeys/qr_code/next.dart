@@ -10,10 +10,17 @@ import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 
 
-class Next extends StatelessWidget{
+class Next extends StatefulWidget{
   final Function onTap;
 
   const Next({Key? key, required this.onTap}) : super(key: key);
+
+  @override
+  State<Next> createState() => _NextState();
+}
+
+class _NextState extends State<Next> {
+  String selectedSocket = "";
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +60,10 @@ class Next extends StatelessWidget{
                 ],
               ),
             ),
-
-
             Padding(
               padding: const EdgeInsets.all(36.0),
               child: Button(text: TranslationConstants.next.t(context), bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)], onPressed: (){
-                onTap();
+                widget.onTap();
               },),
             ),
           ],
@@ -66,5 +71,4 @@ class Next extends StatelessWidget{
       ),
     );
   }
-
 }

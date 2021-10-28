@@ -28,12 +28,18 @@ class UpdateProfileCubit extends Cubit<UpdateProfileState> {
   void initiateUpdateProfile(
       String userId,
       String password,
+      String firstName,
+      String lastName,
+      String image,
       ) async {
     loadingCubit.show();
     final Either<AppError, StatusMessageApiResModel> eitherResponse = await updateProfileUser(
       UpdateProfileParams(
         userId: userId,
         password: password,
+        firstName: firstName,
+        lastName: lastName,
+        image: image,
       ),
     );
 

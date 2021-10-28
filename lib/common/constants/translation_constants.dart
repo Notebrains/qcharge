@@ -120,5 +120,33 @@ class TranslationConstants {
   static const String licencePlate = 'licencePlate';
   static const String updateCar = 'updateCar';
   static const String name = 'name';
-
+  static const String viewAcStation = 'viewAcStation';
+  static const String viewDcStation = 'viewDcStation';
+  static const String direction = 'direction';
+  static const String refresh = 'refresh';
+  static const String onlineTopup = 'onlineTopup';
+  static const String allPlan = 'allPlan';
+  static const String view = 'view';
+  static const String paymentMethod = 'paymentMethod';
+  static const String selectPaymentMethodTxt = 'selectPaymentMethodTxt';
+  static const String walletBalance = 'walletBalance';
+  static const String wallet = 'wallet';
+  static const String payOnline = 'payOnline';
+  static const String cancelSubs = 'cancelSubs';
+  static const String cancelSubsTxt = 'cancelSubsTxt';
+  static const String selectSubsTxt = 'selectSubsTxt';
+  static const String warning = 'warning';
+  static const String message = 'message';
+  static const String monthly = 'monthly';
+  static const String total = 'total';
+  static const String dueBill = 'dueBill';
+  static const String selectCarBrand = 'selectCarBrand';
+  static const String selectCarModel = 'selectCarModel';
+  static const String loadingCaps = 'loadingCaps';
+  static const String getInTouch = 'getInTouch';
+  static const String withinReachTxt = 'withinReachTxt';
+  static const String address = 'address';
+  static const String payBill = 'payBill';
+  static const String yourBilling = 'yourBilling';
+  static const String duration = 'duration';
 }

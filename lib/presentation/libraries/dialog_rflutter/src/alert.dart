@@ -98,7 +98,6 @@ class Alert {
         child: SingleChildScrollView(
           child: AlertDialog(
               key: id == null ? null : Key(id!),
-              backgroundColor: Colors.black26,
               shape: style.alertBorder ?? _defaultShape(),
               insetPadding: style.alertPadding,
               elevation: style.alertElevation,

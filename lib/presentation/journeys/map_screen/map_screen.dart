@@ -4,7 +4,6 @@ import 'dart:math' show cos, sqrt, asin;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
@@ -45,15 +44,11 @@ class _MapScreenState extends State<MapScreen> {
   late GoogleMapController mapController;
 
   late Position _currentPosition;
-  String _currentAddress = '';
   final startAddressController = TextEditingController();
   final destinationAddressController = TextEditingController();
   final startAddressFocusNode = FocusNode();
   final destinationAddressFocusNode = FocusNode();
 
-  String _startAddress = '';
-  String _destinationAddress = '';
-  String _placeDistance = '0.00';
   bool isCurrentLocFetched = false;
   bool isViewAllAcStation = false;
   bool isViewAllDcStation = false;
@@ -63,7 +58,7 @@ class _MapScreenState extends State<MapScreen> {
     circleId: CircleId('q_charge_circle'),
     radius: 12,
   );
-  late PolylinePoints polylinePoints;
+  PolylinePoints polylinePoints = PolylinePoints();
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -79,10 +74,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _startAddress = 'Barjora, Bankura, West bengal, India';
-    startAddressController.text = 'Barjora, Bankura, West bengal, India';
-    destinationAddressController.text = 'Bigbazar, City center, Durgapur, West Bengal, India';
-    _destinationAddress = 'Bigbazar, City center, Durgapur, West Bengal, India';
 
     return Scaffold(
       key: _scaffoldKey,
@@ -96,11 +87,12 @@ class _MapScreenState extends State<MapScreen> {
               children: <Widget>[
                 // Map View
                 GoogleMap(
+                  padding: EdgeInsets.only(top: 115, bottom: 70),
                   markers: Set<Marker>.from(markers),
                   circles: Set.of([circle]),
                   initialCameraPosition: _initialLocation,
                   myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
+                  myLocationButtonEnabled: false,
                   mapType: MapType.normal,
                   zoomGesturesEnabled: true,
                   zoomControlsEnabled: false,
@@ -111,10 +103,9 @@ class _MapScreenState extends State<MapScreen> {
                     _controllerGoogleMap.complete(controller);
                     mapController = controller;
 
+                    setMarkers(state.model.response!);
                     // Getting user loc and address after map loaded
                     _getCurrentLocation();
-
-                    setMarkers(state.model.response!);
                   },
                 ),
 
@@ -180,7 +171,7 @@ class _MapScreenState extends State<MapScreen> {
                                           Padding(
                                             padding: const EdgeInsets.only(right: 12),
                                             child: Text(
-                                              'View all AC stations',
+                                              TranslationConstants.viewAcStation.t(context),
                                               style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10, color: Colors.white),
                                               maxLines: 2,
                                               softWrap: false,
@@ -251,7 +242,7 @@ class _MapScreenState extends State<MapScreen> {
                                           Padding(
                                             padding: const EdgeInsets.only(right: 12),
                                             child: Text(
-                                              'View all DC stations',
+                                              TranslationConstants.viewDcStation.t(context),
                                               style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10, color: Colors.white),
                                               maxLines: 2,
                                               softWrap: false,
@@ -309,202 +300,11 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 ),
 
-                // Show the place input fields & button for
-                // showing the route
-
-                /*SafeArea(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 16),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                  ),
-                  width: width * 0.80,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 5),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        SizedBox(height: 8),
-                        isCurrentLocFetched
-                            ? TextFieldMapAddress(
-                            label: 'Start',
-                            hint: 'Your current location',
-                            prefixIcon: Icon(Icons.looks_one_outlined),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.my_location),
-                              onPressed: () {
-                                try {
-                                  print('----Curr add : $_currentAddress , start add: $_startAddress');
-                                  if (_currentAddress.isNotEmpty && _currentAddress != null) {
-                                    startAddressController.text = _currentAddress;
-                                    _startAddress = _currentAddress;
-                                  } else {
-                                    setState(() {
-                                      isCurrentLocFetched = false;
-                                      _getCurrentLocation();
-                                    });
-                                  }
-                                } catch (e) {
-                                  print(e);
-                                  setState(() {
-                                    isCurrentLocFetched = false;
-                                    _getCurrentLocation();
-                                  });
-                                }
-                              },
-                            ),
-                            controller: startAddressController,
-                            focusNode: startAddressFocusNode,
-                            width: width - 24,
-                            locationCallback: (String value) {
-                              setState(() {
-                                _startAddress = value;
-                              });
-                            })
-                            : EtBorderProgressBar(
-                          text: "Getting current location",
-                          width: width,
-                          onTap: () {
-                            setState(() {
-                              startAddressController.text = '';
-                              isCurrentLocFetched = true;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 8),
-                        TextFieldMapAddress(
-                            label: 'Destination',
-                            hint: 'Choose destination',
-                            prefixIcon: Icon(Icons.looks_two_outlined),
-                            controller: destinationAddressController,
-                            focusNode: destinationAddressFocusNode,
-                            width: width - 24,
-                            locationCallback: (String value) {
-                              setState(() {
-                                _destinationAddress = value;
-                              });
-                            }),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.greenAccent,
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                          ),
-                          child: Container(
-                            width: 215,
-                            //padding: const EdgeInsets.only(left: 8, right: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.pin_drop_outlined,
-                                  size: 18,
-                                  color: Colors.black87,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 12),
-                                  child: Text(
-                                    _placeDistance != null && _placeDistance != '0.00' ? 'Distance: $_placeDistance' : 'Show Route',
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      letterSpacing: 1,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15.0,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onPressed: (_startAddress != '' && _startAddress != null && _destinationAddress != '')
-                              ? () async {
-                            print('----1 $_startAddress ----$_destinationAddress');
-                            startAddressFocusNode.unfocus();
-                            destinationAddressFocusNode.unfocus();
-                            setState(() {
-                              if (markers.isNotEmpty) markers.clear();
-                              if (polylines.isNotEmpty) polylines.clear();
-                              if (polylineCoordinates.isNotEmpty) polylineCoordinates.clear();
-                              _placeDistance = '5km';
-                            });
-
-                            _calculateDistance().then((isCalculated) {
-                              if (isCalculated) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Distance Calculated'),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Error Calculating Distance'),
-                                  ),
-                                );
-                              }
-                            });
-                          }
-                              : () {
-                            print('----2 $_startAddress ----$_destinationAddress');
-
-                            setState(() {
-                              isCurrentLocFetched = false;
-                              _getCurrentLocation();
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),*/
-                // Show current location button
-                /*SafeArea(
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0, bottom: 120.0),
-                child: ClipOval(
-                  child: Material(
-                    color: Colors.orange[100], // button color
-                    child: InkWell(
-                      splashColor: Colors.orange, // inkwell color
-                      child: SizedBox(
-                        width: 45,
-                        height: 45,
-                        child: Icon(Icons.my_location),
-                      ),
-                      onTap: () {
-                        _getCurrentLocation();
-                        mapController.animateCamera(
-                          CameraUpdate.newCameraPosition(
-                            CameraPosition(
-                              target: LatLng(
-                                _currentPosition.latitude,
-                                _currentPosition.longitude,
-                              ),
-                              zoom: 18.0,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),*/
               ],
             );
           } else {
             return NoDataFound(
-              txt: 'No Data Found',
+              txt: TranslationConstants.loadingCaps.t(context),
               onRefresh: () {},
             );
           }
@@ -512,61 +312,42 @@ class _MapScreenState extends State<MapScreen> {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 80),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Visibility(
-              visible: false,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 28),
-                child: FloatingActionButton(
-                  heroTag: '2',
-                  onPressed: () {
-                    //showBottomSheetUi();
-                  },
-                  child: Image.asset(
-                    'assets/icons/pngs/create_account_filter.png',
-                    width: 22,
-                  ),
-                  backgroundColor: AppColor.grey,
-                  tooltip: 'Pressed',
-                  elevation: 5,
-                  splashColor: Colors.grey,
-                ),
-              ),
-            ),
-            FloatingActionButton(
-              heroTag: '3',
-              onPressed: () {
-                _getCurrentLocation();
-              },
-              child: Icon(
-                Icons.my_location_rounded,
-                color: Colors.white,
-                size: 24,
-              ),
-              backgroundColor: AppColor.grey,
-              tooltip: 'Current Location',
-              elevation: 5,
-              splashColor: Colors.grey,
-            ),
-          ],
+        child: FloatingActionButton(
+          heroTag: '3',
+          onPressed: () {
+            _getCurrentLocation();
+          },
+          child: !isCurrentLocFetched?
+              CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.amber.shade600,
+              ) : Icon(
+            Icons.my_location_rounded,
+            color: Colors.white,
+            size: 24,
+          ),
+          backgroundColor: AppColor.grey,
+          tooltip: 'Current Location',
+          elevation: 5,
+          splashColor: Colors.grey,
         ),
       ),
     );
   }
 
   // Method for retrieving the current location
-  _getCurrentLocation() async {
+  void _getCurrentLocation() async {
     await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.medium,
+      desiredAccuracy: LocationAccuracy.bestForNavigation,
       forceAndroidLocationManager: true,
       timeLimit: Duration(seconds: 20),
     ).then((Position position) async {
       setState(() {
+        print('CURRENT POS 1: $position');
+
         isCurrentLocFetched = true;
         _currentPosition = position;
-        print('CURRENT POS: $_currentPosition');
+        print('CURRENT POS 2: $_currentPosition');
         mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
@@ -600,7 +381,7 @@ class _MapScreenState extends State<MapScreen> {
               ),
             );
           });
-          await _getAddress();
+
         }).catchError((error) {
           //handle the exception
           print('----Error 1: $error');
@@ -629,23 +410,6 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  // Method for retrieving the address
-  _getAddress() async {
-    try {
-      List<Placemark> p = await placemarkFromCoordinates(_currentPosition.latitude, _currentPosition.longitude);
-      Placemark place = p[0];
-
-      setState(() {
-        _currentAddress = "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
-        startAddressController.text = _currentAddress;
-        _startAddress = _currentAddress;
-
-        print('----_currentAddress : $_currentAddress');
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
 
   double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
@@ -670,30 +434,37 @@ class _MapScreenState extends State<MapScreen> {
     double destinationLatitude,
     double destinationLongitude,
   ) async {
-    polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      'AIzaSyAJyzOhJBr-3I0aErGmue98rhhuYZTLR6s', // Google Maps API Key
-      PointLatLng(startLatitude, startLongitude),
-      PointLatLng(destinationLatitude, destinationLongitude),
-      travelMode: TravelMode.driving,
-    );
+    //print('---- startLatitude, startLongitude, destinationLatitude, destinationLongitude: $startLatitude ,  $startLongitude , $destinationLatitude , $destinationLongitude , ');
 
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+    try {
+      polylineCoordinates.clear();
+      polylinePoints = PolylinePoints();
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+            'AIzaSyDPICnoQ4VQA_3YM9hxVDhipQ76uNKF7_A', // Google Maps API Key
+            PointLatLng(startLatitude, startLongitude),
+            PointLatLng(destinationLatitude, destinationLongitude),
+            travelMode: TravelMode.driving,
+          );
+
+      if (result.points.isNotEmpty) {
+            result.points.forEach((PointLatLng point) {
+              polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+            });
+          }
+
+      PolylineId id = PolylineId('q_charge_poly');
+      Polyline polyline = Polyline(
+            polylineId: id,
+            color: Colors.blueGrey.shade700,
+            points: polylineCoordinates,
+            width: 3,
+          );
+      polylines[id] = polyline;
+
+      setState(() {});
+    } catch (e) {
+      print(e);
     }
-
-    PolylineId id = PolylineId('q_charge_poly');
-    Polyline polyline = Polyline(
-      polylineId: id,
-      color: Colors.red,
-      points: polylineCoordinates,
-      width: 5,
-    );
-    polylines[id] = polyline;
-
-    setState(() {});
   }
 
 
@@ -763,6 +534,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+
   showBottomSheetUi(
     String stationId,
     double destinationLat,
@@ -814,13 +586,15 @@ class _MapScreenState extends State<MapScreen> {
                                 onPressed: () async {
                                   await _createPolylines(
                                     _currentPosition.latitude,
-                                    _currentPosition.latitude,
+                                    _currentPosition.longitude,
                                     destinationLat,
                                     destinationLong,
                                   );
+
+                                  Navigator.pop(context);
                                 },
                                 child: Text(
-                                  'DIRECTION',
+                                  TranslationConstants.direction.t(context).toUpperCase(),
                                   style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -873,7 +647,9 @@ class _MapScreenState extends State<MapScreen> {
                                 ],
                               ),
                             ),
+
                             cachedNetImgWithRadius(state.stationDetailsApiResModel.response!.image!, double.infinity, Sizes.dimen_50.h, 6),
+
                             Container(
                               width: double.maxFinite,
                               padding: const EdgeInsets.all(14),
@@ -914,7 +690,7 @@ class _MapScreenState extends State<MapScreen> {
                     );
                   } else {
                     return NoDataFound(
-                      txt: 'No Data Found',
+                      txt: TranslationConstants.loadingCaps.t(context),
                       onRefresh: () {
                         BlocProvider.of<MapStationDetailsCubit>(context).initiateMapStationDetails(stationId);
                       },

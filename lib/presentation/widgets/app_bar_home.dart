@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/languages.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
+import 'package:qcharge_flutter/data/data_sources/language_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/blocs/language/language_cubit.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
@@ -11,7 +12,7 @@ import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 PreferredSizeWidget appBarHome(BuildContext context) {
   final ValueNotifier<String> _langValueLister = ValueNotifier<String>('ENG');
   return AppBar(
-    toolbarHeight: Sizes.dimen_26.h,
+    toolbarHeight: Sizes.dimen_70.w,
     title: Image.asset('assets/icons/pngs/q_charge_logo_1.png', fit: BoxFit.cover, width: 30),
     centerTitle: true,
     backgroundColor: AppColor.grey,
@@ -24,17 +25,18 @@ PreferredSizeWidget appBarHome(BuildContext context) {
 
       ValueListenableBuilder(
         builder: (context, String lang, child) {
+          print('----Language 1: $lang');
           return Center(
             child: Padding(
               padding: const EdgeInsets.only(right: 12, bottom: 5),
               child: PopupMenuButton<String>(
                 icon: Center(
-                  child: Txt(txt: lang, txtColor: Colors.white, txtSize: 14, fontWeight: FontWeight.bold, padding: 0, onTap: () {}),
+                  child: Text(lang, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),),
                 ),
                 onSelected: (value) {
-                  //print('----Language: $value');
-                  _langValueLister.value = value;
+                  //print('----Language 2: $value');
                   value == 'ENG' ? _onLanguageSelected(0, context) : _onLanguageSelected(1, context);
+                  _langValueLister.value = value;
                 },
                 itemBuilder: (BuildContext context) {
                   return {'ENG', 'TH' }.map((String choice) {

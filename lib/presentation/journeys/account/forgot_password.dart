@@ -92,8 +92,8 @@ class _ForgotPasswordState extends State {
                               text: TranslationConstants.sendCaps.t(context),
                               bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                               onPressed: () {
-                                if (_controller.text.isEmpty) {
-                                  edgeAlert(context, title: 'Warning', description: 'Please enter mobile number', gravity: Gravity.top);
+                                if (_controller.text.isEmpty || _controller.text.length < 7 || _controller.text.length > 14) {
+                                  edgeAlert(context, title: 'Warning', description: 'Please enter valid mobile number', gravity: Gravity.top);
                                 } else {
                                   BlocProvider.of<ForgotPasswordCubit>(context).initiateForgotPassword(
                                     _controller.text,

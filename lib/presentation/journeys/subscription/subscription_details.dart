@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
 

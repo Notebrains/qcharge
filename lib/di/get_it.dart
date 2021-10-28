@@ -1,10 +1,12 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:qcharge_flutter/domain/usecases/add_update_car_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/bill_pay_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/bill_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/cancel_subscription_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/delete_car_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/faq_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/firebase_token_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/forgot_pass_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/get_car_brand.dart';
 import 'package:qcharge_flutter/domain/usecases/get_car_model.dart';
@@ -21,9 +23,11 @@ import 'package:qcharge_flutter/domain/usecases/topup_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/update_profile_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/verify_user.dart';
 import 'package:qcharge_flutter/domain/usecases/wallet_recharge_usecase.dart';
+import 'package:qcharge_flutter/presentation/blocs/appblocks/firebase_token_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/contents/faq_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/add_update_car_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/bill_cubit.dart';
+import 'package:qcharge_flutter/presentation/blocs/home/bill_pay_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/cancel_subscription_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/delete_car_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
@@ -157,6 +161,10 @@ Future init() async {
 
   getItInstance.registerLazySingleton<Profile>(() => Profile(getItInstance()));
 
+  getItInstance.registerLazySingleton<FirebaseTokenCubit>(() => FirebaseTokenCubit(usecase: getItInstance()));
+
+  getItInstance.registerLazySingleton<FirebaseTokenUsecase>(() => FirebaseTokenUsecase(getItInstance()));
+
   getItInstance.registerLazySingleton<TopUp>(() => TopUp(getItInstance()));
 
   getItInstance.registerLazySingleton<HomeBanner>(() => HomeBanner(getItInstance()));
@@ -189,6 +197,7 @@ Future init() async {
       loadingCubit: getItInstance(),
       topUpCubit: getItInstance(),
       mapCubit: getItInstance(),
+      firebaseTokenCubit: getItInstance(),
     ),
   );
 
@@ -270,6 +279,15 @@ Future init() async {
   getItInstance.registerFactory(
     () => BillCubit (
       billUsecase: getItInstance(),
+      loadingCubit: getItInstance(),
+    ),
+  );
+
+  getItInstance.registerLazySingleton<BillPaymentUsecase>(() => BillPaymentUsecase(getItInstance()));
+
+  getItInstance.registerFactory(
+    () => BillPaymentCubit (
+      usecase: getItInstance(),
       loadingCubit: getItInstance(),
     ),
   );

@@ -113,7 +113,7 @@ class _FaqsState extends State<Faqs> {
                 ),
               );
             } else {
-              return NoDataFound(txt: 'No Data Found', onRefresh: (){
+              return NoDataFound(txt: TranslationConstants.loadingCaps.t(context), onRefresh: (){
               },);
             }
           },

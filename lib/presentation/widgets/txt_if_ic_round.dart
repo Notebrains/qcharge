@@ -7,6 +7,7 @@ class IfIconRound extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType textInputType;
 
+
   const IfIconRound({
     Key? key,
     required this.hint,
@@ -19,7 +20,7 @@ class IfIconRound extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.fromLTRB(34.0, 0, 34.0, 12),
-        child: TextField(
+        child: TextFormField(
           enabled: true,
           autocorrect: true,
           controller: controller,
@@ -33,6 +34,7 @@ class IfIconRound extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColor.grey,
                 borderRadius: BorderRadius.all(Radius.circular(5)),
+
               ),
               child: Icon(icon, color: Colors.white,), // Change this icon as per your requirement
             ),

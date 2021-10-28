@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
+import 'package:qcharge_flutter/common/extensions/validation.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -212,7 +214,7 @@ class _LoginFormState extends State<LoginForm> {
                 if (state is LoginSuccess) {
                   if(state.model.status == 1){
                     Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
-                  } else edgeAlert(context, title: 'Warning!', description: state.model.message! , gravity: Gravity.top);
+                  } else edgeAlert(context, title: TranslationConstants.warning.t(context), description: state.model.message! , gravity: Gravity.top);
                 }
 
 

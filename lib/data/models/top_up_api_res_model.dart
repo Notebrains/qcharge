@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "TopUp History List"
-/// response : {"topup_history":[{"date":"09/09/21","time":"09:07","amount":"100"},{"date":"09/09/21","time":"09:07","amount":"100"},{"date":"09/09/21","time":"13:11","amount":"100"}],"charging_history":[{"date":"06/09/21","time":"00:00","price":"1000"}]}
+/// response : {"topup_history":[{"date":"19/10/21","time":"18:16","amount":"10"},{"date":"19/10/21","time":"18:16","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:18","amount":"10"},{"date":"19/10/21","time":"18:18","amount":"10"},{"date":"20/10/21","time":"02:49","amount":"10"},{"date":"20/10/21","time":"02:49","amount":"10"},{"date":"20/10/21","time":"02:50","amount":"10"},{"date":"20/10/21","time":"02:50","amount":"10"},{"date":"20/10/21","time":"02:52","amount":"10"},{"date":"20/10/21","time":"02:52","amount":"10"},{"date":"20/10/21","time":"02:54","amount":"10"},{"date":"20/10/21","time":"02:54","amount":"10"},{"date":"20/10/21","time":"11:29","amount":"10"},{"date":"20/10/21","time":"11:29","amount":"10"},{"date":"20/10/21","time":"11:29","amount":"20"},{"date":"25/10/21","time":"09:34","amount":"1999"},{"date":"25/10/21","time":"09:34","amount":"1999"},{"date":"25/10/21","time":"09:37","amount":"1999"},{"date":"25/10/21","time":"09:37","amount":"1999"},{"date":"25/10/21","time":"10:02","amount":"1999"},{"date":"25/10/21","time":"10:02","amount":"1999"},{"date":"25/10/21","time":"10:27","amount":"1999"},{"date":"25/10/21","time":"10:27","amount":"1999"},{"date":"25/10/21","time":"10:43","amount":"1999"},{"date":"25/10/21","time":"10:43","amount":"1999"},{"date":"25/10/21","time":"09:59","amount":"10"},{"date":"25/10/21","time":"09:59","amount":"10"},{"date":"25/10/21","time":"10:28","amount":"10"},{"date":"25/10/21","time":"10:28","amount":"10"},{"date":"25/10/21","time":"10:39","amount":"30"},{"date":"25/10/21","time":"10:39","amount":"30"},{"date":"25/10/21","time":"10:41","amount":"30"},{"date":"25/10/21","time":"10:41","amount":"30"},{"date":"25/10/21","time":"10:59","amount":"30"},{"date":"25/10/21","time":"10:59","amount":"30"},{"date":"25/10/21","time":"11:02","amount":"30"},{"date":"25/10/21","time":"11:05","amount":"10"},{"date":"25/10/21","time":"11:06","amount":"10"},{"date":"25/10/21","time":"11:08","amount":"10"},{"date":"25/10/21","time":"11:10","amount":"10"},{"date":"25/10/21","time":"11:11","amount":"12"},{"date":"25/10/21","time":"11:12","amount":"10"}],"charging_history":[{"date":"25/10/21","time":"11:12","price":"10"}],"wallet":"442"}
 
 class TopUpApiResModel {
   TopUpApiResModel({
@@ -37,15 +37,18 @@ class TopUpApiResModel {
 
 }
 
-/// topup_history : [{"date":"09/09/21","time":"09:07","amount":"100"},{"date":"09/09/21","time":"09:07","amount":"100"},{"date":"09/09/21","time":"13:11","amount":"100"}]
-/// charging_history : [{"date":"06/09/21","time":"00:00","price":"1000"}]
+/// topup_history : [{"date":"19/10/21","time":"18:16","amount":"10"},{"date":"19/10/21","time":"18:16","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:17","amount":"10"},{"date":"19/10/21","time":"18:18","amount":"10"},{"date":"19/10/21","time":"18:18","amount":"10"},{"date":"20/10/21","time":"02:49","amount":"10"},{"date":"20/10/21","time":"02:49","amount":"10"},{"date":"20/10/21","time":"02:50","amount":"10"},{"date":"20/10/21","time":"02:50","amount":"10"},{"date":"20/10/21","time":"02:52","amount":"10"},{"date":"20/10/21","time":"02:52","amount":"10"},{"date":"20/10/21","time":"02:54","amount":"10"},{"date":"20/10/21","time":"02:54","amount":"10"},{"date":"20/10/21","time":"11:29","amount":"10"},{"date":"20/10/21","time":"11:29","amount":"10"},{"date":"20/10/21","time":"11:29","amount":"20"},{"date":"25/10/21","time":"09:34","amount":"1999"},{"date":"25/10/21","time":"09:34","amount":"1999"},{"date":"25/10/21","time":"09:37","amount":"1999"},{"date":"25/10/21","time":"09:37","amount":"1999"},{"date":"25/10/21","time":"10:02","amount":"1999"},{"date":"25/10/21","time":"10:02","amount":"1999"},{"date":"25/10/21","time":"10:27","amount":"1999"},{"date":"25/10/21","time":"10:27","amount":"1999"},{"date":"25/10/21","time":"10:43","amount":"1999"},{"date":"25/10/21","time":"10:43","amount":"1999"},{"date":"25/10/21","time":"09:59","amount":"10"},{"date":"25/10/21","time":"09:59","amount":"10"},{"date":"25/10/21","time":"10:28","amount":"10"},{"date":"25/10/21","time":"10:28","amount":"10"},{"date":"25/10/21","time":"10:39","amount":"30"},{"date":"25/10/21","time":"10:39","amount":"30"},{"date":"25/10/21","time":"10:41","amount":"30"},{"date":"25/10/21","time":"10:41","amount":"30"},{"date":"25/10/21","time":"10:59","amount":"30"},{"date":"25/10/21","time":"10:59","amount":"30"},{"date":"25/10/21","time":"11:02","amount":"30"},{"date":"25/10/21","time":"11:05","amount":"10"},{"date":"25/10/21","time":"11:06","amount":"10"},{"date":"25/10/21","time":"11:08","amount":"10"},{"date":"25/10/21","time":"11:10","amount":"10"},{"date":"25/10/21","time":"11:11","amount":"12"},{"date":"25/10/21","time":"11:12","amount":"10"}]
+/// charging_history : [{"date":"25/10/21","time":"11:12","price":"10"}]
+/// wallet : "442"
 
 class Response {
   Response({
       List<Topup_history>? topupHistory, 
-      List<Charging_history>? chargingHistory,}){
+      List<Charging_history>? chargingHistory, 
+      String? wallet,}){
     _topupHistory = topupHistory;
     _chargingHistory = chargingHistory;
+    _wallet = wallet;
 }
 
   Response.fromJson(dynamic json) {
@@ -61,12 +64,15 @@ class Response {
         _chargingHistory?.add(Charging_history.fromJson(v));
       });
     }
+    _wallet = json['wallet'];
   }
   List<Topup_history>? _topupHistory;
   List<Charging_history>? _chargingHistory;
+  String? _wallet;
 
   List<Topup_history>? get topupHistory => _topupHistory;
   List<Charging_history>? get chargingHistory => _chargingHistory;
+  String? get wallet => _wallet;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -76,14 +82,15 @@ class Response {
     if (_chargingHistory != null) {
       map['charging_history'] = _chargingHistory?.map((v) => v.toJson()).toList();
     }
+    map['wallet'] = _wallet;
     return map;
   }
 
 }
 
-/// date : "06/09/21"
-/// time : "00:00"
-/// price : "1000"
+/// date : "25/10/21"
+/// time : "11:12"
+/// price : "10"
 
 class Charging_history {
   Charging_history({
@@ -118,9 +125,9 @@ class Charging_history {
 
 }
 
-/// date : "09/09/21"
-/// time : "09:07"
-/// amount : "100"
+/// date : "19/10/21"
+/// time : "18:16"
+/// amount : "10"
 
 class Topup_history {
   Topup_history({

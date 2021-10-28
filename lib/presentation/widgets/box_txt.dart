@@ -6,6 +6,7 @@ class BoxTxt extends StatelessWidget {
   final String txt2;
   final String txt3;
   final double rightPadding;
+  final double topPadding;
   final Function onTap;
 
   const BoxTxt({
@@ -14,6 +15,7 @@ class BoxTxt extends StatelessWidget {
     required this.txt2,
     required this.txt3,
     required this.rightPadding,
+    required this.topPadding,
     required this.onTap,
   }) : super(key: key);
 
@@ -49,8 +51,9 @@ class BoxTxt extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.normal, color: Colors.white),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8, top: 12),
+
+              Container(
+                padding: EdgeInsets.only(left: 8, top: topPadding),
                 child: Text(
                   txt2,
                   style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11, color: Colors.white),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
+import 'package:qcharge_flutter/presentation/blocs/appblocks/firebase_token_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_station_details_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:qcharge_flutter/presentation/journeys/home_screen/home.dart';
 import 'package:qcharge_flutter/presentation/journeys/map_screen/map_screen.dart';
 import 'package:qcharge_flutter/presentation/journeys/profile/profile.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/qr_code.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/qr_scan.dart';
 import 'package:qcharge_flutter/presentation/journeys/topup/topup.dart';
 import 'package:qcharge_flutter/presentation/libraries/bottom_navbar_center_round/pandabar.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -31,6 +33,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
   late MapCubit _mapCubit;
   late MapStationDetailsCubit _mapStationDetailsCubit;
   late WalletRechargeCubit walletRechargeCubit;
+  late FirebaseTokenCubit _firebaseTokenCubit;
 
 
   @override
@@ -42,6 +45,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
     _topUpCubit = _homeBannerCubit.topUpCubit;
     _mapCubit = _homeBannerCubit.mapCubit;
     walletRechargeCubit = getItInstance<WalletRechargeCubit>();
+    _firebaseTokenCubit = getItInstance<FirebaseTokenCubit>();
 
     _homeBannerCubit.initiateHomeBanner();
   }
@@ -56,6 +60,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
     _mapCubit.close();
     _mapStationDetailsCubit.close();
     walletRechargeCubit.close();
+    _firebaseTokenCubit.close();
   }
 
   @override
@@ -68,6 +73,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
         BlocProvider(create: (context) => _mapCubit,),
         BlocProvider(create: (context) => _mapStationDetailsCubit,),
         BlocProvider(create: (context) =>  walletRechargeCubit,),
+        BlocProvider(create: (context) =>  _firebaseTokenCubit,),
       ],
       child: WillPopScope(
         onWillPop: onWillPop,
@@ -123,7 +129,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                 case 'Home':
                   return Home();
                 case 'QrCode':
-                  return QrCode();
+                  return QRScan();
                 case 'Profile':
                   return Profile();
                 default:

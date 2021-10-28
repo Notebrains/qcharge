@@ -170,6 +170,6 @@ class _AccountStepperState extends State<AccountStepper> {
   }
 
   void callNextScreen() {
-    BlocProvider.of<StepperCubit>(context).initiateStepper();
+    stepperCubit.initiateStepper();
   }
 }

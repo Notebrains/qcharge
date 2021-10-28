@@ -1,15 +1,18 @@
-/*
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_animator/flutter_animator.dart';
-import 'package:qcharge_flutter/common/constants/size_constants.dart';
-import 'package:qcharge_flutter/common/constants/translation_constants.dart';
-import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
-import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/button.dart';
-import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
-import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
+import 'package:qcharge_flutter/common/constants/route_constants.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import 'Constants.dart' as Constants;
+
+
+//iOS response: {"stationId" : 74, "chargerId" : 7401}
 
 class QRScan extends StatefulWidget {
   @override
@@ -20,6 +23,10 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
+  int stationId = 0;
+  int chargerId = 0;
+  late bool isLoading = false;
+
 //  AnimationController? _animationController;
 
   @override
@@ -40,8 +47,6 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
 
   }
 
-
-
   @override
   void dispose() {
 //    _animationController.dispose();
@@ -58,6 +63,37 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
 //    }
 //  }
 
+  Future<void> getChargerDetails()async{
+    try {
+      http.Response tokenResponse = await http.get(Uri.parse("${Constants.APP_BASE_URL}token"));
+      print("getToken: ${tokenResponse.statusCode}");
+      print("getToken: ${tokenResponse.body}");
+      Map<String, dynamic> tokenResult = jsonDecode(tokenResponse.body);
+      MySharedPreferences().addApiToken(tokenResult["accessToken"]);
+
+      Map<String, dynamic> data = Map();
+      data["stationId"] = stationId.toString();
+      data["chargerId"] = chargerId.toString();
+      data["token"] = tokenResult["accessToken"];
+
+      try{
+        http.Response response = await http.post(Uri.parse("${Constants.APP_BASE_URL}qrscan"), body: data);
+        print("getToken: ${response.statusCode}");
+        print("getToken: ${response.body}");
+        MySharedPreferences().addChargerData(response.body);
+      }catch(error){
+        print("qrscan: $error");
+      }
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pushReplacementNamed(context, RouteList.qrcode);
+
+    }catch(error){
+      print("getToken: $error");
+    }
+  }
+
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) async{
@@ -65,7 +101,17 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
       print(scanData.format);
       print(scanData.code);
       controller.stopCamera();
-
+      if(scanData.code.isNotEmpty){
+        Map<String, dynamic> data = jsonDecode(scanData.code);
+        stationId = data["stationId"];
+        chargerId = data["chargerId"];
+        MySharedPreferences().addChargerId(data["stationId"]);
+        MySharedPreferences().addChargerId(data["chargerId"]);
+        setState(() {
+          isLoading = true;
+        });
+        await getChargerDetails();
+      }
     });
   }
   @override
@@ -75,20 +121,32 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
         physics: BouncingScrollPhysics(),
         child: Container(
           height: MediaQuery.of(context).size.height,
-
-          child: Center(
-            child:
-              Container(
-                height: MediaQuery.of(context).size.height / 2.5,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: QRView(key: qrKey, onQRViewCreated: _onQRViewCreated,)),
+          child: Stack(
+            children: [
+              Center(
+                child:
+                Container(
+                  height: MediaQuery.of(context).size.height / 2.5,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: QRView(key: qrKey, onQRViewCreated: _onQRViewCreated,)),
+                ),
               ),
+              isLoading ? Positioned(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: SpinKitWave(
+                    color: Colors.black,
+                    size: 50,
+                  ),
+                ),
+              ) : Container(),
+
+            ],
           ),
         ),
       ),
     );
   }
 }
-*/

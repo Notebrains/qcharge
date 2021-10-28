@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
@@ -11,6 +12,7 @@ import 'package:qcharge_flutter/domain/entities/verify_otp_req_params.dart';
 import 'package:qcharge_flutter/domain/usecases/home_banner.dart';
 import 'package:qcharge_flutter/domain/usecases/send_otp.dart';
 import 'package:qcharge_flutter/domain/usecases/verify_user.dart';
+import 'package:qcharge_flutter/presentation/blocs/appblocks/firebase_token_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
@@ -27,6 +29,7 @@ class HomeBannerCubit extends Cubit<HomeBannerState> {
   final TopUpCubit topUpCubit;
   final LoadingCubit loadingCubit;
   final MapCubit mapCubit;
+  final FirebaseTokenCubit firebaseTokenCubit;
 
   HomeBannerCubit({
     required this.homeBanner,
@@ -34,6 +37,7 @@ class HomeBannerCubit extends Cubit<HomeBannerState> {
     required this.topUpCubit,
     required this.loadingCubit,
     required this.mapCubit,
+    required this.firebaseTokenCubit,
   }) : super(HomeBannerInitial());
 
   void initiateHomeBanner() async {
@@ -54,7 +58,8 @@ class HomeBannerCubit extends Cubit<HomeBannerState> {
       if (userId != null) {
         profileCubit.initiateProfile(userId),
         mapCubit.initiateMap(),
-        topUpCubit.initiateTopUp(userId, '2021-09'),
+        topUpCubit.initiateTopUp(userId, formatDateForTopUp(DateTime.now())),
+        firebaseTokenCubit.initiateFirebaseToken(userId),
       }
     });
 

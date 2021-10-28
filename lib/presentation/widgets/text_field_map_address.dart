@@ -23,7 +23,7 @@ Widget TextFieldMapAddress({
         suffixIcon: suffixIcon,
         labelText: label,
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Colors.black26,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(10.0),

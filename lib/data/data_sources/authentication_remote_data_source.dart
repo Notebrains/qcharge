@@ -14,6 +14,7 @@ import 'package:qcharge_flutter/data/models/station_details_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/subscription_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/wallet_recharge_api_res.dart';
 
 import '../core/api_client.dart';
 
@@ -45,11 +46,15 @@ abstract class AuthenticationRemoteDataSource {
 
   Future<StatusMessageApiResModel> purchaseSubscription(Map<String, dynamic> params);
 
-  Future<StatusMessageApiResModel> walletRecharge(Map<String, dynamic> params);
+  Future<WalletRechargeApiRes> walletRecharge(Map<String, dynamic> params);
 
   Future<BillApiResModel> getBills(String userId);
 
   Future<StatusMessageApiResModel> doChargingCalculation(Map<String, dynamic> params);
+
+  Future<StatusMessageApiResModel> sendFirebaseToken(Map<String, dynamic> params);
+
+  Future<StatusMessageApiResModel> billPayment(String userId);
 }
 
 class AuthenticationRemoteDataSourceImpl
@@ -159,7 +164,7 @@ class AuthenticationRemoteDataSourceImpl
         ApiConstants.topUp,
         params: requestBody,
     );
-    print('Profile res: $response');
+    print('Top up res: $response');
     return TopUpApiResModel.fromJson(response);
   }
 
@@ -171,7 +176,7 @@ class AuthenticationRemoteDataSourceImpl
           'mobile': mobile,
         }
     );
-    print('Profile res: $response');
+    print('getForgotPass res: $response');
     return ForgotPassApiResModel.fromJson(response);
   }
 
@@ -273,13 +278,13 @@ class AuthenticationRemoteDataSourceImpl
   }
 
   @override
-  Future<StatusMessageApiResModel> walletRecharge(Map<String, dynamic> params) async {
+  Future<WalletRechargeApiRes> walletRecharge(Map<String, dynamic> params) async {
     final response = await _client.post(
         ApiConstants.walletRecharge,
         params: params
     );
     print('Wallet Recharge res: $response');
-    return StatusMessageApiResModel.fromJson(response);
+    return WalletRechargeApiRes.fromJson(response);
   }
 
   @override
@@ -301,6 +306,28 @@ class AuthenticationRemoteDataSourceImpl
         params: params
     );
     print('Do Charging Calculation: $response');
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> sendFirebaseToken(Map<String, dynamic> params) async {
+    final response = await _client.post(
+        ApiConstants.updateDeviceToken,
+        params: params
+    );
+    print('Firebase Token Res: $response');
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> billPayment(String userId) async {
+    final response = await _client.post(
+        ApiConstants.billPayment,
+        params: {
+          'user_id': userId
+        }
+    );
+    print('Bill Payment Res: $response');
     return StatusMessageApiResModel.fromJson(response);
   }
 

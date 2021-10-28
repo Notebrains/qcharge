@@ -1,4 +1,5 @@
-/*
+/* Details : https://pub.dev/packages/my2c2psdk
+Other credentials link: https://github.com/siamsiandev/flutter_myccpp/blob/master/example/lib/main.dart
 
 void openPaymentGateway() async {
   try {
@@ -33,7 +34,7 @@ void openPaymentGateway() async {
 
     //My2c2pSDKResponse resultModel = My2c2pSDKResponse.fromJson(jsonDecode(result!));
     //print('---- : ${resultModel.status}');
-    //edgeAlert(context, title: 'Message!', description: resultModel.failReason!, gravity: Gravity.top);
+    //edgeAlert(context, title: TranslationConstants.message.t(context), description: resultModel.failReason!, gravity: Gravity.top);
 
     await AuthenticationLocalDataSourceImpl().getSessionId().then((userId) =>
     {

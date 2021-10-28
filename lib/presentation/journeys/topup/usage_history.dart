@@ -84,7 +84,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
           ),
 
           Container(
-              height: Sizes.dimen_90.h,
+              height: Sizes.dimen_250.h,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: AppColor.grey,
@@ -174,7 +174,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
               )
           ),
         ],
-      ) : NoDataFound(txt: 'No Data Found', onRefresh: (){}),
+      ) : NoDataFound(txt: TranslationConstants.loadingCaps.t(context), onRefresh: (){}),
     );
   }
 

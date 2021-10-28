@@ -4,8 +4,13 @@ import 'package:qcharge_flutter/presentation/journeys/account/forgot_password.da
 import 'package:qcharge_flutter/presentation/journeys/contents/faqs.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
 import 'package:qcharge_flutter/presentation/journeys/subscription/subscription_details.dart';
+import 'journeys/home_screen/call_center.dart';
 import 'journeys/profile/update_profile.dart';
 import 'journeys/profile/profile.dart';
+import 'journeys/qr_code/finish.dart';
+import 'journeys/qr_code/qr_code.dart';
+import 'journeys/qr_code/start.dart';
+import 'journeys/qr_code/stop.dart';
 import 'journeys/setting/setting.dart';
 import 'journeys/home_screen/home_nav_bar.dart';
 
@@ -25,8 +30,13 @@ class Routes {
 
         RouteList.activity: (context) => HomeCards(screenTitle: '', urlEndpoint: "",),
         RouteList.update_profile: (context) => UpdateProfile(),
-        //RouteList.cars: (context) => Cars(),
+        RouteList.call_center: (context) => CallCenter(),
         RouteList.subscription: (context) => Subscription(),
         //RouteList.subscription_details: (context) => SubscriptionDetails(details: '',),
+
+        RouteList.qrcode: (context) => QrCode(),
+        RouteList.start: (context) => Start(),
+        RouteList.stop: (context) => Stop(),
+        RouteList.finish: (context) => Finish(),
       };
 }

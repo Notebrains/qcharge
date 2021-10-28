@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/data/models/register_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/wallet_recharge_api_res.dart';
 import 'package:qcharge_flutter/domain/entities/register_request_params.dart';
 import 'package:qcharge_flutter/domain/entities/update_profile_params.dart';
 import 'package:qcharge_flutter/domain/entities/wallet_recharge_params.dart';
@@ -32,8 +33,9 @@ class WalletRechargeCubit extends Cubit<WalletRechargeState> {
       String transactionId,
       String amount,
       ) async {
+    print('---- -----: $userId , $transactionId , $amount , ');
     loadingCubit.show();
-    final Either<AppError, StatusMessageApiResModel> eitherResponse = await walletRechargeUsecase(
+    final Either<AppError, WalletRechargeApiRes> eitherResponse = await walletRechargeUsecase(
       WalletRechargeParams(
         userId: userId,
         transactionId: transactionId,

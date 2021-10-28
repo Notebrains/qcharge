@@ -18,7 +18,7 @@ class CarModelCubit extends Cubit<CarModelState> {
   }) : super(CarModelInitial());
 
   void loadCarModel(String brandId) async {
-    loadingCubit.show();
+    //loadingCubit.show();
     final Either<AppError, List<CarBrandEntity>> eitherResponse = await carModel(brandId);
 
     emit(eitherResponse.fold(
@@ -26,6 +26,6 @@ class CarModelCubit extends Cubit<CarModelState> {
           (r) => CarModelLoaded(r),
     ));
 
-    loadingCubit.hide();
+    //loadingCubit.hide();
   }
 }

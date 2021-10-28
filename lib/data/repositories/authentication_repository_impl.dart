@@ -15,6 +15,7 @@ import 'package:qcharge_flutter/data/models/station_details_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/subscription_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/wallet_recharge_api_res.dart';
 
 import '../../domain/entities/app_error.dart';
 import '../../domain/repositories/authentication_repository.dart';
@@ -91,12 +92,11 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     final sessionId = await _authenticationLocalDataSource.getSessionId();
     if (sessionId != null) {
       await Future.wait([
-        _authenticationRemoteDataSource.deleteSession(sessionId),
         _authenticationLocalDataSource.deleteSessionId(),
       ]);
     }
-    print(await _authenticationLocalDataSource.getSessionId());
-    return Right(Unit);
+
+    return Right(true);
   }
 
   @override
@@ -295,7 +295,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<Either<AppError, StatusMessageApiResModel>> walletRecharge(Map<String, dynamic> params) async {
+  Future<Either<AppError, WalletRechargeApiRes>> walletRecharge(Map<String, dynamic> params) async {
     try {
       final response = await _authenticationRemoteDataSource.walletRecharge(params);
       return Right(response);
@@ -322,6 +322,30 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<Either<AppError, StatusMessageApiResModel>> doChargingCalculation(Map<String, dynamic> params) async {
     try {
       final response = await _authenticationRemoteDataSource.doChargingCalculation(params);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> firebaseToken(Map<String, dynamic> params) async {
+    try {
+      final response = await _authenticationRemoteDataSource.sendFirebaseToken(params);
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> billPayment(String userId) async {
+    try {
+      final response = await _authenticationRemoteDataSource.billPayment(userId);
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));

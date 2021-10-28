@@ -13,6 +13,6 @@ Widget cachedNetImgWithRadius(String url, double width, double height, double ra
     imageUrl: url,
     progressIndicatorBuilder: (context, url, downloadProgress) =>
         Lottie.asset('assets/animations/lottiefiles/loading-dots.json', width: 100, height: 100),
-    errorWidget: (context, url, error) => Image.network(Strings.imgUrlNotFound),
+    errorWidget: (context, url, error) => Image.network(Strings.imgUrlNotFound, fit: BoxFit.fill, width: width, height: height,),
   ),
 );

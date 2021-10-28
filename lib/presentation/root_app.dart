@@ -152,8 +152,8 @@ class _RootAppState extends State<RootApp> {
     var initSetting = InitializationSettings(android: androidInit, iOS: iosInit);
 
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'stories_bengali_channel_id', // id //change here
-      'Stories', // title
+      'qcharge_channel_id', // id //change here
+      'Q Charge', // title
       'This notification is from  Stories', // description
       importance: Importance.max,
     );

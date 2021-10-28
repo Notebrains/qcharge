@@ -12,6 +12,7 @@ import 'package:qcharge_flutter/data/models/station_details_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/subscription_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/wallet_recharge_api_res.dart';
 import 'package:qcharge_flutter/domain/entities/car_brand_entity.dart';
 
 import '../entities/app_error.dart';
@@ -59,9 +60,13 @@ abstract class AuthenticationRepository {
 
   Future<Either<AppError, StatusMessageApiResModel>> purchaseSubscription(Map<String, dynamic> json);
 
-  Future<Either<AppError, StatusMessageApiResModel>> walletRecharge(Map<String, dynamic> params);
+  Future<Either<AppError, WalletRechargeApiRes>> walletRecharge(Map<String, dynamic> params);
 
   Future<Either<AppError, BillApiResModel>> getBills(String userId);
 
   Future<Either<AppError, StatusMessageApiResModel>> doChargingCalculation(Map<String, dynamic> params);
+
+  Future<Either<AppError, StatusMessageApiResModel>> firebaseToken(Map<String, dynamic> params);
+
+  Future<Either<AppError, StatusMessageApiResModel>> billPayment(String userId);
 }

@@ -8,6 +8,7 @@ import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.d
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../common/extensions/string_extensions.dart';
 
 class TermsAndCondition extends StatefulWidget {
@@ -27,25 +28,39 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
       physics: BouncingScrollPhysics(),
       child: Column(
         children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(45, Sizes.dimen_24.h, 45, Sizes.dimen_16.h),
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: AppColor.grey,
-              border: Border.all(
-                color: Colors.white,
-                width: 1.0,
+          InkWell(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(45, Sizes.dimen_24.h, 45, Sizes.dimen_16.h),
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: AppColor.grey,
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
+                ),
               ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(5.0),
+              child: Column(
+                children: [
+                  Text(
+                    Strings.tAndCTxt,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 13.0),
+                  ),
+
+                  Text(
+                    '\nRead More...',
+                    style: TextStyle(fontSize: 13.0),
+                  ),
+                ],
               ),
             ),
-            child: Text(
-              Strings.txt_lorem_ipsum_big
-                  + Strings.txt_lorem_ipsum_big,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13.0),
-            ),
+
+            onTap: (){
+              _launchInBrowser("https://www.websitepolicies.com/policies/view/RY4kdA4B");
+            },
           ),
 
           Padding(
@@ -104,5 +119,18 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
         ],
       ),
     );
+  }
+
+  Future<void> _launchInBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: false,
+        forceWebView: false,
+        headers: <String, String>{'my_header_key': 'Terms and Condition'},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

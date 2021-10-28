@@ -37,7 +37,6 @@ class _VerifyState extends State<Verify> {
 
     _mobController = TextEditingController();
     _otpController = TextEditingController();
-    _otpController!.text = "501233";
 
   }
 
@@ -92,8 +91,8 @@ class _VerifyState extends State<Verify> {
                       child: Button(text: TranslationConstants.reqOtp.t(context),
                         bgColor:[Color(0xFFEFE07D), Color(0xFFB49839)],
                         onPressed: () {
-                          if(_mobController!.text.isEmpty){
-                            edgeAlert(context, title: 'Warning', description: 'Please enter mobile no.', gravity: Gravity.top);
+                          if(_mobController!.text.isEmpty || _mobController!.text.length < 7 || _mobController!.text.length > 14){
+                            edgeAlert(context, title: 'Warning', description: 'Please enter valid mobile no.', gravity: Gravity.top);
                           } else {
                             BlocProvider.of<ReqOtpCubit>(context).initiateSendOtp(_mobController?.text ?? '',);
                           }

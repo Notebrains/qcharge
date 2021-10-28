@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,21 +44,21 @@ class _SubscriptionState extends State {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                        padding: const EdgeInsets.only(top: 80),
+                        padding: EdgeInsets.only(top: Sizes.dimen_60.w),
                         child: Image.asset(
                           'assets/images/communicate.png',
-                          width: 120,
+                          width: Sizes.dimen_110.w,
                         )),
                     Padding(
-                      padding: const EdgeInsets.only(top: 60),
+                      padding: EdgeInsets.only(top: Sizes.dimen_20.h),
                       child: Text(
-                        'GET IN TOUCH!',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28, color: Colors.white, letterSpacing: 3),
+                          TranslationConstants.getInTouch.t(context),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: Sizes.dimen_24.w, color: Colors.white, letterSpacing: 3),
                       ),
                     ),
                     Text(
-                      'Always within your reach',
-                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14, color: Colors.white),
+                      TranslationConstants.withinReachTxt.t(context),
+                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: Sizes.dimen_14.w, color: Colors.white),
                     ),
                   ],
                 ),
@@ -96,6 +98,20 @@ class _SubscriptionState extends State {
     }
   }
 
+
+  Future<void> _launchInBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: false,
+        forceWebView: false,
+        headers: <String, String>{'my_header_key': 'Arrow Energy'},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   _launchEmailApp() async {
     const url = 'mailto:sejpalbhargav67@gmail.com';
     if (await canLaunch(url)) {
@@ -126,7 +142,7 @@ class _SubscriptionState extends State {
                   Padding(
                     padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
                     child: Text(
-                      'Contact Number',
+                      TranslationConstants.mobNo.t(context),
                       style: TextStyle(fontSize: 14, color: Colors.white),
                       maxLines: 4,
                       softWrap: false,
@@ -142,12 +158,12 @@ class _SubscriptionState extends State {
                     Padding(
                       padding: const EdgeInsets.only(left: 30, top: 5, bottom: 8),
                       child: Text(
-                        '94578323456',
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+                        '094-445-6447',
+                        style: TextStyle(fontSize: 14, color: Colors.white70),
                       ),
                     ),
 
-                    Icon(Icons.arrow_right, size: 22, color: Colors.white,),
+                    Icon(Icons.arrow_right, size: 22, color: Colors.white70,),
                   ],
                 ),
 
@@ -172,7 +188,7 @@ class _SubscriptionState extends State {
                   Padding(
                     padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
                     child: Text(
-                      'Email Id',
+                      TranslationConstants.email.t(context),
                       style: TextStyle(fontSize: 14, color: Colors.white),
                     ),
                   ),
@@ -186,11 +202,11 @@ class _SubscriptionState extends State {
                       padding: const EdgeInsets.only(left: 30, top: 5, bottom: 8),
                       child: Text(
                         'qcharge.contact@gmail.com',
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+                        style: TextStyle(fontSize: 14, color: Colors.white70),
                       ),
                     ),
 
-                    Icon(Icons.arrow_right, size: 22, color: Colors.white,),
+                    Icon(Icons.arrow_right, size: 22, color: Colors.white70,),
                   ],
                 ),
 
@@ -204,6 +220,43 @@ class _SubscriptionState extends State {
               ),
 
 
+              Row(
+                children: [
+                  Icon(Icons.web_outlined, color: Colors.white70),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                    child: Text(
+                      'Website',
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+
+              InkWell(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30, top: 5, bottom: 8),
+                      child: Text(
+                        'https://www.arrow-energy.com/',
+                        style: TextStyle(fontSize: 14, color: Colors.white70),
+                      ),
+                    ),
+
+                    Icon(Icons.arrow_right, size: 22, color: Colors.white70,),
+                  ],
+                ),
+
+                onTap: (){
+                  _launchInBrowser('https://www.arrow-energy.com/');
+                },
+              ),
+
+              Divider(
+                color: Colors.white70,
+              ),
+
 
               Row(
                 children: [
@@ -216,7 +269,7 @@ class _SubscriptionState extends State {
                   Padding(
                     padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
                     child: Text(
-                      'Address',
+                      TranslationConstants.address.t(context),
                       style: TextStyle(fontSize: 14, color: Colors.white),
                       maxLines: 4,
                       softWrap: false,
@@ -231,8 +284,8 @@ class _SubscriptionState extends State {
                     Padding(
                       padding: const EdgeInsets.only(left: 30, top: 5, bottom: 8),
                       child: Text(
-                        'Q-Charge, Viner, Thailand-04537',
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+                        'Arrow Energy Co., Ltd, 87/114-116 Soi\nSukhumvit 63 (Ekkamai), Khlong Tan\nNuea, Wattana, Bangkok 10110',
+                        style: TextStyle(fontSize: 14, color: Colors.white70),
                       ),
                     ),
 
@@ -245,9 +298,6 @@ class _SubscriptionState extends State {
                 },
               ),
 
-              Divider(
-                color: Colors.white70,
-              ),
             ],
           )),
     );

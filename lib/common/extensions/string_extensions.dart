@@ -10,4 +10,8 @@ extension StringExtension on String {
   String t(BuildContext context) {
     return AppLocalizations.of(context)?.translate(this) ?? '';
   }
+
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
 }

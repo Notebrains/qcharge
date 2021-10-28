@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -24,10 +25,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
   late UpdateProfileCubit updateProfileCubit;
 
   late File? xFile = File('');
-  bool isEnabled = true;
-  bool isChangePass = false;
+  String base64Image = '';
 
-  late TextEditingController? _oldPassController, newPasswordController, _confPasswordController;
+  bool isChangePass = false;
+  String changePassBtnTxt = 'CHANGE PASSWORD';
+
+  late TextEditingController? _oldPassController, _passwordController, _firstNameController, _lastNameController,
+      _confPasswordController;
+
 
   @override
   void initState() {
@@ -35,43 +40,68 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
     updateProfileCubit = getItInstance<UpdateProfileCubit>();
 
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
     _oldPassController = TextEditingController();
-    newPasswordController = TextEditingController();
+    _passwordController = TextEditingController();
     _confPasswordController = TextEditingController();
-
-    _oldPassController?.addListener(() {
-      setState(() {
-        isEnabled = (_oldPassController?.text.isNotEmpty ?? false);
-      });
-    });
-
-    newPasswordController?.addListener(() {
-      setState(() {
-        isEnabled = (newPasswordController?.text.isNotEmpty ?? false);
-      });
-    });
-
-    _confPasswordController?.addListener(() {
-      setState(() {
-        isEnabled =
-            (_confPasswordController?.text.isNotEmpty ?? false) && (newPasswordController?.text == _confPasswordController?.text);
-      });
-    });
   }
 
-  Future getImage() async {
-    final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
-    setState(() {
-      xFile = File(imageFile!.path);
-      print('Image Path $xFile');
-    });
+  Future getImage() async {
+    try {
+      final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
+
+      setState(() {
+            xFile = File(imageFile!.path);
+            print('Image Path $xFile');
+          });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  setImage(String path) {
+    try {
+      print('----path: $path');
+      if (path.isEmpty) {
+            return cachedNetImgWithRadius(
+              Strings.imgUrlNotFoundYellowAvatar,
+              110,
+              110,
+              30,
+            );
+          } else {
+            final bytes = File(path).readAsBytesSync();
+            base64Image = base64Encode(bytes);
+            print('-----base64Image:  $base64Image');
+
+            return CircleAvatar(
+              radius: 57,
+              backgroundColor : Colors.amber,
+              child: ClipOval(
+                child: SizedBox(
+                  width: 111.0,
+                  height: 111.0,
+                  child: Image.file(
+                    File(xFile!.path),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+            );
+          }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   void dispose() {
     _oldPassController?.dispose();
-    newPasswordController?.dispose();
+    _passwordController?.dispose();
+    _firstNameController?.dispose();
+    _lastNameController?.dispose();
     _confPasswordController?.dispose();
     super.dispose();
   }
@@ -89,24 +119,24 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    /*InkWell(
+                    InkWell(
                       onTap: (){
                         getImage();
                       },
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 24),
+                        padding: const EdgeInsets.only(top: 45),
                         child: Stack(
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 24, bottom: 24),
+                              padding: const EdgeInsets.only(top: 8, bottom: 24),
                               child: setImage(xFile!.path),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 20),
                               child: Icon(
                                 Icons.camera_alt_rounded,
-                                color: AppColor.app_txt_amber_light,
+                                color: Colors.white,
                                 size: 30,
                               ),
                             ),
@@ -133,97 +163,135 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       ),
                     ),
 
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                      child: IcIfRow(txt: 'Email *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
-                        icon: 'assets/icons/pngs/account_Register_7.png', icColor: Colors.white,
-                        hint: 'Enter email *', textInputType: TextInputType.text,
-                        controller: _emailController,
+                    Visibility(
+                      visible: isChangePass,
+                      child: FadeIn(
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          child: IcIfRow(
+                            txt: 'Old Password *',
+                            txtColor: Colors.white,
+                            txtSize: 12,
+                            fontWeight: FontWeight.normal,
+                            icon: 'assets/icons/pngs/account_Register_1.png',
+                            icColor: Colors.white,
+                            hint: 'Old Password *',
+                            textInputType: TextInputType.phone,
+                            controller: _oldPassController,
+                          ),
+                        ),
                       ),
                     ),
-*/
 
-                    FadeIn(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(8, 50, 8, 8),
-                        child: IcIfRow(
-                          txt: 'Old Password *',
-                          txtColor: Colors.white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.normal,
-                          icon: 'assets/icons/pngs/account_Register_1.png',
-                          icColor: Colors.white,
-                          hint: 'Old Password *',
-                          textInputType: TextInputType.phone,
-                          controller: _oldPassController,
+
+                    Visibility(
+                      visible: isChangePass,
+                      child: FadeIn(
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          child: IcIfRow(
+                            txt: 'Password *',
+                            txtColor: Colors.white,
+                            txtSize: 12,
+                            fontWeight: FontWeight.normal,
+                            icon: 'assets/icons/pngs/account_Register_8.png',
+                            icColor: Colors.white,
+                            hint: 'Enter new password *',
+                            textInputType: TextInputType.visiblePassword,
+                            controller: _passwordController,
+                          ),
                         ),
                       ),
                     ),
-                    FadeIn(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                        child: IcIfRow(
-                          txt: 'Password *',
-                          txtColor: Colors.white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.normal,
-                          icon: 'assets/icons/pngs/account_Register_8.png',
-                          icColor: Colors.white,
-                          hint: 'Enter new password *',
-                          textInputType: TextInputType.visiblePassword,
-                          controller: newPasswordController,
+
+                    Visibility(
+                      visible: isChangePass,
+                      child: FadeIn(
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          child: IcIfRow(
+                            txt: 'Confirm password *',
+                            txtColor: Colors.white,
+                            txtSize: 12,
+                            fontWeight: FontWeight.normal,
+                            icon: 'assets/icons/pngs/account_Register_9.png',
+                            icColor: Colors.white,
+                            hint: 'Enter confirm password *',
+                            textInputType: TextInputType.visiblePassword,
+                            controller: _confPasswordController,
+                          ),
                         ),
                       ),
                     ),
-                    FadeIn(
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                        child: IcIfRow(
-                          txt: 'Confirm password *',
-                          txtColor: Colors.white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.normal,
-                          icon: 'assets/icons/pngs/account_Register_9.png',
-                          icColor: Colors.white,
-                          hint: 'Enter confirm password *',
-                          textInputType: TextInputType.visiblePassword,
-                          controller: _confPasswordController,
+
+
+                    Visibility(
+                      visible: isChangePass,
+                      child: FadeIn(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(60, 12, 50, 8),
+                          child: Text(
+                            '*Note:  Fill password section only if you want to change your password, else hide it',
+                            style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10, color: Colors.white60),
+                            maxLines: 2,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ),
+
+
                     Container(
                       width: 270,
-                      padding: const EdgeInsets.only(right: 6, top: 70),
+                      padding: const EdgeInsets.only(right: 6, top: 24),
+                      child: Button(
+                        text: changePassBtnTxt,
+                        bgColor:
+                        [Color(0xFFEFE07D), Color(0xFFB49839)],
+                        onPressed: () async {
+                          setState(() {
+                            isChangePass? isChangePass = false : isChangePass = true;
+                            isChangePass? changePassBtnTxt = "DON'T CHANGE" : changePassBtnTxt = 'CHANGE PASSWORD';
+                          });
+                        },
+                      ),
+                    ),
+
+
+                    Container(
+                      width: 270,
+                      padding: const EdgeInsets.only(right: 6, bottom: 50),
                       child: Button(
                         text: 'UPDATE',
-                        bgColor:
-                            isEnabled ? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Colors.grey.shade400, Colors.grey.shade400],
+                        bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                         onPressed: () async {
-                          if (_oldPassController!.text.isEmpty) {
+                          if (isChangePass && _oldPassController!.text.isEmpty) {
                             edgeAlert(context, title: 'Warning', description: 'Please enter old password', gravity: Gravity.top);
-                          } else if (newPasswordController!.text.isEmpty) {
-                            edgeAlert(context, title: 'Warning', description: 'Please enter new password', gravity: Gravity.top);
-                          } else if (_confPasswordController!.text.isEmpty) {
+                          } else if (isChangePass && _passwordController!.text.isEmpty) {
+                            edgeAlert(context, title: 'Warning', description: 'Please enter minimum 5 digit password', gravity: Gravity.top);
+                          } else if (isChangePass && _confPasswordController!.text.isEmpty) {
                             edgeAlert(context,
                                 title: 'Warning', description: 'Please enter confirm password', gravity: Gravity.top);
-                          } else if (_confPasswordController!.text != newPasswordController!.text) {
+                          } else if (isChangePass && _confPasswordController!.text != _passwordController!.text) {
                             edgeAlert(context,
                                 title: 'Warning',
                                 description: 'New password and confirm password did not matched',
                                 gravity: Gravity.top);
                           } else {
-                            if (isEnabled) {
-                              await AuthenticationLocalDataSourceImpl().getSessionId().then((userId) => {
-                                    print('---- user id 1: $userId'),
-                                    if (userId != null)
-                                      {
-                                        BlocProvider.of<UpdateProfileCubit>(context).initiateUpdateProfile(
-                                          userId,
-                                          newPasswordController?.text ?? '',
-                                        ),
-                                      }
-                                  });
-                            }
+                            await AuthenticationLocalDataSourceImpl().getSessionId().then((userId) => {
+                              print('---- user id 1: $userId'),
+                              if (userId != null)
+                                {
+                                  BlocProvider.of<UpdateProfileCubit>(context).initiateUpdateProfile(
+                                    userId,
+                                    _passwordController?.text ?? '',
+                                    _firstNameController?.text ?? '',
+                                    _lastNameController?.text ?? '',
+                                    base64Image,
+                                  ),
+                                }
+                            });
                           }
                         },
                       ),
@@ -251,24 +319,5 @@ class _UpdateProfileState extends State<UpdateProfile> {
             }),
       ),
     );
-  }
-
-  setImage(String path) {
-    print('----path : $path');
-    if (path.isEmpty) {
-      return cachedNetImgWithRadius(
-        Strings.imgUrlNotFoundYellowAvatar,
-        110,
-        110,
-        60,
-      );
-    } else
-      return ClipOval(
-        child: Image.file(
-          File(xFile!.path),
-          width: 110,
-          height: 110,
-        ),
-      );
   }
 }

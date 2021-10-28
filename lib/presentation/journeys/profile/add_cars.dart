@@ -240,12 +240,13 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                         icColor: AppColor.app_txt_white,
                         itemSelected: optionItemSelected,
                         onOptionSelected: (OptionItem optionItem) {
-                          print('----Car brand: ${optionItem.title}');
-                          //BlocProvider.of<CarModelCubit>(context).loadCarModel(optionItem.id);
+                          //print('----Car brand: ${optionItem.title}');
+                          BlocProvider.of<CarModelCubit>(context).loadCarModel(optionItem.id);
                           setState(() {
                             widget.carBrandId = optionItem.id;
                             widget.carBrand = optionItem.title;
                             optionItemSelected.title = optionItem.title;
+                            widget.carModelId = '';
                           });
                         },
                         dropListModel: carBrandDropDownList,
@@ -262,14 +263,20 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                         icColor: AppColor.app_txt_white,
                         itemSelected: optionItemSelected2,
                         onOptionSelected: (OptionItem optionItem) {
-                          try {
-                            print('----Car model: ${optionItem.title}');
 
-                            setState(() {
-                              widget.carModelId = optionItem.id;
-                              widget.carModel = optionItem.title;
-                              optionItemSelected2.title = optionItem.title;
-                            });
+                          try {
+                            if (widget.carBrandId.isNotEmpty) {
+                              print('----Car model: ${optionItem.title}');
+
+                              setState(() {
+                                widget.carModelId = optionItem.id;
+                                widget.carModel = optionItem.title;
+                                optionItemSelected2.title = optionItem.title;
+                              });
+                            } else {
+                              edgeAlert(context, title: 'Warning', description: 'Please select car brand first', gravity: Gravity.top);
+                            }
+
                           } catch (e) {
                             print('---- : $e');
                           }
@@ -304,8 +311,11 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                         if (_carNamesController!.text.isEmpty) {
                           edgeAlert(context, title: 'Warning', description: 'Please enter car name', gravity: Gravity.top);
                         } else if (_carLicencePlateController!.text.isEmpty) {
-                          edgeAlert(context,
-                              title: 'Warning', description: 'Please enter car plate licence', gravity: Gravity.top);
+                          edgeAlert(context, title: 'Warning', description: 'Please enter car plate licence', gravity: Gravity.top);
+                        } else if(widget.carBrandId.isEmpty){
+                          edgeAlert(context, title: 'Warning', description: 'Please enter car brand', gravity: Gravity.top);
+                        } else if(widget.carModelId.isEmpty){
+                          edgeAlert(context, title: 'Warning', description: 'Please select car model', gravity: Gravity.top);
                         } else {
                           await AuthenticationLocalDataSourceImpl().getSessionId().then((userId) => {
                                 print('---- user id 1: $userId'),

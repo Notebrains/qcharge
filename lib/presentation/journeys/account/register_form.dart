@@ -8,6 +8,7 @@ import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:qcharge_flutter/common/extensions/validation.dart';
 import 'package:qcharge_flutter/presentation/blocs/register/car_model_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/register/register_cubit.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
@@ -120,42 +121,50 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   Future getImage() async {
-    final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
+    try {
+      final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
-    setState(() {
-      xFile = File(imageFile!.path);
-      print('Image Path $xFile');
-    });
+      setState(() {
+            xFile = File(imageFile!.path);
+            print('Image Path $xFile');
+          });
+    } catch (e) {
+      print(e);
+    }
   }
 
   setImage(String path) {
-    print('----path: $path');
-    if (path.isEmpty) {
-      return cachedNetImgWithRadius(
-        Strings.imgUrlNotFoundYellowAvatar,
-        110,
-        110,
-        30,
-      );
-    } else {
-      final bytes = File(path).readAsBytesSync();
-      base64Image = base64Encode(bytes);
-      print('-----base64Image:  $base64Image');
+    try {
+      print('----path: $path');
+      if (path.isEmpty) {
+            return cachedNetImgWithRadius(
+              Strings.imgUrlNotFoundYellowAvatar,
+              110,
+              110,
+              30,
+            );
+          } else {
+            final bytes = File(path).readAsBytesSync();
+            base64Image = base64Encode(bytes);
+            print('-----base64Image:  $base64Image');
 
-      return CircleAvatar(
-        radius: 57,
-        backgroundColor : Colors.amber,
-        child: ClipOval(
-          child: SizedBox(
-            width: 111.0,
-            height: 111.0,
-            child: Image.file(
-              File(xFile!.path),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-      );
+            return CircleAvatar(
+              radius: 57,
+              backgroundColor : Colors.amber,
+              child: ClipOval(
+                child: SizedBox(
+                  width: 111.0,
+                  height: 111.0,
+                  child: Image.file(
+                    File(xFile!.path),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+            );
+          }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -280,10 +289,11 @@ class _RegisterFormState extends State<RegisterForm> {
                 itemSelected: optionItemSelected,
                 onOptionSelected: (OptionItem optionItem) {
                   print('----Car brand: ${optionItem.title}');
-                  //BlocProvider.of<CarModelCubit>(context).loadCarModel(optionItem.id);
+                  BlocProvider.of<CarModelCubit>(context).loadCarModel(optionItem.id);
                   setState(() {
                     carBrandId = optionItem.id;
                     optionItemSelected.title = optionItem.title;
+                    carModelId = '';
                   });
                 },
                 dropListModel: carBrandDropDownList,
@@ -298,12 +308,16 @@ class _RegisterFormState extends State<RegisterForm> {
                 itemSelected: optionItemSelected2,
                 onOptionSelected: (OptionItem optionItem){
                   try{
-                    print('----Car model: ${optionItem.title}');
+                    if (carBrandId.isNotEmpty) {
+                      print('----Car model: ${optionItem.title}');
 
-                    setState(() {
-                      carModelId = optionItem.id;
-                      optionItemSelected2.title = optionItem.title;
-                    });
+                      setState(() {
+                        carModelId = optionItem.id;
+                        optionItemSelected2.title = optionItem.title;
+                      });
+                    } else {
+                      edgeAlert(context, title: 'Warning', description: 'Please select car brand first', gravity: Gravity.top);
+                    }
                   } catch (e){
                     print('---- : $e');
                   }
@@ -326,23 +340,25 @@ class _RegisterFormState extends State<RegisterForm> {
               child: Button(text: TranslationConstants.register.t(context),
                 bgColor: isEnabled? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Colors.grey.shade400, Colors.grey.shade400],
                 onPressed: () {
-                  if (_mobileController!.text.isEmpty) {
-                    edgeAlert(context, title: 'Warning', description: 'Please enter mobile number', gravity: Gravity.top);
-                  } else if(_passwordController!.text.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please enter password', gravity: Gravity.top);
+                  if (_mobileController!.text.isEmpty  || _mobileController!.text.length < 7 || _mobileController!.text.length > 14) {
+                    edgeAlert(context, title: 'Warning', description: 'Please enter valid mobile number', gravity: Gravity.top);
                   } else if(_firstNameController!.text.isEmpty){
                     edgeAlert(context, title: 'Warning', description: 'Please enter first name', gravity: Gravity.top);
                   } else if(_lastNameController!.text.isEmpty){
                     edgeAlert(context, title: 'Warning', description: 'Please enter last name', gravity: Gravity.top);
-                  } else if(_emailController!.text.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please enter email id', gravity: Gravity.top);
-                  } else if(_confPasswordController!.text.isEmpty){
+                  } else if(!validateEmail(_emailController!.text)){
+                    edgeAlert(context, title: 'Warning', description: 'Please enter valid email id', gravity: Gravity.top);
+                  } else if(_passwordController!.text.isEmpty || _passwordController!.text.length < 5){
+                    edgeAlert(context, title: 'Warning', description: 'Please enter minimum 5 digit password ', gravity: Gravity.top);
+                  }  else if(_confPasswordController!.text.isEmpty){
                     edgeAlert(context, title: 'Warning', description: 'Please enter confirm password', gravity: Gravity.top);
-                  } else if(carBrandId.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please enter car name', gravity: Gravity.top);
-                  } else if(carModelId.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please select car brand', gravity: Gravity.top);
+                  } else if(_passwordController!.text != _confPasswordController!.text){
+                    edgeAlert(context, title: 'Warning', description: 'Password and confirm password did not matched', gravity: Gravity.top);
                   } else if(_carNameController!.text.isEmpty){
+                    edgeAlert(context, title: 'Warning', description: 'Please select car name', gravity: Gravity.top);
+                  } else if(carBrandId.isEmpty){
+                    edgeAlert(context, title: 'Warning', description: 'Please enter car brand', gravity: Gravity.top);
+                  } else if(carModelId.isEmpty){
                     edgeAlert(context, title: 'Warning', description: 'Please select car model', gravity: Gravity.top);
                   } else if(_carLicencePlateController!.text.isEmpty){
                     edgeAlert(context, title: 'Warning', description: 'Please enter car licence plate no.', gravity: Gravity.top);

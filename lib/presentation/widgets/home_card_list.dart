@@ -51,10 +51,10 @@ class HomeCardList extends StatelessWidget{
                 heroTag: '8',
                 mini: true,
                 onPressed: () {
-                  // Navigator.of(context).pushNamed(RouteList.add_review);
+                  onTap();
                 },
                 child: Icon(Icons.arrow_forward, color: Colors.white, size: 18,),
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.black38,
                 tooltip: 'Pressed',
                 elevation: 0,
                 splashColor: Colors.grey,

@@ -16,7 +16,7 @@ class ApiConstants {
   static const String profile = "profile";
   static const String faq = "faq";
   static const String topUp = "topuphistory";
-  static const String cmsHomeBanner = "cms";
+  static const String cmsHomeBanner = "homebanner";
   static const String updateProfile = "updateprofile";
   static const String changePassword = "changepassword";
   static const String mapLoc = "evstations";
@@ -29,6 +29,8 @@ class ApiConstants {
   static const String walletRecharge = "wallet-recharge";
   static const String chargingBilling = "chargingbilling";
   static const String chargingCalculation = "chargingcalculation";
+  static const String updateDeviceToken = "updatedevicetoken";
+  static const String billPayment = "billPayment";
 
 
   //previous app

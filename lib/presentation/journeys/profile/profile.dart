@@ -47,7 +47,7 @@ class Profile extends StatelessWidget {
                             state.model.response!.image!,
                             110,
                             110,
-                            30,
+                            60,
                           ),
                         ),
                         Expanded(
@@ -154,37 +154,35 @@ class Profile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         BoxTxt(
-                            txt1: state.model.response!.currentMembershipPlan! != 'Unavailable'
-                                ? ' Active Plan >'
-                                : ' All Plans >',
+                            txt1:
+                                state.model.response!.currentMembershipPlan! != 'Unavailable' ? ' Active Plan >' : ' All Plans >',
                             txt2: state.model.response!.currentMembershipPlan! != 'Unavailable'
-                                ? state.model.response!.currentMembershipPlan! : '',
+                                ? state.model.response!.currentMembershipPlan!
+                                : '',
                             txt3: state.model.response!.currentMembershipPlan! != 'Unavailable'
-                                ? state.model.response!.currentMembershipPlanPrice! : 'View',
+                                ? state.model.response!.currentMembershipPlanPrice!
+                                : 'View',
                             rightPadding: 12,
+                            topPadding: state.model.response!.currentMembershipPlan! != 'Unavailable' ? 12 : 3,
                             onTap: () {
                               Navigator.pushNamed(context, RouteList.subscription);
                             }),
-
                         Visibility(
                           visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
+                          //visible: true,
                           child: BoxTxt(
-                              txt1: ' Due Bill >',
-                              txt2: 'Total',
+                              txt1: ' ${TranslationConstants.dueBill.t(context)} >',
+                              txt2: TranslationConstants.total.t(context),
                               txt3: convertStrToDoubleStr(state.model.response!.dueBilling.toString()),
                               rightPadding: 0,
+                              topPadding: 12,
                               onTap: () async {
-                                await AuthenticationLocalDataSourceImpl().getSessionId().then((userId) => {
-                                  if (userId != null)
-                                    {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Billing(userId: userId),
-                                        ),
-                                      ),
-                                    }
-                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Billing(),
+                                  ),
+                                );
                               }),
                         ),
                       ],
@@ -295,38 +293,36 @@ class Profile extends StatelessWidget {
                           text: TranslationConstants.logoutCaps.t(context),
                           bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                           onPressed: () {
-                            BlocProvider.of<LoginCubit>(context).logout();
-
-                            /*showDialog(
-                        context: context,
-                        builder: (BuildContext context) => CupertinoAlertDialog(
-                              title: new Text("LOGOUT ?"),
-                              content: new Text("Are you sure you want to logout?"),
-                              actions: <Widget>[
-                                CupertinoDialogAction(
-                                  isDefaultAction: true,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    "Cancel",
-                                    style: TextStyle(color: Colors.white),
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => CupertinoAlertDialog(
+                                title: new Text(TranslationConstants.logout.t(context)),
+                                content: new Text(TranslationConstants.logoutDialogContent.t(context)),
+                                actions: <Widget>[
+                                  CupertinoDialogAction(
+                                    isDefaultAction: true,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      TranslationConstants.cancel.t(context),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
-                                ),
-                                CupertinoDialogAction(
-                                  isDefaultAction: true,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.of(context).pushNamed(RouteList.login);
-                                  },
-                                  child: Text(
-                                    'Logout',
-                                    style: TextStyle(color: Colors.amber),
+                                  CupertinoDialogAction(
+                                    isDefaultAction: true,
+                                    onPressed: () {
+                                      BlocProvider.of<LoginCubit>(context).logout();
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      TranslationConstants.logout.t(context),
+                                      style: TextStyle(color: Colors.amber),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                    );*/
+                                ],
+                              ),
+                            );
                           },
                         ),
                       ),
@@ -338,7 +334,9 @@ class Profile extends StatelessWidget {
           } else {
             return NoDataFound(
               txt: TranslationConstants.noDataFound.t(context),
-              onRefresh: () {},
+              onRefresh: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
+              },
             );
           }
         },

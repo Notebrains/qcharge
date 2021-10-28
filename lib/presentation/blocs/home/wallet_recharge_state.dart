@@ -10,7 +10,7 @@ abstract class WalletRechargeState extends Equatable {
 class WalletRechargeInitial extends WalletRechargeState {}
 
 class WalletRechargeSuccess extends WalletRechargeState {
-  final StatusMessageApiResModel model;
+  final WalletRechargeApiRes model;
 
   WalletRechargeSuccess(this.model);
 

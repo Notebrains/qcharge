@@ -1,6 +1,6 @@
 /// status : 1
-/// message : "Activity List"
-/// response : [{"id":1,"slug":"activity","title":"Activity","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/activity/slide1-1630069229.jpg","body":"<p>test description</p>","status":1}]
+/// message : "Home Banner List"
+/// response : [{"title":"Banner1","status":1,"image":"https://mridayaitservices.com/demo/qcharge/public/uploads/banner/chair-1635146691.jpg"},{"title":"Banner2","status":1,"image":"https://mridayaitservices.com/demo/qcharge/public/uploads/banner/1-s-1635146923.png"}]
 
 class HomeBannerApiResModel {
   HomeBannerApiResModel({
@@ -42,59 +42,38 @@ class HomeBannerApiResModel {
 
 }
 
-/// id : 1
-/// slug : "activity"
-/// title : "Activity"
-/// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/activity/slide1-1630069229.jpg"
-/// body : "<p>test description</p>"
+/// title : "Banner1"
 /// status : 1
+/// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/banner/chair-1635146691.jpg"
 
 class Response {
   Response({
-      int? id, 
-      String? slug, 
       String? title, 
-      String? image, 
-      String? body, 
-      int? status,}){
-    _id = id;
-    _slug = slug;
+      int? status, 
+      String? image,}){
     _title = title;
-    _image = image;
-    _body = body;
     _status = status;
+    _image = image;
 }
 
   Response.fromJson(dynamic json) {
-    _id = json['id'];
-    _slug = json['slug'];
     _title = json['title'];
-    _image = json['image'];
-    _body = json['body'];
     _status = json['status'];
+    _image = json['image'];
   }
-  int? _id;
-  String? _slug;
   String? _title;
-  String? _image;
-  String? _body;
   int? _status;
+  String? _image;
 
-  int? get id => _id;
-  String? get slug => _slug;
   String? get title => _title;
-  String? get image => _image;
-  String? get body => _body;
   int? get status => _status;
+  String? get image => _image;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['slug'] = _slug;
     map['title'] = _title;
-    map['image'] = _image;
-    map['body'] = _body;
     map['status'] = _status;
+    map['image'] = _image;
     return map;
   }
 
