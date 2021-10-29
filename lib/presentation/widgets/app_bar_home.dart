@@ -4,10 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/languages.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
-import 'package:qcharge_flutter/data/data_sources/language_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/blocs/language/language_cubit.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
 PreferredSizeWidget appBarHome(BuildContext context) {
   final ValueNotifier<String> _langValueLister = ValueNotifier<String>('ENG');
@@ -63,9 +61,11 @@ PreferredSizeWidget appBarHome(BuildContext context) {
         },
         valueListenable: _langValueLister,
       ),
+
     ],
   );
 }
+
 
 void _onLanguageSelected(int index, BuildContext context) {
   BlocProvider.of<LanguageCubit>(context).toggleLanguage(

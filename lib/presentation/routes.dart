@@ -3,7 +3,7 @@ import 'package:qcharge_flutter/presentation/journeys/account/account_stepper.da
 import 'package:qcharge_flutter/presentation/journeys/account/forgot_password.dart';
 import 'package:qcharge_flutter/presentation/journeys/contents/faqs.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
-import 'package:qcharge_flutter/presentation/journeys/subscription/subscription_details.dart';
+import 'package:qcharge_flutter/presentation/journeys/subscription/billing.dart';
 import 'journeys/home_screen/call_center.dart';
 import 'journeys/profile/update_profile.dart';
 import 'journeys/profile/profile.dart';
@@ -37,6 +37,7 @@ class Routes {
         RouteList.qrcode: (context) => QrCode(),
         RouteList.start: (context) => Start(),
         RouteList.stop: (context) => Stop(),
-        RouteList.finish: (context) => Finish(),
+        //RouteList.finish: (context) => Finish(),
+        RouteList.billing: (context) => Billing(),
       };
 }

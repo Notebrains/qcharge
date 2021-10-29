@@ -24,6 +24,8 @@ class Strings {
 
   static const String shareTxt =
       'Restobuy Supplier is a highly addictive high score competitive trump card style game. Join the game now and beat others.';
+  static const String updateDescTxt =
+      'Q Charge recommends that you update to the latest version. You can keep using this app while downloading the update.';
   static const String txt_lorem_ipsum_big =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt consectetur adipiscing elit, sed do eiusmod tempor incididunt.';
   static const String txt_lorem_ipsum_small = 'Lorem ipsum dolor sit consecte pcing.';

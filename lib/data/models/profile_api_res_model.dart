@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Profile Details."
-/// response : {"name":"Alamgir Alam","email":"alamgira@mridayaitservices.com","mobile":"9732508414","wallet":"100","collect_point":"50","image":"https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png","current_membership_plan":"VIP Ruby","current_membership_plan_price":"2999","due_billing":20,"vehicles":[{"vehicle_id":18,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFG1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634634846.jpg"},{"vehicle_id":19,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634635010.jpg"},{"vehicle_id":21,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2221","car_lisense_plate":"ZASA1231","image":""},{"vehicle_id":29,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":30,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":31,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":32,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":33,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Aufg","car_lisense_plate":"ddg4677","image":""},{"vehicle_id":34,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Aufg","car_lisense_plate":"ddg4677","image":""},{"vehicle_id":35,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"dgghh","car_lisense_plate":"frr55444","image":""},{"vehicle_id":36,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"dgghh","car_lisense_plate":"frr55444","image":""}]}
+/// response : {"name":"Alamgir Alam","email":"alamgira@mridayaitservices.com","mobile":"9732508414","wallet":"570","collect_point":"50","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635240476.jpg","current_membership_plan":"Unavailable","current_membership_plan_price":"","due_billing":20,"payment_flag":0,"vehicles":[{"vehicle_id":18,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFG1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634634846.jpg"},{"vehicle_id":19,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634635010.jpg"},{"vehicle_id":29,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":39,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Holhag","car_lisense_plate":"kjsjdjjd","image":""},{"vehicle_id":40,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Holhag","car_lisense_plate":"kjsjdjjd","image":""}]}
 
 class ProfileApiResModel {
   ProfileApiResModel({
@@ -40,13 +40,14 @@ class ProfileApiResModel {
 /// name : "Alamgir Alam"
 /// email : "alamgira@mridayaitservices.com"
 /// mobile : "9732508414"
-/// wallet : "100"
+/// wallet : "570"
 /// collect_point : "50"
-/// image : "https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png"
-/// current_membership_plan : "VIP Ruby"
-/// current_membership_plan_price : "2999"
+/// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635240476.jpg"
+/// current_membership_plan : "Unavailable"
+/// current_membership_plan_price : ""
 /// due_billing : 20
-/// vehicles : [{"vehicle_id":18,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFG1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634634846.jpg"},{"vehicle_id":19,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634635010.jpg"},{"vehicle_id":21,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2221","car_lisense_plate":"ZASA1231","image":""},{"vehicle_id":29,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":30,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":31,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":32,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":33,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Aufg","car_lisense_plate":"ddg4677","image":""},{"vehicle_id":34,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Aufg","car_lisense_plate":"ddg4677","image":""},{"vehicle_id":35,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"dgghh","car_lisense_plate":"frr55444","image":""},{"vehicle_id":36,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"dgghh","car_lisense_plate":"frr55444","image":""}]
+/// payment_flag : 0
+/// vehicles : [{"vehicle_id":18,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFG1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634634846.jpg"},{"vehicle_id":19,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634635010.jpg"},{"vehicle_id":29,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":39,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Holhag","car_lisense_plate":"kjsjdjjd","image":""},{"vehicle_id":40,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Holhag","car_lisense_plate":"kjsjdjjd","image":""}]
 
 class Response {
   Response({
@@ -59,6 +60,7 @@ class Response {
       String? currentMembershipPlan, 
       String? currentMembershipPlanPrice, 
       int? dueBilling, 
+      int? paymentFlag, 
       List<Vehicles>? vehicles,}){
     _name = name;
     _email = email;
@@ -69,6 +71,7 @@ class Response {
     _currentMembershipPlan = currentMembershipPlan;
     _currentMembershipPlanPrice = currentMembershipPlanPrice;
     _dueBilling = dueBilling;
+    _paymentFlag = paymentFlag;
     _vehicles = vehicles;
 }
 
@@ -82,6 +85,7 @@ class Response {
     _currentMembershipPlan = json['current_membership_plan'];
     _currentMembershipPlanPrice = json['current_membership_plan_price'];
     _dueBilling = json['due_billing'];
+    _paymentFlag = json['payment_flag'];
     if (json['vehicles'] != null) {
       _vehicles = [];
       json['vehicles'].forEach((v) {
@@ -98,6 +102,7 @@ class Response {
   String? _currentMembershipPlan;
   String? _currentMembershipPlanPrice;
   int? _dueBilling;
+  int? _paymentFlag;
   List<Vehicles>? _vehicles;
 
   String? get name => _name;
@@ -109,6 +114,7 @@ class Response {
   String? get currentMembershipPlan => _currentMembershipPlan;
   String? get currentMembershipPlanPrice => _currentMembershipPlanPrice;
   int? get dueBilling => _dueBilling;
+  int? get paymentFlag => _paymentFlag;
   List<Vehicles>? get vehicles => _vehicles;
 
   Map<String, dynamic> toJson() {
@@ -122,6 +128,7 @@ class Response {
     map['current_membership_plan'] = _currentMembershipPlan;
     map['current_membership_plan_price'] = _currentMembershipPlanPrice;
     map['due_billing'] = _dueBilling;
+    map['payment_flag'] = _paymentFlag;
     if (_vehicles != null) {
       map['vehicles'] = _vehicles?.map((v) => v.toJson()).toList();
     }

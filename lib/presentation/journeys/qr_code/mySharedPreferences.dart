@@ -107,4 +107,18 @@ Future<String?> getTotalUnits() async {
     return "";
 }
 
+void addStartDateTime(String units) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("startDateTime", units);
+}
+
+Future<String?> getStartDateTime() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("startDateTime")) {
+    String? key = _preferences!.getString("startDateTime");
+    return key;
+  }
+  else
+    return "";
+}
 }

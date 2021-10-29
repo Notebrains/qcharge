@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
-import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
-import 'package:qcharge_flutter/presentation/demo/stepper_demo.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/button.dart';
-import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../common/extensions/string_extensions.dart';
 
 class TermsAndCondition extends StatefulWidget {

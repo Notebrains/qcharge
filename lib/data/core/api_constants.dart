@@ -31,6 +31,7 @@ class ApiConstants {
   static const String chargingCalculation = "chargingcalculation";
   static const String updateDeviceToken = "updatedevicetoken";
   static const String billPayment = "billPayment";
+  static const String chargingDetails = "charging";
 
 
   //previous app

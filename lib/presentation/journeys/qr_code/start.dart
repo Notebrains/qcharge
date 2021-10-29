@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
@@ -132,9 +133,15 @@ class _StartState extends State<Start> {
                           text: TranslationConstants.start.t(context),
                           bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                           onPressed: ()async{
+
                             setState(() {
                               isLoading = true;
                             });
+
+
+                            String startDateTime = DateFormat('yyyy-MM-DD hh:mm:ss').format(DateTime.now());
+                            MySharedPreferences().addStartDateTime(startDateTime);
+
                             Map<String, dynamic> data = Map();
                             data["chargerId"] = connectorData["chargerId"].toString();
                             data["connectorId"] = connectorData["connector"]["connectorId"].toString();
@@ -149,6 +156,7 @@ class _StartState extends State<Start> {
                               setState(() {
                                 isLoading = false;
                               });
+
                               if(response.statusCode == 200)
                                 Navigator.pushReplacementNamed(context, RouteList.stop);
                               else
@@ -158,7 +166,7 @@ class _StartState extends State<Start> {
                               print("startCharge: $error");
                             }
 
-//                    widget.onTap();
+
                           },
                         ),
                       ),
@@ -183,7 +191,7 @@ class _StartState extends State<Start> {
             ),
           );
           else
-            return Center(child: CircularProgressIndicator(),);
+            return Center(child: CircularProgressIndicator(color: Colors.amber.shade600,),);
 
         }
       ),

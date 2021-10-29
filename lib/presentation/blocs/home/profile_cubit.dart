@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/data/models/profile_api_res_model.dart';
 import 'package:qcharge_flutter/domain/usecases/profile_usecase.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 
 import '../../../common/constants/translation_constants.dart';
 import '../../../domain/entities/app_error.dart';
@@ -19,15 +20,17 @@ class ProfileCubit extends Cubit<ProfileState> {
 
 
   void initiateProfile(String userId) async {
-    print('------- : ${userId}');
+
     final Either<AppError, ProfileApiResModel> eitherResponse = await profile(userId);
 
     emit(eitherResponse.fold((l) {
       var message = getErrorMessage(l.appErrorType);
       print(message);
       return ProfileError(message);
-    },
-          (r) => ProfileSuccess(r),
+    }, (r) {
+
+      return ProfileSuccess(r);
+      },
     ));
   }
 

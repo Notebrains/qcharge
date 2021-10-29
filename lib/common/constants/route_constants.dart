@@ -24,4 +24,5 @@ class RouteList {
   static const String start = '/start';
   static const String stop = '/stop';
   static const String finish = '/finish';
+  static const String billing = '/billing';
 }

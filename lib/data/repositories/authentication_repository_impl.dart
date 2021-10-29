@@ -16,6 +16,7 @@ import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/subscription_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
 import 'package:qcharge_flutter/data/models/wallet_recharge_api_res.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 
 import '../../domain/entities/app_error.dart';
 import '../../domain/repositories/authentication_repository.dart';
@@ -141,6 +142,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       final response = await _authenticationRemoteDataSource.getProfile(userId);
       if (response.status == 1) {
         await _authenticationLocalDataSource.saveWalletBalance(response.response!.wallet!);
+        await _authenticationLocalDataSource.saveUserDuePaymentFlag(response.response!.paymentFlag!.toString());
       }
       return Right(response);
     } on SocketException {

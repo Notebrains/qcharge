@@ -184,8 +184,7 @@ class _QrCodeState extends State<QrCode> {
                           MySharedPreferences().addConnectorData(jsonEncode(selectedSocketData));
                           Navigator.pushReplacementNamed(context, RouteList.start);
                         }
-                        else
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please select Socket first"),));
+                        else ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please select socket first"),));
 //                        widget.onTap();
                       },),
                     ),
@@ -193,50 +192,12 @@ class _QrCodeState extends State<QrCode> {
                 ),
               ),
             );
-          }else
-            return Center(child: CircularProgressIndicator(
-              color: Colors.amberAccent,
+          }else return Center(child: CircularProgressIndicator(
+              color: Colors.amber.shade600,
             ),);
         }
       ),
     );
   }
 
-//  Widget loadNextScreen(){
-//    print('----Screen Title : $screenTitle');
-//    switch (screenTitle) {
-//      case 'next':
-//        return Next(onTap:(){
-//          setState(() {
-//            screenTitle = 'start';
-//          });
-//        },);
-//      case 'start':
-//        return Start(onTap:(){
-//          setState(() {
-//            screenTitle = 'stop';
-//          });
-//        },);
-//      case 'stop':
-//        return Stop(onTap:(){
-//          setState(() {
-//            screenTitle = 'finish';
-//          });
-//        },);
-//      case 'finish':
-//        return Finish(onTap:(){
-//          setState(() {
-//            screenTitle = 'next';
-//          });
-//        },);
-//      default:
-//        return Next(onTap:(){
-//          setState(() {
-//            setState(() {
-//              screenTitle = 'next';
-//            });
-//          });
-//        },);
-//    }
-//  }
 }

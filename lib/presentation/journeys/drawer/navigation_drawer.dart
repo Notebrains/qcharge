@@ -85,6 +85,13 @@ class NavigationDrawer extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               children: <Widget>[
                 NavigationListItem(
+                  title: TranslationConstants.home.t(context),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(RouteList.home_screen);
+                  },
+                ),
+
+                NavigationListItem(
                   title: TranslationConstants.newsAndUpdate.t(context),
                   onPressed: () {
                     //Navigator.of(context).pop();

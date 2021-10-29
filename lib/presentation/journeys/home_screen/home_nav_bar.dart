@@ -14,7 +14,6 @@ import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.d
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home.dart';
 import 'package:qcharge_flutter/presentation/journeys/map_screen/map_screen.dart';
 import 'package:qcharge_flutter/presentation/journeys/profile/profile.dart';
-import 'package:qcharge_flutter/presentation/journeys/qr_code/qr_code.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/qr_scan.dart';
 import 'package:qcharge_flutter/presentation/journeys/topup/topup.dart';
 import 'package:qcharge_flutter/presentation/libraries/bottom_navbar_center_round/pandabar.dart';

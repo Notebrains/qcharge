@@ -5,11 +5,9 @@ import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
-import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/login/login_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
-import 'package:qcharge_flutter/presentation/journeys/subscription/billing.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -168,8 +166,8 @@ class Profile extends StatelessWidget {
                               Navigator.pushNamed(context, RouteList.subscription);
                             }),
                         Visibility(
-                          visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
-                          //visible: true,
+                          //visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
+                          visible: false,
                           child: BoxTxt(
                               txt1: ' ${TranslationConstants.dueBill.t(context)} >',
                               txt2: TranslationConstants.total.t(context),
@@ -177,12 +175,7 @@ class Profile extends StatelessWidget {
                               rightPadding: 0,
                               topPadding: 12,
                               onTap: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Billing(),
-                                  ),
-                                );
+                                Navigator.pushNamed(context, RouteList.billing);
                               }),
                         ),
                       ],

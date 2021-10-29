@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_version/new_version.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
-import 'package:qcharge_flutter/data/models/home_banner_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
-import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_card_list.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_slider.dart';
@@ -17,7 +17,66 @@ import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 
 import '../../../common/extensions/string_extensions.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Instantiate NewVersion manager object (Using GCP Console app as example)
+    final newVersion = NewVersion(
+      iOSId: 'com.arrow.energy.qcharge',
+      androidId: 'com.arrowenergy.qcharge',
+    );
+
+  /*  //There are test credentials  //change here
+    final newVersion = NewVersion(
+      iOSId: 'itunes.apple.com',
+      androidId: 'com.whatsapp.w4b',
+    );*/
+
+    // You can let the plugin handle fetching the status and showing a dialog,
+    // or you can fetch the status and display your own dialog, or no dialog.
+    const simpleBehavior = false;
+
+    if (simpleBehavior) {
+      basicStatusCheck(newVersion);
+    } else {
+      advancedStatusCheck(newVersion);
+    }
+  }
+
+  basicStatusCheck(NewVersion newVersion) {
+    newVersion.showAlertIfNecessary(context: context);
+  }
+
+  advancedStatusCheck(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      print(status.releaseNotes);
+      print(status.appStoreLink);
+      print(status.localVersion);
+      print(status.storeVersion);
+      print(status.canUpdate.toString());
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: 'App Update Available',
+        dialogText: "Current version: ${status.localVersion}\nNew version: ${status.storeVersion}\n\n${Strings.updateDescTxt}",
+        updateButtonText : 'UPDATE',
+        allowDismissal : true,
+        dismissButtonText : 'MAYBE LATER',
+
+      );
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +87,6 @@ class Home extends StatelessWidget {
         child: BlocBuilder<HomeBannerCubit, HomeBannerState>(
           builder: (BuildContext context, state) {
             if (state is HomeBannerSuccess) {
-              //showUpdateDialog(context, state.model.response!);
               return Column(
                 children: [
                   Container(
@@ -74,12 +132,9 @@ class Home extends StatelessWidget {
                           onTap: () {
                             Navigator.pushNamed(context, RouteList.call_center);
 
-                            /*Navigator.push(
+                            /*  Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => HomeCards(
-                              screenTitle: TranslationConstants.activity.t(context),
-                              urlEndpoint: 'activity',
-                            ),
+                            MaterialPageRoute(builder: (context) => PackageInfoDemo(),
                             ),
                           );*/
                           },
@@ -112,50 +167,5 @@ class Home extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void showUpdateDialog(BuildContext context, List<Response> response) {
-    /*
-                      String title = "App Update Available";
-                      String btnLabel = "Update Now";
-                      String btnLabelCancel = "Later";
-                      String btnLabelDontAskAgain = "Don't ask me again";
-                      return DoNotAskAgainDialog(
-                        'kUpdateDialogKeyName',
-                        title,
-                        'A newer version of the app is available',
-                */
-
-    Alert(
-      context: context,
-      title: "App Update Available",
-      desc: "A newer version of the app is available\n",
-      image: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Icon(Icons.system_update_rounded, size: 100,),
-      ),
-      buttons: [
-        DialogButton(
-          color: Colors.white,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            'Update Now',
-            style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-        ),
-        DialogButton(
-          color: Colors.white,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            'Later',
-            style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-        )
-      ],
-    ).show();
   }
 }
