@@ -54,7 +54,7 @@ abstract class AuthenticationRemoteDataSource {
 
   Future<StatusMessageApiResModel> sendFirebaseToken(Map<String, dynamic> params);
 
-  Future<StatusMessageApiResModel> billPayment(String userId);
+  Future<StatusMessageApiResModel> billPayment(Map<String, dynamic> params);
 }
 
 class AuthenticationRemoteDataSourceImpl
@@ -207,7 +207,7 @@ class AuthenticationRemoteDataSourceImpl
   @override
   Future<SubscriptionApiResModel> doSubscription(String userId) async {
     final response = await _client.post(
-      ApiConstants.subscription, //change here
+      ApiConstants.subscription,
       params: {
         'user_id' : userId,
       },
@@ -320,12 +320,10 @@ class AuthenticationRemoteDataSourceImpl
   }
 
   @override
-  Future<StatusMessageApiResModel> billPayment(String userId) async {
+  Future<StatusMessageApiResModel> billPayment(Map<String, dynamic> params) async {
     final response = await _client.post(
         ApiConstants.billPayment,
-        params: {
-          'user_id': userId
-        }
+        params: params
     );
     print('Bill Payment Res: $response');
     return StatusMessageApiResModel.fromJson(response);

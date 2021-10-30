@@ -30,7 +30,7 @@ class ApiConstants {
   static const String chargingBilling = "chargingbilling";
   static const String chargingCalculation = "chargingcalculation";
   static const String updateDeviceToken = "updatedevicetoken";
-  static const String billPayment = "billPayment";
+  static const String billPayment = "due-billing-payment";
   static const String chargingDetails = "charging";
 
 

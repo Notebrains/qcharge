@@ -41,10 +41,12 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
                 ),
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
                     Strings.tAndCTxt,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     style: TextStyle(fontSize: 13.0),
                   ),
 
@@ -57,7 +59,8 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
             ),
 
             onTap: (){
-              _launchInBrowser("https://www.websitepolicies.com/policies/view/RY4kdA4B");
+              _launchInBrowser("https://docs.google.com/gview?embedded=true&url=" + Strings.termAndCondPdfUrl);
+              //_launchInBrowser("https://docs.google.com/viewer?url="+ Strings.termAndCondPdfUrl);
             },
           ),
 

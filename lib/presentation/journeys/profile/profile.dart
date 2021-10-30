@@ -166,8 +166,8 @@ class Profile extends StatelessWidget {
                               Navigator.pushNamed(context, RouteList.subscription);
                             }),
                         Visibility(
-                          //visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
-                          visible: false,
+                          visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
+                          //visible: true,
                           child: BoxTxt(
                               txt1: ' ${TranslationConstants.dueBill.t(context)} >',
                               txt2: TranslationConstants.total.t(context),

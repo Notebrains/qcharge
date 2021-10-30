@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
@@ -138,14 +139,13 @@ class _StartState extends State<Start> {
                               isLoading = true;
                             });
 
-
                             String startDateTime = DateFormat('yyyy-MM-DD hh:mm:ss').format(DateTime.now());
                             MySharedPreferences().addStartDateTime(startDateTime);
 
                             Map<String, dynamic> data = Map();
                             data["chargerId"] = connectorData["chargerId"].toString();
                             data["connectorId"] = connectorData["connector"]["connectorId"].toString();
-                            data["cardNo"] = "ABCDE";
+                            data["cardNo"] = (Random().nextInt(912319541) + 154145).toString();
 
                             String? token = await MySharedPreferences().getApiToken();
                             data["token"] = token.toString();

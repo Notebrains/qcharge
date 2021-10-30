@@ -345,9 +345,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<Either<AppError, StatusMessageApiResModel>> billPayment(String userId) async {
+  Future<Either<AppError, StatusMessageApiResModel>> billPayment(Map<String, dynamic> params) async {
     try {
-      final response = await _authenticationRemoteDataSource.billPayment(userId);
+      final response = await _authenticationRemoteDataSource.billPayment(params);
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));

@@ -15,11 +15,11 @@ import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
-import 'package:qcharge_flutter/data/repositories/authentication_repository_impl.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/journeys/subscription/billing.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
+import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import 'Constants.dart' as Constants;
@@ -106,13 +106,17 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
 
   void _onQRViewCreated(QRViewController controller) async {
     String? userDuePaymentStatus = await AuthenticationLocalDataSourceImpl().getUserDuePaymentFlag();
-    print('----User Due Payment Status : $userDuePaymentStatus');
+    String? balance = await AuthenticationLocalDataSourceImpl().getWalletBalance();
+    double walletBalance = double.parse(balance!);
 
-    if (userDuePaymentStatus != null && userDuePaymentStatus == '1') {
-      if (!controller.hasPermissions) {
-        edgeAlert(context,
-            title: 'Warning!', description: 'Please give camera permission to use the QR Scanner', gravity: Gravity.top);
-      }
+    print('----User Due Payment Status : $userDuePaymentStatus');
+    print('----walletBalance : $walletBalance');
+
+    if (userDuePaymentStatus == null || userDuePaymentStatus == '1') {
+      showDuePaymentDialog(context);
+    } else if (walletBalance == 0 || walletBalance < 500) {
+      showInsufficientWalletBalanceDialog(context);
+    } else {
       this.controller = controller;
       controller.scannedDataStream.listen((scanData) async {
         print(scanData);
@@ -131,8 +135,6 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
           await getChargerDetails();
         }
       });
-    } else {
-      showDialog(context);
     }
   }
 
@@ -176,7 +178,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
     );
   }
 
-  void showDialog(BuildContext context) {
+  void showDuePaymentDialog(BuildContext context) {
     Alert(
       context: context,
       onWillPopActive: true,
@@ -184,11 +186,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
       desc: "Your charging bill limit is exceeded. Please pay due bill to continue charging.\n",
       image: Padding(
         padding: const EdgeInsets.all(18.0),
-        child: Image.asset(
-          "assets/images/payment-credit-card.png",
-          width: 170,
-          height: 170,
-        ),
+        child: Icon(Icons.warning, color: AppColor.border, size: 120,)
       ),
       closeIcon: IconButton(
           onPressed: () {
@@ -217,9 +215,8 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
         DialogButton(
           color: Colors.amber,
           onPressed: () {
-            //Navigator.pushNamed(context, RouteList.home_screen);
-            submitChargingData();
-            //updatePaymentStatus();
+            Navigator.pushNamed(context, RouteList.home_screen);
+            //submitChargingData();
             Navigator.pop(context);
           },
           child: Text(
@@ -231,23 +228,56 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
     ).show();
   }
 
+  void showInsufficientWalletBalanceDialog(BuildContext context) {
+    Alert(
+      context: context,
+      onWillPopActive: true,
+      title: 'Insufficient Wallet Balance',
+      desc: "Minimum 500 thb wallet balance require for charging the car. Please top up your wallet and continue charging.\n",
+      image: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Icon(Icons.warning, color: AppColor.border, size: 120,)
+      ),
+      closeIcon: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, RouteList.home_screen);
+          },
+          icon: Icon(
+            Icons.cancel,
+            color: Colors.white70,
+          )),
+      buttons: [
+        DialogButton(
+          color: Colors.amber,
+          onPressed: () {
+            Navigator.pushNamed(context, RouteList.home_screen);
+          },
+          child: Text(
+            ' Close ',
+            style: TextStyle(color: Colors.black, fontSize: 14),
+          ),
+        ),
+      ],
+    ).show();
+  }
+
   void submitChargingData() async {
     String startDateTime = DateFormat('yyyy-MM-DD hh:mm:ss').format(DateTime.now());
     print('----startDateTime : $startDateTime');
 
     Map<String, dynamic> data = Map();
     data["user_id"] = '15';
-    data["station_id"] = '1113';
-    data["vehicle_id"] = '1113';
+    data["station_id"] = '143423';
+    data["vehicle_id"] = '1245513';
     data["start_time"] = '2021-10-29 18:40:15';
     data["end_time"] = '2021-10-29 18:55:17';
     data["duration"] = '16';
     data["parking_time"] = '22';
-    data["consume_charge"] = '50';
+    data["consume_charge"] = '2';
 
     try {
       http.Response response =
-      await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/charging"), body: data);
+          await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/charging"), body: data);
       print("charging response: ${response.body}");
 
       if (response.statusCode == 200) {
@@ -259,110 +289,34 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
         String id = resData["id"].toString();
         String totalPrice = resData["total_price"].toString();
 
-        Alert(
-          context: context,
-          title: TranslationConstants.paymentMethod.t(context),
-          desc: '',//"${TranslationConstants.message.t(context)}\n\n ${TranslationConstants.walletBalance.t(context)}: ${convertStrToDoubleStr(walletBalance)} thb",
-          image: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Image.asset("assets/images/payment-credit-card.png", width: 170, height: 170,),
-          ),
-          buttons: [
-            DialogButton(
-              color: Colors.amber,
-              onPressed: () {
-                //pay by wallet api
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                TranslationConstants.wallet.t(context),
-                style: TextStyle(
-                    color: Colors.black, fontSize: 14),
-              ),
-            ),
-            DialogButton(
-              color: Colors.amber,
-              onPressed: () {
-                openPaymentGateway(id, totalPrice,);
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                TranslationConstants.payOnline.t(context),
-                style: TextStyle(color: Colors.black, fontSize: 14),
-              ),
-            )
-          ],
-        ).show();
+
+        updatePaymentStatus(id, totalPrice);
       } else
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error Code : ${response.statusCode}"),),
+          SnackBar(
+            content: Text("Error Code : ${response.statusCode}"),
+          ),
         );
     } catch (error) {
       print("charging: $error");
     }
   }
 
-
-  void openPaymentGateway(String id, String totalPrice, ) async {
-    try {
-      final sdk = My2c2pSDK(privateKey: Platform.isAndroid? Strings.androidPrivateKey : Strings.iosPrivateKey);
-      sdk.paymentUI = true; // false to direct payment and true to see payment ui to manual payment
-      sdk.productionMode = false;
-      sdk.merchantId = "764764000001966";
-      sdk.uniqueTransactionCode = (Random().nextInt(912319541) + 154145).toString();
-      sdk.desc = "product item 1";
-      sdk.amount = double.parse(totalPrice);
-      sdk.currencyCode = "764";
-      sdk.pan = "5105105105105100";
-      sdk.cardExpireMonth = 12;
-      sdk.cardExpireYear = 2025;
-      sdk.cardHolderName = "Mr. John";
-      sdk.cardPin = "4111111111111111";
-      sdk.cardType = CardType.OPEN_LOOP;
-      sdk.panCountry = "TH";
-      sdk.panBank = 'Kasikom Bank';
-      sdk.secretKey = "24ABCC819638916E7DD47D09F2DEA4588FAE70636B085B8DE47A9592C4FD034F";
-      //set optional fields
-      sdk.securityCode = "2234523";
-      sdk.cardHolderEmail = 'Thanpilin@arrow-energy.com';
-
-      final result = await sdk.proceed();
-      print('----2c2p payment result: $result');
-
-      Map<String, dynamic> responseJson = json.decode(result!);
-
-      String uniqueTransactionCode = responseJson["uniqueTransactionCode"];
-
-      /*String amount = responseJson["amt"];
-
-      print('----amount: ${responseJson["amt"]}');
-      print('----uniqueTransactionCode: ${responseJson["uniqueTransactionCode"]}');
-      print('----tranRef: ${responseJson["tranRef"]}');
-      print('----approvalCode: ${responseJson["approvalCode"]}');
-      print('----refNumber: ${responseJson["refNumber"]}');*/
-
-      if (uniqueTransactionCode.isNotEmpty) {
-        updatePaymentStatus(uniqueTransactionCode, id);
-      } else {
-        edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Payment Failed', gravity: Gravity.top);
-      }
-    } catch (e) {
-      print('----Error : $e');
-    }
-  }
-
-  void updatePaymentStatus(String uniqueTransactionCode, String id) async {
+  void updatePaymentStatus( String id, String totalPrice) async {
     Map<String, dynamic> data = Map();
     data["id"] = id;
-    data["transaction_id"] = uniqueTransactionCode;
+    data["transaction_id"] = (Random().nextInt(912319541) + 154145).toString();
+    data["user_id"] = '15';
+    data["total_price"] = totalPrice;
 
     try {
-      http.Response response =
-      await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/update-payment-status"), body: data);
+      http.Response response = await http
+          .post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/update-payment-status"), body: data);
       print("charging pay response: ${response.body}");
 
       if (response.statusCode == 200) {
-        edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Payment Successful', gravity: Gravity.top);
+        edgeAlert(context,
+            title: TranslationConstants.message.t(context), description: 'Payment Successful', gravity: Gravity.top);
         Navigator.pushReplacementNamed(context, RouteList.home_screen);
       } else
         ScaffoldMessenger.of(context).showSnackBar(

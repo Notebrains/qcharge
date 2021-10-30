@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -107,8 +108,8 @@ class _StopState extends State<Stop> {
     print(data);
     connectorData = jsonDecode(data.toString());
     print(connectorData);
-    int? stationId = await MySharedPreferences().getStationId();
-    int? chargerId = await MySharedPreferences().getStationId();
+    //int? stationId = await MySharedPreferences().getStationId();
+    //int? chargerId = await MySharedPreferences().getStationId();
     http.Response checkStatus = await http.get(Uri.parse(
         "https://qcharge.hashtrix.in/public/api/getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}"));
     print("checkStatus: ${checkStatus.statusCode}");
@@ -121,11 +122,11 @@ class _StopState extends State<Stop> {
 //      elapsedTime = "${temp.substring(0,1).toUpperCase}${temp.substring(1)}";
       connectorStatus = statusData["status"].toString().capitalize();
       units = statusData["kwhValue"];
-      statusTimer = Timer.periodic(Duration(seconds: 3), (timer) async {
+      statusTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
         http.Response checkStatus = await http.get(Uri.parse(
             "https://qcharge.hashtrix.in/public/api/getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}"));
-        print("checkStatus: ${checkStatus.statusCode}");
-        print("checkStatus: ${checkStatus.body}");
+        print("getchargerstatus code: ${checkStatus.statusCode}");
+        print("get charger status res: ${checkStatus.body}");
         dynamic data = jsonDecode(checkStatus.body);
         statusData = data["data"];
         setState(() {
@@ -144,7 +145,7 @@ class _StopState extends State<Stop> {
           Map<String, dynamic> data = Map();
           data["chargerId"] = connectorData["chargerId"].toString();
           data["connectorId"] = connectorData["connector"]["connectorId"].toString();
-          data["cardNo"] = "ABCDE";
+          data["cardNo"] = (Random().nextInt(912319541) + 154145).toString(); //change here
 
           String? token = await MySharedPreferences().getApiToken();
           data["token"] = token.toString();

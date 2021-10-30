@@ -100,7 +100,7 @@ class NavigationDrawer extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => HomeCards(
                           screenTitle: TranslationConstants.newsAndUpdate.t(context),
-                          urlEndpoint: 'news', //change here
+                          urlEndpoint: 'news',
                         ),
                       ),
                     );

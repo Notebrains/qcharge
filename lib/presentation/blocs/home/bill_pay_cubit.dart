@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
+import 'package:qcharge_flutter/domain/entities/due_bill_payment_params.dart';
 import 'package:qcharge_flutter/domain/usecases/bill_pay_usecase.dart';
 import 'package:qcharge_flutter/presentation/blocs/loading/loading_cubit.dart';
 
@@ -21,9 +22,21 @@ class BillPaymentCubit extends Cubit<BillPaymentState> {
   }) : super(BillPaymentInitial());
 
 
-  void initiateBillPayment(String vehicleId) async {
+  void initiateBillPayment(
+      String userId,
+      String transactionId,
+      String dueBilling,
+      String flag,
+      ) async {
     loadingCubit.show();
-    final Either<AppError, StatusMessageApiResModel> eitherResponse = await usecase(vehicleId);
+    final Either<AppError, StatusMessageApiResModel> eitherResponse = await usecase(
+        DueBillPayParams(
+            userId: userId,
+            transactionId: transactionId,
+            dueBilling: dueBilling,
+            flag: flag,
+        )
+    );
 
     emit(eitherResponse.fold(
           (l) {

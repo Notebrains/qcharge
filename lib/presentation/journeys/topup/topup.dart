@@ -51,6 +51,8 @@ class _TopUpState extends State<TopUp> {
 
     getLocalData();
     _topupAmountController = TextEditingController();
+    _topupAmountController!.text = '500.00';
+
   }
 
   @override
