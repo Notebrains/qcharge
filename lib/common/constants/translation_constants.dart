@@ -149,4 +149,24 @@ class TranslationConstants {
   static const String payBill = 'payBill';
   static const String yourBilling = 'yourBilling';
   static const String duration = 'duration';
+  static const String duePayment = 'duePayment';
+  static const String duePaymentExceedTxt = 'duePaymentExceedTxt';
+  static const String viewPay = 'viewPay';
+  static const String later = 'later';
+  static const String insufficientBalance = 'insufficientBalance';
+  static const String insufficientBalanceTxt = 'insufficientBalanceTxt';
+  static const String close = 'close';
+  static const String carChargedTxt = 'carChargedTxt';
+  static const String connectorStatus = 'connectorStatus';
+  static const String goBack = 'goBack';
+  static const String connectorNotFound = 'connectorNotFound';
+  static const String wrongConnector = 'wrongConnector';
+  static const String processing = 'processing';
+  static const String totalSpend = 'totalSpend';
+  static const String from = 'from';
+  static const String dateRegular = 'dateRegular';
+  static const String timeRegular = 'timeRegular';
+  static const String priceRegular = 'priceRegular';
+  static const String select = 'select';
+  static const String to = 'to';
 }

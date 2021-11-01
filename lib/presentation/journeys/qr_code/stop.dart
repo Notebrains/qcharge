@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
@@ -39,12 +37,17 @@ class _StopState extends State<Stop> {
   late bool isLoading = false;
   late bool isLoaded = false;
   late bool showButton = false;
+  late bool isChargingStart = false;
+  late bool isCharged = false;
   late Stopwatch stopwatch = Stopwatch();
   late Timer timer;
   late Timer statusTimer;
   late String elapsedTime = '00:00:00';
   late String connectorStatus = '';
   late String units = '0';
+  String? cardNo = '';
+  String actualUnit = '0';
+  double minusUnit = 0.00;
 
   updateTime(Timer timer) {
     if (stopwatch.isRunning) {
@@ -105,6 +108,7 @@ class _StopState extends State<Stop> {
 
   Future<bool> getConnectorDetails() async {
     String? data = await MySharedPreferences().getConnectorData();
+    cardNo = await MySharedPreferences().getCardNo();
     print(data);
     connectorData = jsonDecode(data.toString());
     print(connectorData);
@@ -132,83 +136,117 @@ class _StopState extends State<Stop> {
         setState(() {
           connectorStatus = statusData["status"].toString().capitalize();
           units = statusData["kwhValue"];
+          elapsedTime = transformMilliSeconds(timer.tick);
+          if (minusUnit == 0.00) {
+            minusUnit = double.parse(units);
+          } else {
+            actualUnit = (double.parse(units) - minusUnit).toString();
+          }
         });
-        if (statusData["data"].toString() == "charging") {
-          if (!stopwatch.isRunning) startWatch();
-        }
-        if (statusData["data"].toString() == "charged") {
+
+        print('-----1  ${timer.tick}');
+        print('-----2  ${statusData["status"].toString()}');
+        print('-----3  $isChargingStart');
+
+        if (timer.tick == 15 && (statusData["status"].toString() == "occupied" || statusData["status"].toString() == "available")) {
           stopWatch();
           timer.cancel();
-          setState(() {
-            isLoading = true;
+          showWrongConnectorDialog();
+        }
+
+        if (statusData["status"].toString() == "charging") {
+          isChargingStart = true;
+          if (!stopwatch.isRunning) startWatch();
+        }
+
+        if(isChargingStart && statusData["status"].toString() == "available"){
+          stopCharging( 'You have unplug from the charger', onTap: () {
+            Navigator.pushReplacementNamed(context, RouteList.finish);
           });
-          Map<String, dynamic> data = Map();
-          data["chargerId"] = connectorData["chargerId"].toString();
-          data["connectorId"] = connectorData["connector"]["connectorId"].toString();
-          data["cardNo"] = (Random().nextInt(912319541) + 154145).toString(); //change here
+        }
 
-          String? token = await MySharedPreferences().getApiToken();
-          data["token"] = token.toString();
-          try {
-            http.Response response = await http.post(Uri.parse("${Constants.APP_BASE_URL}stopcharging"), body: data);
-            print("stopCharge: ${response.statusCode}");
-            print("stopCharge: ${response.body}");
-            setState(() {
-              isLoading = false;
-            });
-            if (response.statusCode == 200) {
-            } else
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Error Code : ${response.statusCode}"),
-              ));
-
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text("Your car battery is fully charged!"),
-                    actions: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.easeIn,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          gradient: LinearGradient(
-                              begin: Alignment.centerRight,
-                              end: Alignment.centerLeft,
-                              colors: [Color(0xFFEFE07D), Color(0xFFB49839)]),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
-                        margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
-                        width: 80,
-                        height: 35,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Finish(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "Ok",
-                            style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                });
-          } catch (error) {
-            print("stopCharge: $error");
-          }
+        if (statusData["status"].toString() == "charged" ) {
+          stopCharging(TranslationConstants.carChargedTxt.t(context), onTap: () {
+            Navigator.pushReplacementNamed(context, RouteList.finish);
+          });
         }
       });
     }
     return true;
+  }
+
+  stopCharging(String dialogText,  {
+    required Function() onTap,
+  }) async {
+    stopWatch();
+    timer.cancel();
+    setState(() {
+      isLoading = true;
+    });
+    Map<String, dynamic> data = Map();
+    data["chargerId"] = connectorData["chargerId"].toString();
+    data["connectorId"] = connectorData["connector"]["connectorId"].toString();
+    data["cardNo"] = cardNo;
+
+    String? token = await MySharedPreferences().getApiToken();
+    data["token"] = token.toString();
+    try {
+      http.Response response = await http.post(Uri.parse("${Constants.APP_BASE_URL}stopcharging"), body: data);
+      print("stopCharge: ${response.statusCode}");
+      print("stopCharge: ${response.body}");
+      setState(() {
+        isLoading = false;
+      });
+      if (response.statusCode == 200) {
+        if (dialogText == 'no') {
+          Navigator.pushReplacementNamed(context, RouteList.finish);
+        }
+      } else ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error Code : ${response.statusCode}"),
+      ));
+
+      if (dialogText != 'no') {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Message'),
+                content: Text(dialogText,),
+                actions: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeIn,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5),
+                      ),
+                      gradient: LinearGradient(
+                          begin: Alignment.centerRight,
+                          end: Alignment.centerLeft,
+                          colors: [Color(0xFFEFE07D), Color(0xFFB49839)]),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
+                    margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h, horizontal: 24),
+                    width: 80,
+                    height: 35,
+                    child: TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                        onTap();
+                      },
+                      child: Text(
+                        TranslationConstants.okay.t(context),
+                        style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            });
+      }
+    } catch (error) {
+      print("stopCharge: $error");
+    }
   }
 
   @override
@@ -243,7 +281,7 @@ class _StopState extends State<Stop> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   ImgTxtRow(
-                                    txt: 'Connector Status: $connectorStatus',
+                                    txt: '${TranslationConstants.connectorStatus.t(context)} $connectorStatus',
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
@@ -251,7 +289,7 @@ class _StopState extends State<Stop> {
                                     icColor: AppColor.app_txt_white,
                                   ),
                                   ImgTxtRow(
-                                    txt: 'Charging Time: $elapsedTime',
+                                    txt: '${TranslationConstants.chargingTime.t(context)} $elapsedTime',
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
@@ -259,21 +297,21 @@ class _StopState extends State<Stop> {
                                     icColor: AppColor.app_txt_white,
                                   ),
                                   ImgTxtRow(
-                                    txt: 'Units: $units',
+                                    txt: '${TranslationConstants.unit.t(context)} $actualUnit',
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
                                     icon: 'assets/icons/pngs/scan_qr_for_filter_4.png',
                                     icColor: AppColor.app_txt_white,
                                   ),
-                                  ImgTxtRow(
+                                  /*ImgTxtRow(
                                     txt: TranslationConstants.acType.t(context),
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
                                     icon: 'assets/icons/pngs/scan_qr_for_filter_10_charge_ac.png',
                                     icColor: AppColor.app_txt_white,
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
@@ -299,44 +337,7 @@ class _StopState extends State<Stop> {
                                 text: TranslationConstants.stop.t(context),
                                 bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                                 onPressed: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-
-                                  Map<String, dynamic> data = Map();
-                                  data["chargerId"] = connectorData["chargerId"].toString();
-                                  data["connectorId"] = connectorData["connector"]["connectorId"].toString();
-                                  data["cardNo"] = "ABCDE";
-
-                                  String? token = await MySharedPreferences().getApiToken();
-                                  data["token"] = token.toString();
-                                  try {
-                                    http.Response response =
-                                        await http.post(Uri.parse("${Constants.APP_BASE_URL}stopcharging"), body: data);
-                                    print("stopCharge: ${response.statusCode}");
-                                    print("stopCharge: ${response.body}");
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    if (response.statusCode == 200) {
-                                      stopWatch();
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Finish(),
-                                        ),
-                                      );
-                                    } else
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text("Error Code : ${response.statusCode}"),
-                                        ),
-                                      );
-                                  } catch (error) {
-                                    print("stopCharge: $error");
-                                  }
-
-            //                    widget.onTap();
+                                  stopCharging('no', onTap: () {  });
                                 },
                               ),
                             ),
@@ -369,7 +370,7 @@ class _StopState extends State<Stop> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          " Connector not found",
+                          TranslationConstants.connectorNotFound.t(context),
                           style: TextStyle(
                             color: AppColor.app_txt_white,
                             fontSize: 12,
@@ -379,7 +380,7 @@ class _StopState extends State<Stop> {
                         Padding(
                           padding: const EdgeInsets.only(left: 36, right: 36, bottom: 70),
                           child: Button(
-                            text: "Go Back",
+                            text: TranslationConstants.goBack.t(context),
                             bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                             onPressed: () async {
                               Navigator.pushReplacementNamed(context, RouteList.home_screen);
@@ -395,5 +396,45 @@ class _StopState extends State<Stop> {
               );
           }),
     );
+  }
+
+  void showWrongConnectorDialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(TranslationConstants.warning.t(context),),
+            content: Text(TranslationConstants.wrongConnector.t(context),),
+            actions: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeIn,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                  gradient: LinearGradient(
+                      begin: Alignment.centerRight,
+                      end: Alignment.centerLeft,
+                      colors: [Color(0xFFEFE07D), Color(0xFFB49839)]),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
+                margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h, horizontal: 24),
+                width: 130,
+                height: 35,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, RouteList.qrcode);
+                  },
+                  child: Text(
+                    TranslationConstants.goBack.t(context),
+                    style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+            ],
+          );
+        });
   }
 }

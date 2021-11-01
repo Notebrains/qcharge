@@ -30,7 +30,7 @@ abstract class AuthenticationRemoteDataSource {
   Future<bool> deleteSession(String sessionId);
   Future<ProfileApiResModel> getProfile(String userId);
   Future<TopUpApiResModel> getTopUp(Map<String, dynamic> requestBody);
-  Future<ForgotPassApiResModel> getForgotPass(String mobile);
+  Future<ForgotPassApiResModel> getForgotPass(String email);
   Future<FaqApiResModel> getFaq();
   Future<HomeCardApiResModel> callHomeCardApi(String contentEndpoint);
   Future<StatusMessageApiResModel> updateProfile(Map<String, dynamic> body);
@@ -169,11 +169,11 @@ class AuthenticationRemoteDataSourceImpl
   }
 
   @override
-  Future<ForgotPassApiResModel> getForgotPass(String mobile) async {
+  Future<ForgotPassApiResModel> getForgotPass(String email) async {
     final response = await _client.post(
         ApiConstants.forgotPassword,
         params: {
-          'mobile': mobile,
+          'email': email,
         }
     );
     print('getForgotPass res: $response');

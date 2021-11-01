@@ -11,6 +11,6 @@ class ForgotPassword extends UseCase<ForgotPassApiResModel, String> {
   ForgotPassword(this._authenticationRepository);
 
   @override
-  Future<Either<AppError, ForgotPassApiResModel>> call(String mobile) async =>
-      _authenticationRepository.getForgotPassword(mobile);
+  Future<Either<AppError, ForgotPassApiResModel>> call(String email) async =>
+      _authenticationRepository.getForgotPassword(email);
 }

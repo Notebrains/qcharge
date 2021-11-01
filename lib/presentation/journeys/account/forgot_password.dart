@@ -4,6 +4,7 @@ import 'package:flutter_animator/widgets/sliding_entrances/slide_in_up.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:qcharge_flutter/common/extensions/validation.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/login/forgot_pass_cubit.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
@@ -22,7 +23,6 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State {
   TextEditingController _controller = TextEditingController();
-  String mobile = '';
   GlobalKey<FormState> _key = new GlobalKey();
   //bool _validate = false;
 
@@ -76,10 +76,10 @@ class _ForgotPasswordState extends State {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 12),
                             child: IfIconRound(
-                              hint: TranslationConstants.mobNo.t(context),
-                              icon: Icons.phone_android_sharp,
+                              hint: TranslationConstants.email.t(context),
+                              icon: Icons.email_outlined,
                               controller: _controller,
-                              textInputType: TextInputType.phone,
+                              textInputType: TextInputType.emailAddress,
                             ),
                           ),
                           preferences: AnimationPreferences(autoPlay: AnimationPlayStates.Forward, duration: Duration(milliseconds: 750)),
@@ -92,8 +92,8 @@ class _ForgotPasswordState extends State {
                               text: TranslationConstants.sendCaps.t(context),
                               bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                               onPressed: () {
-                                if (_controller.text.isEmpty || _controller.text.length < 7 || _controller.text.length > 14) {
-                                  edgeAlert(context, title: 'Warning', description: 'Please enter valid mobile number', gravity: Gravity.top);
+                                if (_controller.text.isEmpty || !validateEmail(_controller.text)) {
+                                  edgeAlert(context, title: 'Warning', description: 'Please enter valid email number', gravity: Gravity.top);
                                 } else {
                                   BlocProvider.of<ForgotPasswordCubit>(context).initiateForgotPassword(
                                     _controller.text,
@@ -122,7 +122,7 @@ class _ForgotPasswordState extends State {
                             if (state is ForgotPasswordSuccess) {
                               //print('---- : ${state.model.message}');
                               edgeAlert(context, title: 'Note', description: state.model.message!, gravity: Gravity.top);
-                            } else edgeAlert(context, title: 'Warning', description: 'Could not send the password. Please enter registered mobile number.', gravity: Gravity.top);
+                            } else edgeAlert(context, title: 'Warning', description: 'Could not send the password. Please enter registered email address.', gravity: Gravity.top);
                           },
                         ),
                       ],

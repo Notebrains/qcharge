@@ -10,6 +10,8 @@ abstract class AuthenticationLocalDataSource {
   Future<void> deleteSessionId();
   Future<String?> getUserDuePaymentFlag();
   Future<void> saveUserDuePaymentFlag(String status);
+  Future<String?> getUserSubscriptionStatus();
+  Future<void> saveUserSubscriptionStatus(String status);
 }
 
 class AuthenticationLocalDataSourceImpl extends AuthenticationLocalDataSource {
@@ -55,5 +57,17 @@ class AuthenticationLocalDataSourceImpl extends AuthenticationLocalDataSource {
   Future<void> saveUserDuePaymentFlag(String status) async {
     final authenticationBox = await Hive.openBox('authenticationBox');
     return await authenticationBox.put('duePaymentStatus', status);
+  }
+
+  @override
+  Future<String?> getUserSubscriptionStatus() async {
+    final authenticationBox = await Hive.openBox('authenticationBox');
+    return await authenticationBox.get('subsStatus');
+  }
+
+  @override
+  Future<void> saveUserSubscriptionStatus(String status) async {
+    final authenticationBox = await Hive.openBox('authenticationBox');
+    return await authenticationBox.put('subsStatus', status);
   }
 }

@@ -1,42 +1,85 @@
 {
   "project_info": {
-    "project_number": "210310094911",
-    "project_id": "qcharge-41c3a",
-    "storage_bucket": "qcharge-41c3a.appspot.com"
+    "project_number": "241701258432",
+    "project_id": "qcharge-31e4c",
+    "storage_bucket": "qcharge-31e4c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:210310094911:android:a23a3458de8e574471988a",
+        "mobilesdk_app_id": "1:241701258432:android:c945c4aea2e9806bb69925",
         "android_client_info": {
-          "package_name": "com.dev.qcharge"
+          "package_name": "com.arrowenergy.qcharge"
         }
       },
       "oauth_client": [
         {
-          "client_id": "210310094911-q1v1v8vglo312ovkmh87i2inmjmtls7i.apps.googleusercontent.com",
+          "client_id": "241701258432-2ul2fs7h33ruf3urtaff79o8ji9j44vr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.dev.qcharge",
+            "package_name": "com.arrowenergy.qcharge",
             "certificate_hash": "d53d917c39fd01bdd0c292cd90a7d81ba1396fa2"
           }
         },
         {
-          "client_id": "210310094911-r9nj7lt69l8nbco9cu1polc6dcpj2h75.apps.googleusercontent.com",
+          "client_id": "241701258432-h0ns8lf06lf6lh4t3jqktefsinf3na5j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD_nmuQAIhwWfQQrQjIZrWbGrOdBhPjErs"
+          "current_key": "AIzaSyBb47iZEpE9e9-2b3tSg6tZ9Jj8ua136po"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "210310094911-r9nj7lt69l8nbco9cu1polc6dcpj2h75.apps.googleusercontent.com",
+              "client_id": "241701258432-h0ns8lf06lf6lh4t3jqktefsinf3na5j.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "241701258432-i0gqt9rov5g69clgshcs2fe59k91e7gg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.arrowenergy.qcharge"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241701258432:android:e07fbe5bcff35db0b69925",
+        "android_client_info": {
+          "package_name": "com.dev.qcharge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241701258432-h0ns8lf06lf6lh4t3jqktefsinf3na5j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb47iZEpE9e9-2b3tSg6tZ9Jj8ua136po"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241701258432-h0ns8lf06lf6lh4t3jqktefsinf3na5j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "241701258432-i0gqt9rov5g69clgshcs2fe59k91e7gg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.arrowenergy.qcharge"
+              }
             }
           ]
         }

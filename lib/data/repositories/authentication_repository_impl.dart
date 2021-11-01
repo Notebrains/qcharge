@@ -141,8 +141,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     try {
       final response = await _authenticationRemoteDataSource.getProfile(userId);
       if (response.status == 1) {
-        await _authenticationLocalDataSource.saveWalletBalance(response.response!.wallet!);
+        await _authenticationLocalDataSource.saveWalletBalance(response.response!.wallet?? '0.00');
         await _authenticationLocalDataSource.saveUserDuePaymentFlag(response.response!.paymentFlag!.toString());
+        await _authenticationLocalDataSource.saveUserSubscriptionStatus(response.response!.currentMembershipPlan!.toString());
       }
       return Right(response);
     } on SocketException {
@@ -165,9 +166,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<Either<AppError, ForgotPassApiResModel>> getForgotPassword(String mobile) async {
+  Future<Either<AppError, ForgotPassApiResModel>> getForgotPassword(String email) async {
     try {
-      final response = await _authenticationRemoteDataSource.getForgotPass(mobile);
+      final response = await _authenticationRemoteDataSource.getForgotPass(email);
       return Right(response);
     } on SocketException {
       return Left(AppError(AppErrorType.network));

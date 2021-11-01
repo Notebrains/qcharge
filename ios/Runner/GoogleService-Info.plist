@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>210310094911-0ih352idqih38qc0f48d9v59vv78aa80.apps.googleusercontent.com</string>
+	<string>241701258432-i0gqt9rov5g69clgshcs2fe59k91e7gg.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.210310094911-0ih352idqih38qc0f48d9v59vv78aa80</string>
+	<string>com.googleusercontent.apps.241701258432-i0gqt9rov5g69clgshcs2fe59k91e7gg</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>210310094911-q1v1v8vglo312ovkmh87i2inmjmtls7i.apps.googleusercontent.com</string>
+	<string>241701258432-2ul2fs7h33ruf3urtaff79o8ji9j44vr.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyArjnoxtMjh46BVeX1tg13AMczSxYsrUXg</string>
+	<string>AIzaSyCVT64OvyAyokOqIIQG5u5Rn8SF5fF3qiY</string>
 	<key>GCM_SENDER_ID</key>
-	<string>210310094911</string>
+	<string>241701258432</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.dev.qcharge</string>
+	<string>com.arrowenergy.qcharge</string>
 	<key>PROJECT_ID</key>
-	<string>qcharge-41c3a</string>
+	<string>qcharge-31e4c</string>
 	<key>STORAGE_BUCKET</key>
-	<string>qcharge-41c3a.appspot.com</string>
+	<string>qcharge-31e4c.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:210310094911:ios:592b23461fa5270c71988a</string>
+	<string>1:241701258432:ios:6725f99727ec580fb69925</string>
 </dict>
 </plist>

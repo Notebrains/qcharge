@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_animator/flutter_animator.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
@@ -9,35 +13,34 @@ import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
-import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
+import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
-import 'package:http/http.dart' as http;
+
+import 'mySharedPreferences.dart';
 
 class Finish extends StatefulWidget {
-
   @override
   State<Finish> createState() => _FinishState();
 }
 
 class _FinishState extends State<Finish> {
+  bool isPaymentDone = false;
   late Future _future;
   late String? startDateTime = "";
-  late String? elapsedTime = "";
-  late String? totalUnits = "";
-  late int? stationId = 0;
-  late String date = "";
+  late String date = "", time = "", totalUnits = "", totalPrice = "";
   late String? userId = "0";
+  String elapsedTime = '00:00:00', cardNo = '0';
 
   @override
   void initState() {
     super.initState();
     _future = getChargingDetails();
 
-    submitChargingData();
+    getTransactionDetails();
   }
 
   @override
@@ -46,140 +49,165 @@ class _FinishState extends State<Finish> {
   }
 
   Future<bool> getChargingDetails() async {
-    startDateTime = await MySharedPreferences().getStartDateTime();
-    elapsedTime = await MySharedPreferences().getElapsedTime();
-    totalUnits = await MySharedPreferences().getTotalUnits();
-    stationId = await MySharedPreferences().getStationId();
-
+    //startDateTime = await MySharedPreferences().getStartDateTime();
+    elapsedTime = await MySharedPreferences().getElapsedTime()?? '00:00:00';
+    cardNo = await MySharedPreferences().getCardNo()?? '0';
+    startDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now()); //change here
     userId = await AuthenticationLocalDataSourceImpl().getSessionId();
 
-    print("elapsedTime: $elapsedTime");
-    print("elapsedTime: $totalUnits");
-    date = DateFormat("dd/MM/yy").format(DateTime.now());
+    date = DateFormat("dd/MM/yyyy").format(DateTime.now());
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: appBarHome(context),
       drawer: NavigationDrawer(),
       body: FutureBuilder(
-        future: _future,
-        builder: (context, snapShot) {
-          if(snapShot.hasData)
-            return SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: SlideInRight(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 36, top: 100),
-                    child: Txt(txt: TranslationConstants.thanksForUsingServc.t(context), txtColor: Colors.white, txtSize: 18,
-                        fontWeight: FontWeight.normal, padding: 0, onTap: (){}),
+          future: _future,
+          builder: (context, snapShot) {
+            if (snapShot.hasData)
+              return SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: SlideInRight(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 36, top: 100),
+                        child: Txt(
+                            txt: TranslationConstants.thanksForUsingServc.t(context),
+                            txtColor: Colors.white,
+                            txtSize: 18,
+                            fontWeight: FontWeight.normal,
+                            padding: 0,
+                            onTap: () {}),
+                      ),
+                      Container(
+                        width: Sizes.dimen_280.w,
+                        padding: const EdgeInsets.all(24),
+                        margin: EdgeInsets.only(bottom: Sizes.dimen_30.h),
+                        decoration: BoxDecoration(
+                          color: AppColor.grey,
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ImgTxtRow(
+                              txt: '${TranslationConstants.date.t(context)}: $date',
+                              txtColor: AppColor.app_txt_white,
+                              txtSize: 12,
+                              fontWeight: FontWeight.normal,
+                              icon: 'assets/icons/pngs/scan_qr_for_filter_17.png',
+                              icColor: AppColor.app_txt_white,
+                            ),
+                            ImgTxtRow(
+                              txt: '${TranslationConstants.time.t(context)}: $time',
+                              txtColor: AppColor.app_txt_white,
+                              txtSize: 12,
+                              fontWeight: FontWeight.normal,
+                              icon: 'assets/icons/pngs/scan_qr_for_filter_5.png',
+                              icColor: AppColor.app_txt_white,
+                            ),
+                            ImgTxtRow(
+                              txt: "${TranslationConstants.unit.t(context)} $totalUnits",
+                              txtColor: AppColor.app_txt_white,
+                              txtSize: 12,
+                              fontWeight: FontWeight.normal,
+                              icon: 'assets/icons/pngs/scan_qr_for_filter_4.png',
+                              icColor: AppColor.app_txt_white,
+                            ),
+                            ImgTxtRow(
+                              txt: TranslationConstants.price.t(context) + " " + totalPrice + 'thb',
+                              txtColor: AppColor.app_txt_white,
+                              txtSize: 12,
+                              fontWeight: FontWeight.normal,
+                              icon: 'assets/icons/pngs/scan_qr_for_filter_3.png',
+                              icColor: AppColor.app_txt_white,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Visibility(
+                        visible: !isPaymentDone,
+                        child: CircularProgressIndicator(
+                          color: Colors.amber.shade600,
+                        ),
+                      ),
+
+                      Visibility(
+                        visible: !isPaymentDone,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 12),
+                          child: Text(
+                            TranslationConstants.processing.t(context),
+                            style: TextStyle(fontWeight: FontWeight.normal, fontSize: Sizes.dimen_20.w, color: Colors.white, letterSpacing: 3),
+                          ),
+                        ),
+                      ),
+
+
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(36, 34, 36, 20),
+                        child: Button(
+                          text: TranslationConstants.finish.t(context),
+                          bgColor: isPaymentDone? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Color(0xFF8D8D8D), Color(0xFFD2D2D2)],
+                          onPressed: () {
+                            if (isPaymentDone) {
+                              Navigator.pushReplacementNamed(context, RouteList.home_screen);
+                            } edgeAlert(context, title: TranslationConstants.warning.t(context), description: 'Please wait until processing is done', gravity: Gravity.top);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-
-                  Container(
-                    width: Sizes.dimen_280.w,
-                    padding: const EdgeInsets.all(24),
-                    margin: const EdgeInsets.only(bottom: 12),
-                    decoration: BoxDecoration(
-                      color: AppColor.grey,
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ImgTxtRow(
-                          txt: '${TranslationConstants.date.t(context)}: $date',
-                          txtColor: AppColor.app_txt_white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.normal,
-                          icon: 'assets/icons/pngs/scan_qr_for_filter_17.png',
-                          icColor: AppColor.app_txt_white,
-                        ),
-//                        ImgTxtRow(
-//                          txt: "${TranslationConstants.unit.t(context)}: $totalUnits",
-//                          txtColor: AppColor.app_txt_white,
-//                          txtSize: 12,
-//                          fontWeight: FontWeight.normal,
-//                          icon: 'assets/icons/pngs/scan_qr_for_filter_5.png',
-//                          icColor: AppColor.app_txt_white,
-//                        ),
-
-                        ImgTxtRow(
-                          txt: '${TranslationConstants.time.t(context)}: $elapsedTime',
-                          txtColor: AppColor.app_txt_white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.normal,
-                          icon: 'assets/icons/pngs/scan_qr_for_filter_5.png',
-                          icColor: AppColor.app_txt_white,
-                        ),
-
-                        ImgTxtRow(
-                          txt: "Units: $totalUnits",
-                          txtColor: AppColor.app_txt_white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.normal,
-                          icon: 'assets/icons/pngs/scan_qr_for_filter_4.png',
-                          icColor: AppColor.app_txt_white,
-                        ),
-
-                        ImgTxtRow(
-                          txt: TranslationConstants.price.t(context),
-                          txtColor: AppColor.app_txt_white,
-                          txtSize: 12,
-                          fontWeight: FontWeight.normal,
-                          icon: 'assets/icons/pngs/scan_qr_for_filter_3.png',
-                          icColor: AppColor.app_txt_white,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(36, Sizes.dimen_30.h, 36, 20),
-                    child: Button(
-                      text: TranslationConstants.finish.t(context),
-                      bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, RouteList.initial);//                    widget.onTap();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-          else
-            return Center(child: CircularProgressIndicator(color: Colors.amber.shade600,),);
-        }
-      ),
+                ),
+              );
+            else
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Colors.amber.shade600,
+                ),
+              );
+          }),
     );
   }
 
-
-  void submitChargingData() async {
-    Map<String, dynamic> data = Map();
-    data["user_id"] = userId;
-    data["station_id"] = stationId;
-    data["vehicle_id"] = '1';
-    data["start_time"] = startDateTime;
-    data["end_time"] = DateFormat('yyyy-MM-DD hh:mm:ss').format(DateTime.now());;
-    data["duration"] = elapsedTime;
-    data["parking_time"] = elapsedTime;
-    data["consume_charge"] = totalUnits;
-
+  void getTransactionDetails() async {
     try {
       http.Response response =
-      await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/charging"), body: data);
-      print("charging response: ${response.body}");
+      await http.get(Uri.parse("https://qcharge.hashtrix.in/public/api/transaction/$cardNo"));
+      print("Transaction API response: ${response.body}");
 
       if (response.statusCode == 200) {
+        var resData = jsonDecode(response.body.toString());
+
+        print('----status: ${resData["status"]}');
+        print('----message: ${resData["message"]}');
+
+        if(resData["status"]){
+          print('----stationId: ${resData["data"]["stationId"]}');
+
+          setState(() {
+            String stationId = resData["data"]["stationId"].toString();
+            time = resData["data"]["session_time"].toString();
+            //String chargerId = resData["chargerId"].toString();
+            totalUnits = resData["data"]["kwhValue"].toString();
+
+            getChargingCalculatedData(stationId);
+          });
+          
+        } else {
+          setState(() {
+            isPaymentDone = true;
+          });
+          edgeAlert(context, title: TranslationConstants.warning.t(context), description: resData["message"], gravity: Gravity.top);
+        }
 
       } else
         ScaffoldMessenger.of(context).showSnackBar(
@@ -192,20 +220,71 @@ class _FinishState extends State<Finish> {
     }
   }
 
+  void getChargingCalculatedData(String stationId) async {
+    try {
+      print('---- userId: $userId');
+      print('---- stationId: $stationId');
+      print('---- startDateTime: $startDateTime');
+      print('---- time: $time');
+      print('---- totalUnits: $totalUnits');
 
+      Map<String, dynamic> data = Map();
+      data["user_id"] = userId;
+      data["station_id"] = stationId;
+      data["vehicle_id"] = '1';
+      data["start_time"] = startDateTime;
+      data["end_time"] = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+      data["duration"] = elapsedTime;
+      data["parking_time"] = elapsedTime;
+      data["consume_charge"] = totalUnits;
 
-  void updatePaymentStatus() async {
-    Map<String, dynamic> data = Map();
-    data["id"] = '15';
-    data["transaction_id"] = '10';
+      http.Response response =
+      await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/charging"), body: data);
+      print("charging response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        var resData = jsonDecode(response.body.toString());
+
+        print('----id: ${resData["id"]}');
+        print('----total_price: ${resData["total_price"]}');
+
+        String id = resData["id"].toString();
+        
+        setState(() {
+          totalPrice = resData["total_price"].toString();
+        });
+        
+        updatePaymentStatus(id, totalPrice);
+      } else
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error Code : ${response.statusCode}"),
+          ),
+        );
+    } catch (error) {
+      print("charging: $error");
+    }
+  }
+
+  void updatePaymentStatus( String id, String totalPrice) async {
 
     try {
-      http.Response response =
-      await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/update-payment-status"), body: data);
+      Map<String, dynamic> data = Map();
+      data["id"] = id;
+      data["transaction_id"] = (Random().nextInt(912319541) + 154145).toString();
+      data["user_id"] = userId;
+      data["total_price"] = totalPrice;
+
+      http.Response response = await http
+          .post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/update-payment-status"), body: data);
       print("charging pay response: ${response.body}");
 
       if (response.statusCode == 200) {
-
+        setState(() {
+          isPaymentDone = true;
+        });
+        edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Processing complete. Thank you!', gravity: Gravity.top);
+        //Navigator.pushReplacementNamed(context, RouteList.home_screen);
       } else
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

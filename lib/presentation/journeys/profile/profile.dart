@@ -167,7 +167,6 @@ class Profile extends StatelessWidget {
                             }),
                         Visibility(
                           visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
-                          //visible: true,
                           child: BoxTxt(
                               txt1: ' ${TranslationConstants.dueBill.t(context)} >',
                               txt2: TranslationConstants.total.t(context),

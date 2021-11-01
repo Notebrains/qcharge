@@ -87,7 +87,7 @@ class _BillingState extends State<Billing> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'total spend',
+                          TranslationConstants.totalSpend.t(context),
                           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 14, ),
                         ),
 
@@ -110,13 +110,13 @@ class _BillingState extends State<Billing> {
                           padding: const EdgeInsets.only(left: 8, bottom: 6),
                           child: RichText(
                             text: TextSpan(
-                              text: 'from  ',
+                              text: TranslationConstants.from.t(context),
                               style: DefaultTextStyle.of(context).style,
                               children: <TextSpan>[
                                 TextSpan(text: state.model.response!.startDate!,
                                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
 
-                                TextSpan(text: '  to  ',
+                                TextSpan(text: TranslationConstants.to.t(context),
                                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white)),
 
                                 TextSpan(text: state.model.response!.endDate!,
@@ -145,7 +145,7 @@ class _BillingState extends State<Billing> {
                       Padding(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'Date',
+                          TranslationConstants.dateRegular.t(context),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -158,7 +158,7 @@ class _BillingState extends State<Billing> {
                       Padding(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'Time',
+                          TranslationConstants.timeRegular.t(context),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -171,7 +171,7 @@ class _BillingState extends State<Billing> {
                       Padding(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'Duration',
+                          TranslationConstants.duration.t(context),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -184,7 +184,7 @@ class _BillingState extends State<Billing> {
                       Padding(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'Unit',
+                          TranslationConstants.unit.t(context),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -197,7 +197,7 @@ class _BillingState extends State<Billing> {
                       Padding(
                         padding: EdgeInsets.all(6),
                         child: Text(
-                          'Price',
+                          TranslationConstants.priceRegular.t(context),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,

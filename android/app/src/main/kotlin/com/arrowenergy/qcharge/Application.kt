@@ -1,4 +1,4 @@
-package com.dev.qcharge
+package com.arrowenergy.qcharge
 
 import io.flutter.app.FlutterApplication
 import io.flutter.plugin.common.PluginRegistry

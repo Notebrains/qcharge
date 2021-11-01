@@ -1,4 +1,4 @@
-package com.dev.qcharge
+package com.arrowenergy.qcharge
 
 
 import io.flutter.embedding.android.FlutterActivity

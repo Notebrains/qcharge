@@ -38,7 +38,7 @@ abstract class AuthenticationRepository {
 
   Future<Either<AppError, TopUpApiResModel>> getTopUp(Map<String, dynamic> params);
 
-  Future<Either<AppError, ForgotPassApiResModel>> getForgotPassword(String mobile);
+  Future<Either<AppError, ForgotPassApiResModel>> getForgotPassword(String email);
 
   Future<Either<AppError, FaqApiResModel>> getFaqData();
 

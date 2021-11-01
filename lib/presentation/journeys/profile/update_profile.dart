@@ -74,7 +74,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
           } else {
             final bytes = File(path).readAsBytesSync();
             base64Image = base64Encode(bytes);
-            print('-----base64Image:  $base64Image');
+            //print('-----base64Image:  $base64Image');
 
             return CircleAvatar(
               radius: 57,

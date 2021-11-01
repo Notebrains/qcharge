@@ -126,7 +126,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
       setState(() {
             xFile = File(imageFile!.path);
-            print('Image Path $xFile');
+            //print('Image Path $xFile');
           });
     } catch (e) {
       print(e);
@@ -146,7 +146,7 @@ class _RegisterFormState extends State<RegisterForm> {
           } else {
             final bytes = File(path).readAsBytesSync();
             base64Image = base64Encode(bytes);
-            print('-----base64Image:  $base64Image');
+            //print('-----base64Image:  $base64Image');
 
             return CircleAvatar(
               radius: 57,

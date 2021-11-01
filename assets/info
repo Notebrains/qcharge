@@ -1,0 +1,100 @@
+* QR SCAN
+qr code scan result:
+{"stationId" : 74, "chargerId" : 7401}
+
+token api response body:
+{"accessToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwb2x5dGVjaCIsImV4cCI6MTYzNTU3NTA0MSwiaWF0IjoxNjM1NDg4NjQxfQ.k_0S9cuze7axyc3-fv9F3aDHoLA54lk5YPW98vAb-Ph8LN8bgDSP60VgE95aAZlkgsnuspdQJj-BoMnPnb6MeA",
+"expiresIn":86400,
+"refreshToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwb2x5dGVjaCIsImV4cCI6MTYzNTc0Nzg0MSwiaWF0IjoxNjM1NDg4NjQxfQ.hCe1kiNr8PjahGUy5nqFpcfPb-e8fDRyz6qClEXxkwrBgmNIbaXbIX4b3IaYbw7-KnDZT2QAl5_8kXAAD-YsKQ",
+"refreshExpiresIn":259200,
+"response":{"code":"S200","message":"Success"}
+}
+
+
+Qrscan api fail response:
+{
+"accessToken":null,"expiresIn":null,"refreshToken":null,"refreshExpiresIn":null,
+"response":{"code":"F500","message":"Fail"}
+}
+
+qrscan api success res body:
+{"station":{"stationId":74,"name":"POLYTECH","owner":"POLYTECH","lat":"13.978145","lon":"100.678476","numberOfCharger":2,"images":null,"type":"Private","status":"1"},
+"charger":{"id":"7401",
+"detail":{"name":"TH0321070053","brand":"Schneider Electric","model":"MONOBLOCK",
+"connector":[{"connectorId":1,"type":"Socket T2","status":"1","cardNo":"-","startTime":"-","meterValue":0,"etf":0,"images":null},
+{"connectorId":2,"type":"Socket T2","status":"1","cardNo":"-","startTime":"-","meterValue":0,"etf":0,"images":null}],"images":null},
+"statusId":1,"status":"Ready","location":{"station":"POLYTECH","lat":"13.978145","lon":"100.678476"},
+"remark":"","lastUpdate":"2021-10-22 14:49:23.000"},
+"response":{"code":"S200","message":"Success"}
+}
+
+
+* START SCREEN
+
+Connector details success res:
+{"stationId":74,"chargerId":"7401","connector":{"connectorId":2,"type":"Socket T2","status":"1","cardNo":"-","startTime":"-","meterValue":0,"etf":0,"images":null}}
+
+check Status of Connector fail res:
+{"status":false,"data":[]}
+
+
+
+
+
+Charging api response:
+ {"status":1,"message":"Vehicle charged Successfully","id":144,"total_price":510}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

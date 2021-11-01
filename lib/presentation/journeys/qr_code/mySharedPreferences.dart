@@ -121,4 +121,20 @@ Future<String?> getStartDateTime() async {
   else
     return "";
 }
+
+void addCardNo(String cardNo) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("cardNo", cardNo);
+}
+
+Future<String?> getCardNo() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("cardNo")) {
+    String? key = _preferences!.getString("cardNo");
+    return key;
+  }
+  else
+    return "";
+}
+
 }

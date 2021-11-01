@@ -50,3 +50,6 @@ String convertStrToDoubleStrWithZeroDecimal(String value) =>
 String formatDateForTopUp(DateTime date) => new DateFormat("yyyy-MM").format(date);
 
 String formatDateForServer(DateTime date) => new DateFormat("yyyy-MM-dd").format(date);
+
+//String startDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+//MySharedPreferences().addStartDateTime(startDateTime);

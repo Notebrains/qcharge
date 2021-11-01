@@ -436,7 +436,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
     } else {
       final bytes = File(path).readAsBytesSync();
       base64Image = base64Encode(bytes);
-      print('-----base64Image:  $base64Image');
+      //print('-----base64Image:  $base64Image');
 
       return Image.file(
         File(xFile!.path),

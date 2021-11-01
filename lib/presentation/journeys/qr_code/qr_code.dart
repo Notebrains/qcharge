@@ -113,7 +113,7 @@ class _QrCodeState extends State<QrCode> {
                                       });
                                     },
                                     child: Text(
-                                      "Select",
+                                      TranslationConstants.select.t(context),
                                       style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -153,7 +153,7 @@ class _QrCodeState extends State<QrCode> {
                                       });
                                     },
                                     child: Text(
-                                      "Select",
+                                      TranslationConstants.select.t(context),
                                       style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
                                     ),
                                   ),

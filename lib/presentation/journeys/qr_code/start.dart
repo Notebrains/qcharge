@@ -33,11 +33,13 @@ class _StartState extends State<Start> {
   late Future _future;
   late Map<String, dynamic> connectorData;
   late bool isLoading = false;
+  String? cardNo = '';
 
   @override
   void initState() {
     super.initState();
     _future = getConnectorDetails();
+
   }
 
   @override
@@ -47,6 +49,7 @@ class _StartState extends State<Start> {
 
   Future<bool> getConnectorDetails()async{
     String? data = await MySharedPreferences().getConnectorData();
+    cardNo = await MySharedPreferences().getCardNo();
     print(data);
     connectorData = jsonDecode(data.toString());
     print(connectorData);
@@ -83,7 +86,7 @@ class _StartState extends State<Start> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ImgTxtRow(
-                                txt: '${TranslationConstants.chargingTime.t(context)}',
+                                txt: '${TranslationConstants.chargingTime.t(context)} 00:00:00',
                                 txtColor: AppColor.app_txt_white,
                                 txtSize: 12,
                                 fontWeight: FontWeight.normal,
@@ -91,7 +94,7 @@ class _StartState extends State<Start> {
                                 icColor: AppColor.app_txt_white,
                             ),
                             ImgTxtRow(
-                                txt: '${TranslationConstants.unit.t(context)}',
+                                txt: '${TranslationConstants.unit.t(context)} 0 kwh',
                                 txtColor: AppColor.app_txt_white,
                                 txtSize: 12,
                                 fontWeight: FontWeight.normal,
@@ -99,14 +102,14 @@ class _StartState extends State<Start> {
                                 icColor: AppColor.app_txt_white,
                             ),
 
-                            ImgTxtRow(
+                            /*ImgTxtRow(
                                 txt: TranslationConstants.acType.t(context),
                                 txtColor: AppColor.app_txt_white,
                                 txtSize: 12,
                                 fontWeight: FontWeight.normal,
                                 icon: 'assets/icons/pngs/scan_qr_for_filter_10_charge_ac.png',
                                 icColor: AppColor.app_txt_white,
-                            ),
+                            ),*/
                           ],
                         ),
                       ),
@@ -133,19 +136,18 @@ class _StartState extends State<Start> {
                         child: Button(
                           text: TranslationConstants.start.t(context),
                           bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
-                          onPressed: ()async{
+                          onPressed: () async{
 
                             setState(() {
                               isLoading = true;
                             });
 
-                            String startDateTime = DateFormat('yyyy-MM-DD hh:mm:ss').format(DateTime.now());
-                            MySharedPreferences().addStartDateTime(startDateTime);
+                            print('----- cardNo: ${cardNo}');
 
                             Map<String, dynamic> data = Map();
                             data["chargerId"] = connectorData["chargerId"].toString();
                             data["connectorId"] = connectorData["connector"]["connectorId"].toString();
-                            data["cardNo"] = (Random().nextInt(912319541) + 154145).toString();
+                            data["cardNo"] = cardNo;
 
                             String? token = await MySharedPreferences().getApiToken();
                             data["token"] = token.toString();
@@ -190,9 +192,7 @@ class _StartState extends State<Start> {
               ),
             ),
           );
-          else
-            return Center(child: CircularProgressIndicator(color: Colors.amber.shade600,),);
-
+          else return Center(child: CircularProgressIndicator(color: Colors.amber.shade600,),);
         }
       ),
     );

@@ -130,7 +130,11 @@ class _HomeState extends State<Home> {
                           title: TranslationConstants.callCenter.t(context),
                           img: 'assets/images/home_screen_7.png',
                           onTap: () {
-                            Navigator.pushNamed(context, RouteList.call_center);
+                            //Navigator.pushNamed(context, RouteList.call_center);
+
+
+                            buildCardAsP1(onTap: () {  });
+
 
                             /*  Navigator.push(
                             context,
@@ -167,5 +171,11 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void buildCardAsP1( {
+        required Function() onTap,
+      }) {
+
   }
 }
