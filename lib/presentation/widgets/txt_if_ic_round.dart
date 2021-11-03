@@ -7,7 +7,6 @@ class IfIconRound extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType textInputType;
 
-
   const IfIconRound({
     Key? key,
     required this.hint,

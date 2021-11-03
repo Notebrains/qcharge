@@ -286,7 +286,7 @@ class _TopUpState extends State<TopUp> {
             );
           } else {
             return NoDataFound(
-              txt: TranslationConstants.loadingCaps.t(context),
+              txt: 'No DATA FOUND',
               onRefresh: () {},
             );
           }

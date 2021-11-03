@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animator/flutter_animator.dart';
-import 'package:flutter_animator/widgets/sliding_entrances/slide_in_up.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my2c2psdk/models/my2c2psdk_type.dart';
 import 'package:my2c2psdk/my2c2psdk.dart';
@@ -99,17 +97,13 @@ class _SubscriptionState extends State {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SlideInUp(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 50, left: 30, right: 30, bottom: 24),
-                        child: Text(
-                          TranslationConstants.subscribePlan.t(context),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColor.app_txt_amber_light),
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 50, left: 30, right: 30, bottom: 24),
+                      child: Text(
+                        TranslationConstants.subscribePlan.t(context),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColor.app_txt_amber_light),
                       ),
-                      preferences:
-                      AnimationPreferences(autoPlay: AnimationPlayStates.Forward, duration: Duration(milliseconds: 700)),
                     ),
 
                     Container(
@@ -213,74 +207,39 @@ class _SubscriptionState extends State {
                         ),
                       ),
                     ),
-                    SlideInUp(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 36, right: 36, top: 24),
-                        child: Button(
-                          text: !isSubscriptionActive ? TranslationConstants.subscribeCaps.t(context) :
-                          TranslationConstants.cancelSubs.t(context).toUpperCase(),
-                          bgColor: !isSubscriptionActive ? [Color(0xFFEFE07D), Color(0xFFB49839)] :
-                          [Color(0xFFFFD5AD), Color(0xFFD46817)],
-                          onPressed: () {
-                            if (!isSubscriptionActive) {
-                              if (subscriptionId.isEmpty) {
-                                edgeAlert(context, title: TranslationConstants.warning.t(context),
-                                    description: TranslationConstants.selectSubsTxt.t(context),
-                                    gravity: Gravity.top);
-                              } else {
-                                Alert(
-                                  context: context,
-                                  title: TranslationConstants.paymentMethod.t(context),
-                                  desc: "${TranslationConstants.message.t(context)}\n\n ${TranslationConstants.walletBalance.t(context)}: ${convertStrToDoubleStr(walletBalance)} thb",
-                                  image: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Image.asset("assets/images/payment-credit-card.png", width: 170, height: 170,),
-                                  ),
-                                  buttons: [
-                                    DialogButton(
-                                      color: Colors.amber,
-                                      onPressed: () {
-                                        purchaseSubscriptionCubit.initiatePurchaseSubscription(
-                                          _userId, 'wallet${(Random().nextInt(912319541) + 12319541).toString()}', state.model.response![selectedIndex].membershipPrice!, 'Wallet', subscriptionId,
-                                        );
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text(
-                                        TranslationConstants.wallet.t(context),
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 14),
-                                      ),
-                                    ),
-                                    DialogButton(
-                                      color: Colors.amber,
-                                      onPressed: () {
-                                        if(subscriptionPrice.isNotEmpty)openPaymentGateway();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text(
-                                        TranslationConstants.payOnline.t(context),
-                                        style: TextStyle(color: Colors.black, fontSize: 14),
-                                      ),
-                                    )
-                                  ],
-                                ).show();
-                              }
+                    Padding(
+                      padding: const EdgeInsets.only(left: 36, right: 36, top: 24),
+                      child: Button(
+                        text: !isSubscriptionActive ? TranslationConstants.subscribeCaps.t(context) :
+                        TranslationConstants.cancelSubs.t(context).toUpperCase(),
+                        bgColor: !isSubscriptionActive ? [Color(0xFFEFE07D), Color(0xFFB49839)] :
+                        [Color(0xFFFFD5AD), Color(0xFFD46817)],
+                        onPressed: () {
+                          if (!isSubscriptionActive) {
+                            if (subscriptionId.isEmpty) {
+                              edgeAlert(context, title: TranslationConstants.warning.t(context),
+                                  description: TranslationConstants.selectSubsTxt.t(context),
+                                  gravity: Gravity.top);
                             } else {
-
                               Alert(
                                 context: context,
-                                title: TranslationConstants.cancelSubs.t(context),
-                                desc: TranslationConstants.cancelSubsTxt.t(context),
+                                title: TranslationConstants.paymentMethod.t(context),
+                                desc: "${TranslationConstants.message.t(context)}\n\n ${TranslationConstants.walletBalance.t(context)}: ${convertStrToDoubleStr(walletBalance)} thb",
                                 image: Padding(
-                                  padding: const EdgeInsets.all(24.0),
-                                  child: Image.asset("assets/images/unsubscribe.png", width: 170, height: 170,),
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Image.asset("assets/images/payment-credit-card.png", width: 170, height: 170,),
                                 ),
                                 buttons: [
                                   DialogButton(
                                     color: Colors.amber,
-                                    onPressed: () => Navigator.of(context).pop(),
+                                    onPressed: () {
+                                      purchaseSubscriptionCubit.initiatePurchaseSubscription(
+                                        _userId, 'wallet${(Random().nextInt(912319541) + 12319541).toString()}', state.model.response![selectedIndex].membershipPrice!, 'Wallet', subscriptionId,
+                                      );
+                                      Navigator.of(context).pop();
+                                    },
                                     child: Text(
-                                      TranslationConstants.no.t(context),
+                                      TranslationConstants.wallet.t(context),
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 14),
                                     ),
@@ -288,23 +247,54 @@ class _SubscriptionState extends State {
                                   DialogButton(
                                     color: Colors.amber,
                                     onPressed: () {
-                                      cancelSubscriptionCubit.initiateCancelSubscription(_userId, subscriptionId);
+                                      if(subscriptionPrice.isNotEmpty)openPaymentGateway();
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(
-                                      TranslationConstants.yes.t(context),
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 14),
+                                      TranslationConstants.payOnline.t(context),
+                                      style: TextStyle(color: Colors.black, fontSize: 14),
                                     ),
                                   )
                                 ],
                               ).show();
                             }
-                          },
-                        ),
+                          } else {
+
+                            Alert(
+                              context: context,
+                              title: TranslationConstants.cancelSubs.t(context),
+                              desc: TranslationConstants.cancelSubsTxt.t(context),
+                              image: Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: Image.asset("assets/images/unsubscribe.png", width: 170, height: 170,),
+                              ),
+                              buttons: [
+                                DialogButton(
+                                  color: Colors.amber,
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text(
+                                    TranslationConstants.no.t(context),
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 14),
+                                  ),
+                                ),
+                                DialogButton(
+                                  color: Colors.amber,
+                                  onPressed: () {
+                                    cancelSubscriptionCubit.initiateCancelSubscription(_userId, subscriptionId);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    TranslationConstants.yes.t(context),
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 14),
+                                  ),
+                                )
+                              ],
+                            ).show();
+                          }
+                        },
                       ),
-                      preferences:
-                      AnimationPreferences(autoPlay: AnimationPlayStates.Forward, duration: Duration(milliseconds: 800)),
                     ),
 
                     BlocConsumer<CancelSubscriptionCubit, CancelSubscriptionState>(

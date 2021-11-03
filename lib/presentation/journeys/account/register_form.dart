@@ -362,10 +362,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     edgeAlert(context, title: 'Warning', description: 'Please select car model', gravity: Gravity.top);
                   } else if(_carLicencePlateController!.text.isEmpty){
                     edgeAlert(context, title: 'Warning', description: 'Please enter car licence plate no.', gravity: Gravity.top);
-                  } else if(base64Image.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please pick profile image.', gravity: Gravity.top);
-                  } else {
-                    if (isEnabled) {
+                  } else if (isEnabled) {
                       BlocProvider.of<RegisterCubit>(context).initiateRegister(
                         _firstNameController?.text ?? '',
                         _lastNameController?.text ?? '',
@@ -379,7 +376,6 @@ class _RegisterFormState extends State<RegisterForm> {
                         _carLicencePlateController?.text ?? '',
                         base64Image,
                       );
-                    }
                   }
                 },
               ),
@@ -461,10 +457,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 );*/
 
                 if (state is RegisterSuccess) {
-
-                  if (state.model.status == 1 && state.model.response!.userId != null) {
-                    widget.isProcessCompleted();
-
+                  if (state.model.status == 1) {
                     edgeAlert(
                       context,
                       duration: 2,
@@ -473,6 +466,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       description: 'Registration Successful',
                       gravity: Gravity.top,
                     );
+                    widget.isProcessCompleted();
                   } else {
                     edgeAlert(
                       context,

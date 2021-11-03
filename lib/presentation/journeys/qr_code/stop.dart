@@ -357,14 +357,12 @@ class _StopState extends State<Stop> {
                                     ),
                                   ),
                                 ),
-                              )
-                            : Container(),
+                              ) : Container(),
                       ],
                     ),
                   ),
                 );
-              else
-                return Center(
+              else return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,

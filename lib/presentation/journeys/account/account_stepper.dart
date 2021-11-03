@@ -148,20 +148,6 @@ class _AccountStepperState extends State<AccountStepper> {
                     ),
                   ),
 
-                 /* BlocConsumer<StepperCubit, StepperState>(
-                    builder: (context, state) {
-                      return const SizedBox.shrink();
-                    },
-                    listenWhen: (previous, current) => current is StepperOnNext,
-                    listener: (context, state) {
-                      //'Password has send to your email. Please get your new password from email and login.',
-                      //Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial,(route) => false,);
-                      if (state is StepperOnNext) {
-                        print('---- : next called 1');
-                        //edgeAlert(context, title: 'Note', description: 'On Next Called', gravity: Gravity.top);
-                      }
-                    },
-                  ),*/
                 ],
               );
             }),

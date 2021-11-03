@@ -491,7 +491,10 @@ class _MapScreenState extends State<MapScreen> {
     double markerLat = double.parse(response[i].latitude!);
     double markerLong = double.parse(response[i].longitude!);
 
-    Geolocator.getCurrentPosition().then((curLoc) async {
+    Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.bestForNavigation,
+      forceAndroidLocationManager: true,
+    ).then((curLoc) async {
       //totalDistance = Geolocator.distanceBetween(_currentPosition.latitude, _currentPosition.longitude, markerLat, markerLong);
       //double totalDistance = _coordinateDistance(22.608355, 88.426884, markerLat, markerLong);
       double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);

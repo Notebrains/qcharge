@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qcharge_flutter/common/extensions/common_fun.dart';
-import 'package:qcharge_flutter/common/extensions/validation.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -28,6 +26,7 @@ class _LoginFormState extends State<LoginForm> {
   late TextEditingController? _mobileController, _passwordController;
   bool enableSignIn = false;
   //bool isRememberMeChecked = true;
+  bool isPasswordVisible = false;
 
   @override
   void initState() {
@@ -90,10 +89,54 @@ class _LoginFormState extends State<LoginForm> {
               textInputType: TextInputType.phone,
             ),
 
-            IfIconRound(hint: TranslationConstants.pass.t(context), icon: Icons.lock_rounded,
+            Padding(
+                padding: EdgeInsets.fromLTRB(34.0, 0, 34.0, 12),
+                child: TextFormField(
+                  enabled: true,
+                  autocorrect: true,
+                  obscureText: isPasswordVisible? false : true,
+                  controller: _passwordController,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    hintText: TranslationConstants.pass.t(context),
+                    prefixIcon: Container(
+                      margin: EdgeInsets.only(right: 12),
+                      height: 55,
+                      width: 55,
+                      decoration: BoxDecoration(
+                        color: AppColor.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+
+                      ),
+                      child: Icon(Icons.lock_rounded, color: Colors.white,),
+                    ),
+                    suffixIcon: InkWell(
+                        child: Icon(Icons.remove_red_eye, color:  isPasswordVisible? Colors.white : Colors.grey,),
+                        onTap: (){
+                            setState(() {
+                              isPasswordVisible? isPasswordVisible = false : isPasswordVisible = true ;
+                            });
+                        },
+                    ),
+
+                    hintStyle: TextStyle(color: Colors.grey),
+                    filled: true,
+                    fillColor: AppColor.grey.withOpacity(0.8),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      //borderSide: BorderSide(color: AppColor.border, width: 1),
+                    ),
+                  ),
+                ),
+            ),
+
+            /*IfIconRound(hint: TranslationConstants.pass.t(context), icon: Icons.lock_rounded,
             controller: _passwordController,
               textInputType: TextInputType.visiblePassword,
-            ),
+            ),*/
 
             /*Padding(
               padding: const EdgeInsets.only(left: 16,),

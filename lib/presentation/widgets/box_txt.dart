@@ -43,12 +43,12 @@ class BoxTxt extends StatelessWidget {
                 width: double.maxFinite,
                 padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.grey.shade600,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                 ),
                 child: Text(
                   txt1,
-                  style: TextStyle(fontWeight: FontWeight.normal, color: Colors.white),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
                 ),
               ),
 
