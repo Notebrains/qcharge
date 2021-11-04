@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,9 +9,11 @@ import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
+import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_card_list.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_slider.dart';
@@ -23,6 +27,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  String? cardNo = '', walletBalance = '', normalCustomerParkingPrice = "", normalCustomerChargingPrice = "";
+
+
   @override
   void initState() {
     super.initState();
@@ -130,11 +138,7 @@ class _HomeState extends State<Home> {
                           title: TranslationConstants.callCenter.t(context),
                           img: 'assets/images/home_screen_7.png',
                           onTap: () {
-                            //Navigator.pushNamed(context, RouteList.call_center);
-
-
-                            buildCardAsP1(onTap: () {  });
-
+                            Navigator.pushNamed(context, RouteList.call_center);
 
                             /*  Navigator.push(
                             context,
@@ -171,11 +175,5 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  void buildCardAsP1( {
-        required Function() onTap,
-      }) {
-
   }
 }

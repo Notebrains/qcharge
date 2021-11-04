@@ -9,14 +9,19 @@ import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
+import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
+import 'package:qcharge_flutter/data/models/coupon_code_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
+import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:http/http.dart' as http;
+import 'package:qcharge_flutter/presentation/widgets/voucher_code_ui.dart';
 import 'Constants.dart' as Constants;
 
 
@@ -34,6 +39,9 @@ class _StartState extends State<Start> {
   late Map<String, dynamic> connectorData;
   late bool isLoading = false;
   String? cardNo = '';
+  String couponId = '';
+  TextEditingController _controller = TextEditingController();
+  String applyBtnTxt = 'APPLY';
 
   @override
   void initState() {
@@ -45,6 +53,7 @@ class _StartState extends State<Start> {
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
   }
 
   Future<bool> getConnectorDetails()async{
@@ -132,6 +141,51 @@ class _StartState extends State<Start> {
                       ),
 
                       Padding(
+                        padding: const EdgeInsets.only(left: 34, right: 34, bottom: 8),
+                        child: VoucherCodeUi(
+                            controller: _controller,
+                            hint: 'Coupon Code Here',
+                            textInputType: TextInputType.text,
+                            onSaved: (value){
+
+                            },
+                            onTap: (){
+                                validateCouponCode();
+                            },
+                          
+                          onIconTap: () async {
+                            try {
+                              http.Response response =
+                                  await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/promocode"));
+                              print("promo code API response: ${response.body}");
+
+                              if (response.statusCode == 200) {
+                                CouponCodeApiResModel model = CouponCodeApiResModel.fromJson(jsonDecode(response.body.toString()));
+
+                                //print('----status: ${model.status}');
+                                //print('----message: ${model.response}');
+
+                                if(model.status == 1 && model.response != null){
+                                  showCouponsBottomSheet(model.response);
+                                }else {
+                                  edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Currently coupon code not available', gravity: Gravity.top);
+                                }
+
+
+                              } else
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Error Code : ${response.statusCode}"),
+                                  ),
+                                );
+                            } catch (error) {
+                              print("charging: $error");
+                            }
+                          }, applyBtnTxt: applyBtnTxt,
+                        )
+                      ),
+
+                      Padding(
                         padding: const EdgeInsets.only(left: 36, right: 36, bottom: 70),
                         child: Button(
                           text: TranslationConstants.start.t(context),
@@ -142,7 +196,7 @@ class _StartState extends State<Start> {
                               isLoading = true;
                             });
 
-                            print('----- cardNo: ${cardNo}');
+                            //print('----- cardNo: $cardNo');
 
                             Map<String, dynamic> data = Map();
                             data["chargerId"] = connectorData["chargerId"].toString();
@@ -196,5 +250,144 @@ class _StartState extends State<Start> {
         }
       ),
     );
+  }
+
+  void showCouponsBottomSheet(List<Response>? response) {
+
+    showModalBottomSheet<void>(
+        backgroundColor: Colors.grey.shade900,
+        context: context,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20.0))),
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (BuildContext context, StateSetter state) {
+            return Container(
+              height: 500,
+              padding: EdgeInsets.only(bottom: 26, left: 12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 16),
+                    child: Text(
+                      "AVAILABLE COUPON CODE",
+                      textAlign: TextAlign.start,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                    child: Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Colors.grey[200],
+                    ),
+                  ),
+
+                  Expanded(
+                    child: ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        itemCount: response!.length,
+                        itemBuilder: (BuildContext context, int index) {
+
+                          return InkWell(
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              width: double.maxFinite,
+                              padding: const EdgeInsets.all(18),
+                              margin: const EdgeInsets.all(8),
+                              color: Colors.grey[850],
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 12, left: 6),
+                                        child: Icon(Icons.local_offer_rounded, size: 20, color: AppColor.border,),
+                                      ),
+                                      Text(response[index].discountType! == 'Percentage'?
+                                      '${response[index].amount!}% OFF':
+                                      'FLAT${response[index].amount!} OFF',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(fontSize: 16, color: AppColor.border),
+                                      ),
+
+                                    ],
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 36, top: 2, bottom: 2),
+                                    child: Text('Code: ${response[index].couponCode!}',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(fontSize: 12, color: Colors.white),
+                                    ),
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 36),
+                                    child: Text(response[index].title!,
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(fontSize: 12, color: Colors.white),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            onTap: (){
+                              setState(() {
+                                _controller.text = response[index].couponCode!;
+                                couponId = response[index].id.toString();
+                                applyBtnTxt = 'APPLY';
+                                Navigator.pop(context);
+                              });
+                            },
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            );
+          });
+        });
+  }
+
+  void validateCouponCode() async {
+    isLoading = true;
+    String? userId = await AuthenticationLocalDataSourceImpl().getSessionId();
+
+    print('---- couponId: $couponId,  $userId, ');
+    if(userId != null && couponId.isNotEmpty){
+
+      Map<String, dynamic> data = Map();
+      data["user_id"] = userId;
+      data["id"] = couponId;
+
+      try{
+        http.Response response = await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/apply-promocode"), body: data);
+        print("apply promo code status code: ${response.statusCode}");
+        print("apply promo code res: ${response.body}");
+        setState(() {
+          isLoading = false;
+        });
+        StatusMessageApiResModel model = StatusMessageApiResModel.fromJson(jsonDecode(response.body.toString()));
+
+        if(response.statusCode == 200 && model.status == 1) {
+          edgeAlert(context, title: TranslationConstants.message.t(context), description: model.message!, gravity: Gravity.top);
+          MySharedPreferences().addCouponId(couponId);
+          setState(() {
+            applyBtnTxt = 'APPLIED';
+          });
+        }else
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wrong. Please try again."),));
+
+      }catch(error){
+        print("startCharge: $error");
+      }
+    }
   }
 }

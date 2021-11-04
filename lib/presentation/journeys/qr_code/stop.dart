@@ -11,6 +11,7 @@ import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -19,7 +20,6 @@ import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 
 import 'Constants.dart' as Constants;
-import 'finish.dart';
 
 class Stop extends StatefulWidget {
 //  final Function onTap;
@@ -39,13 +39,14 @@ class _StopState extends State<Stop> {
   late bool showButton = false;
   late bool isChargingStart = false;
   late bool isCharged = false;
+  late bool isWalletBalanceFinished = false;
   late Stopwatch stopwatch = Stopwatch();
   late Timer timer;
   late Timer statusTimer;
   late String elapsedTime = '00:00:00';
   late String connectorStatus = '';
   late String units = '0';
-  String? cardNo = '';
+  String? cardNo = '', walletBalance = '', normalCustomerParkingPrice = "", normalCustomerChargingPrice = "", userSubscriptionStatus = "";
   String actualUnit = '0';
   double minusUnit = 0.00;
 
@@ -99,6 +100,8 @@ class _StopState extends State<Stop> {
   void initState() {
     super.initState();
     _future = getConnectorDetails();
+
+    getNormalCustomerPrice();
   }
 
   @override
@@ -152,6 +155,12 @@ class _StopState extends State<Stop> {
           stopWatch();
           timer.cancel();
           showWrongConnectorDialog();
+        }
+
+        if (isWalletBalanceFinished && userSubscriptionStatus == 'Unavailable') {
+          stopCharging( 'You have used all your wallet balance. Please top up and continue charging', onTap: () {
+            Navigator.pushReplacementNamed(context, RouteList.finish);
+          });
         }
 
         if (statusData["status"].toString() == "charging") {
@@ -304,14 +313,14 @@ class _StopState extends State<Stop> {
                                     icon: 'assets/icons/pngs/scan_qr_for_filter_4.png',
                                     icColor: AppColor.app_txt_white,
                                   ),
-                                  /*ImgTxtRow(
-                                    txt: TranslationConstants.acType.t(context),
+                                  ImgTxtRow(
+                                    txt: TranslationConstants.priceRegular.t(context) + ': ${getTotalAmountUsed()}' ,
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
                                     icon: 'assets/icons/pngs/scan_qr_for_filter_10_charge_ac.png',
                                     icColor: AppColor.app_txt_white,
-                                  ),*/
+                                  ),
                                 ],
                               ),
                             ),
@@ -434,5 +443,28 @@ class _StopState extends State<Stop> {
             ],
           );
         });
+  }
+
+  void getNormalCustomerPrice() async {
+    normalCustomerChargingPrice = await MySharedPreferences().getNormalCustomerChargingPrice();
+    normalCustomerParkingPrice = await MySharedPreferences().getNormalCustomerParkingPrice();
+    walletBalance = await AuthenticationLocalDataSourceImpl().getWalletBalance();
+    userSubscriptionStatus = await AuthenticationLocalDataSourceImpl().getUserSubscriptionStatus();
+  }
+
+  String getTotalAmountUsed() {
+    double usedAmount = 0.00;
+    try {
+      usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(units);
+      if(usedAmount >= double.parse(walletBalance!)){
+            setState(() {
+              isWalletBalanceFinished = true;
+            });
+          }
+    } catch (e) {
+      print(e);
+    }
+    //print('----used Amount: $usedAmount');
+    return usedAmount.toString();
   }
 }

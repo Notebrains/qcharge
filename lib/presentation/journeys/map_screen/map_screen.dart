@@ -74,7 +74,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: appBarHome(context),
@@ -85,7 +84,6 @@ class _MapScreenState extends State<MapScreen> {
             //print('----Map : ${state.model.message}');
             return Stack(
               children: <Widget>[
-                // Map View
                 GoogleMap(
                   padding: EdgeInsets.only(top: 115, bottom: 70),
                   markers: Set<Marker>.from(markers),
@@ -108,7 +106,6 @@ class _MapScreenState extends State<MapScreen> {
                     _getCurrentLocation();
                   },
                 ),
-
                 Container(
                   alignment: Alignment.center,
                   height: 115,
@@ -131,7 +128,7 @@ class _MapScreenState extends State<MapScreen> {
                                 margin: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: isViewAllAcStation? AppColor.border: Colors.transparent,
+                                    color: isViewAllAcStation ? AppColor.border : Colors.transparent,
                                     width: 0.4,
                                   ),
                                   borderRadius: BorderRadius.circular(3.0),
@@ -202,7 +199,7 @@ class _MapScreenState extends State<MapScreen> {
                                 padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: isViewAllDcStation? AppColor.border : Colors.transparent,
+                                    color: isViewAllDcStation ? AppColor.border : Colors.transparent,
                                     width: 0.3,
                                   ),
                                   borderRadius: BorderRadius.circular(3.0),
@@ -299,7 +296,6 @@ class _MapScreenState extends State<MapScreen> {
                     ],
                   ),
                 ),
-
               ],
             );
           } else {
@@ -317,15 +313,16 @@ class _MapScreenState extends State<MapScreen> {
           onPressed: () {
             _getCurrentLocation();
           },
-          child: !isCurrentLocFetched?
-              CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.amber.shade600,
-              ) : Icon(
-            Icons.my_location_rounded,
-            color: Colors.white,
-            size: 24,
-          ),
+          child: !isCurrentLocFetched
+              ? CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.amber.shade600,
+                )
+              : Icon(
+                  Icons.my_location_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
           backgroundColor: AppColor.grey,
           tooltip: 'Current Location',
           elevation: 5,
@@ -359,19 +356,19 @@ class _MapScreenState extends State<MapScreen> {
       });
       // await _getAddress();
     }).catchError((error) {
-      print('---- Error 0: $error');
+      //print('---- Error 0: $error');
       isCurrentLocFetched = false;
       if (error is TimeoutException) {
         Geolocator.getLastKnownPosition(
           forceAndroidLocationManager: true,
         ).then((position) async {
           //getting last known position
-          print('---- Loc 2: $position');
+          //print('---- Loc 2: $position');
 
           setState(() {
             isCurrentLocFetched = true;
             _currentPosition = position!;
-            print('Last curr POS: $_currentPosition');
+            //print('Last curr POS: $_currentPosition');
             mapController.animateCamera(
               CameraUpdate.newCameraPosition(
                 CameraPosition(
@@ -381,10 +378,9 @@ class _MapScreenState extends State<MapScreen> {
               ),
             );
           });
-
         }).catchError((error) {
           //handle the exception
-          print('----Error 1: $error');
+          //print('----Error 1: $error');
           showSnackBar(context, 'Current location not found!');
           setState(() {
             isCurrentLocFetched = true;
@@ -410,14 +406,6 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-
-  double calculateDistance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 - c((lat2 - lat1) * p) / 2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
-  }
-
   // Formula for calculating distance between two coordinates
   // https://stackoverflow.com/a/54138876/11910277
   double _coordinateDistance(lat1, lon1, lat2, lon2) {
@@ -440,25 +428,25 @@ class _MapScreenState extends State<MapScreen> {
       polylineCoordinates.clear();
       polylinePoints = PolylinePoints();
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-            'AIzaSyDPICnoQ4VQA_3YM9hxVDhipQ76uNKF7_A', // Google Maps API Key
-            PointLatLng(startLatitude, startLongitude),
-            PointLatLng(destinationLatitude, destinationLongitude),
-            travelMode: TravelMode.driving,
-          );
+        'AIzaSyDPICnoQ4VQA_3YM9hxVDhipQ76uNKF7_A', // Google Maps API Key
+        PointLatLng(startLatitude, startLongitude),
+        PointLatLng(destinationLatitude, destinationLongitude),
+        travelMode: TravelMode.driving,
+      );
 
       if (result.points.isNotEmpty) {
-            result.points.forEach((PointLatLng point) {
-              polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-            });
-          }
+        result.points.forEach((PointLatLng point) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        });
+      }
 
       PolylineId id = PolylineId('q_charge_poly');
       Polyline polyline = Polyline(
-            polylineId: id,
-            color: Colors.blueGrey.shade700,
-            points: polylineCoordinates,
-            width: 3,
-          );
+        polylineId: id,
+        color: Colors.blueGrey.shade700,
+        points: polylineCoordinates,
+        width: 3,
+      );
       polylines[id] = polyline;
 
       setState(() {});
@@ -466,7 +454,6 @@ class _MapScreenState extends State<MapScreen> {
       print(e);
     }
   }
-
 
   void updateMarkers(List<Response> list) {
     markers.clear();
@@ -491,36 +478,43 @@ class _MapScreenState extends State<MapScreen> {
     double markerLat = double.parse(response[i].latitude!);
     double markerLong = double.parse(response[i].longitude!);
 
-    Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.bestForNavigation,
-      forceAndroidLocationManager: true,
-    ).then((curLoc) async {
-      //totalDistance = Geolocator.distanceBetween(_currentPosition.latitude, _currentPosition.longitude, markerLat, markerLong);
-      //double totalDistance = _coordinateDistance(22.608355, 88.426884, markerLat, markerLong);
-      double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);
-      //print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
+    Geolocator.isLocationServiceEnabled().then((isLocationEnabled) => {
+          if (isLocationEnabled) {
+            Geolocator.getCurrentPosition(
+              //desiredAccuracy: LocationAccuracy.bestForNavigation,
+              //forceAndroidLocationManager: true,
+            ).then((curLoc) async {
+              //totalDistance = Geolocator.distanceBetween(_currentPosition.latitude, _currentPosition.longitude, markerLat, markerLong);
+              //double totalDistance = _coordinateDistance(22.608355, 88.426884, markerLat, markerLong);
+              double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);
+              //print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
 
-      markers.add(
-        Marker(
-          markerId: MarkerId("${i + 1}"),
-          position: LatLng(double.parse(response[i].latitude!), double.parse(response[i].longitude!)),
-          //position: LatLng(13.736717 + i, 100.523186 + i),
-          infoWindow: InfoWindow(
-              title: '${response[i].stationName},       ${totalDistance.toStringAsFixed(2)} km',
-              snippet: '${response[i].city}, ${response[i].state}, ${response[i].country}, ${response[i].zipcode},',
-              onTap: () {
-                BlocProvider.of<MapStationDetailsCubit>(context).initiateMapStationDetails(response[i].stationId.toString());
-                showBottomSheetUi(response[i].stationId.toString(), markerLat, markerLong);
-              }),
-          icon: await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(devicePixelRatio: 2.5),
-            response[i].type == 'Ac' ? 'assets/icons/pngs/create_account_layer_2.png' : 'assets/icons/pngs/create_account_layer_1.png',
-          ),
-        ),
-      );
+              markers.add(
+                Marker(
+                  markerId: MarkerId("${i + 1}"),
+                  position: LatLng(double.parse(response[i].latitude!), double.parse(response[i].longitude!)),
+                  //position: LatLng(13.736717 + i, 100.523186 + i),
+                  infoWindow: InfoWindow(
+                      title: '${response[i].stationName},       ${totalDistance.toStringAsFixed(2)} km',
+                      snippet: '${response[i].city}, ${response[i].state}, ${response[i].country}, ${response[i].zipcode},',
+                      onTap: () {
+                        BlocProvider.of<MapStationDetailsCubit>(context)
+                            .initiateMapStationDetails(response[i].stationId.toString());
+                        showBottomSheetUi(response[i].stationId.toString(), markerLat, markerLong);
+                      }),
+                  icon: await BitmapDescriptor.fromAssetImage(
+                    ImageConfiguration(devicePixelRatio: 2.5),
+                    response[i].type == 'Ac'
+                        ? 'assets/icons/pngs/create_account_layer_2.png'
+                        : 'assets/icons/pngs/create_account_layer_1.png',
+                  ),
+                ),
+              );
 
-      setState(() {});
-    });
+              setState(() {});
+            })
+          },
+        });
   }
 
   void moveCameraToLoc(List<Response> list, int index) {
@@ -536,7 +530,6 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
   }
-
 
   showBottomSheetUi(
     String stationId,
@@ -617,7 +610,7 @@ class _MapScreenState extends State<MapScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(right: 12),
                                     child: Txt(
-                                      txt: state.stationDetailsApiResModel.response!.spaceType!,
+                                      txt: state.stationDetailsApiResModel.response!.spaceType ?? '',
                                       txtColor: Colors.white,
                                       txtSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -628,7 +621,7 @@ class _MapScreenState extends State<MapScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(right: 12),
                                     child: Txt(
-                                      txt: state.stationDetailsApiResModel.response!.secure!,
+                                      txt: state.stationDetailsApiResModel.response!.secure ?? '',
                                       txtColor: Colors.white,
                                       txtSize: 14,
                                       fontWeight: FontWeight.normal,
@@ -639,7 +632,7 @@ class _MapScreenState extends State<MapScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(right: 12),
                                     child: Txt(
-                                      txt: state.stationDetailsApiResModel.response!.type!,
+                                      txt: state.stationDetailsApiResModel.response!.type ?? '',
                                       txtColor: Colors.white,
                                       txtSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -650,9 +643,8 @@ class _MapScreenState extends State<MapScreen> {
                                 ],
                               ),
                             ),
-
-                            cachedNetImgWithRadius(state.stationDetailsApiResModel.response!.image!, double.infinity, Sizes.dimen_50.h, 6),
-
+                            cachedNetImgWithRadius(
+                                state.stationDetailsApiResModel.response!.image!, double.infinity, Sizes.dimen_50.h, 6),
                             Container(
                               width: double.maxFinite,
                               padding: const EdgeInsets.all(14),
@@ -703,5 +695,4 @@ class _MapScreenState extends State<MapScreen> {
           );
         });
   }
-
 }

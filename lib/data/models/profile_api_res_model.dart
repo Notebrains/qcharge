@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Profile Details."
-/// response : {"name":"Alamgir Alam","email":"alamgira@mridayaitservices.com","mobile":"9732508414","wallet":"570","collect_point":"50","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635240476.jpg","current_membership_plan":"Unavailable","current_membership_plan_price":"","due_billing":20,"payment_flag":0,"vehicles":[{"vehicle_id":18,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFG1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634634846.jpg"},{"vehicle_id":19,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634635010.jpg"},{"vehicle_id":29,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":39,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Holhag","car_lisense_plate":"kjsjdjjd","image":""},{"vehicle_id":40,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Holhag","car_lisense_plate":"kjsjdjjd","image":""}]}
+/// response : {"name":"Imdadul Haque","email":"imdadulhaque.bt@gmail.com","mobile":"0909564636","wallet":"15005","collect_point":"50","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635783069.jpg","current_membership_plan":"Unavailable","current_membership_plan_price":"","due_billing":0,"payment_flag":0,"normal_customer_charging_price":"10","normal_customer_parking_price":"5","normal_customer_stay_time_after_charge":"20","vehicles":[{"vehicle_id":1,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi005x","image":""}]}
 
 class ProfileApiResModel {
   ProfileApiResModel({
@@ -37,17 +37,20 @@ class ProfileApiResModel {
 
 }
 
-/// name : "Alamgir Alam"
-/// email : "alamgira@mridayaitservices.com"
-/// mobile : "9732508414"
-/// wallet : "570"
+/// name : "Imdadul Haque"
+/// email : "imdadulhaque.bt@gmail.com"
+/// mobile : "0909564636"
+/// wallet : "15005"
 /// collect_point : "50"
-/// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635240476.jpg"
+/// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635783069.jpg"
 /// current_membership_plan : "Unavailable"
 /// current_membership_plan_price : ""
-/// due_billing : 20
+/// due_billing : 0
 /// payment_flag : 0
-/// vehicles : [{"vehicle_id":18,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"ABCD123","car_lisense_plate":"EFG1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634634846.jpg"},{"vehicle_id":19,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"SDXZ2222","car_lisense_plate":"ZASA1234","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634635010.jpg"},{"vehicle_id":29,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi555","image":""},{"vehicle_id":39,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Holhag","car_lisense_plate":"kjsjdjjd","image":""},{"vehicle_id":40,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Holhag","car_lisense_plate":"kjsjdjjd","image":""}]
+/// normal_customer_charging_price : "10"
+/// normal_customer_parking_price : "5"
+/// normal_customer_stay_time_after_charge : "20"
+/// vehicles : [{"vehicle_id":1,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi005x","image":""}]
 
 class Response {
   Response({
@@ -61,6 +64,9 @@ class Response {
       String? currentMembershipPlanPrice, 
       int? dueBilling, 
       int? paymentFlag, 
+      String? normalCustomerChargingPrice, 
+      String? normalCustomerParkingPrice, 
+      String? normalCustomerStayTimeAfterCharge, 
       List<Vehicles>? vehicles,}){
     _name = name;
     _email = email;
@@ -72,6 +78,9 @@ class Response {
     _currentMembershipPlanPrice = currentMembershipPlanPrice;
     _dueBilling = dueBilling;
     _paymentFlag = paymentFlag;
+    _normalCustomerChargingPrice = normalCustomerChargingPrice;
+    _normalCustomerParkingPrice = normalCustomerParkingPrice;
+    _normalCustomerStayTimeAfterCharge = normalCustomerStayTimeAfterCharge;
     _vehicles = vehicles;
 }
 
@@ -86,6 +95,9 @@ class Response {
     _currentMembershipPlanPrice = json['current_membership_plan_price'];
     _dueBilling = json['due_billing'];
     _paymentFlag = json['payment_flag'];
+    _normalCustomerChargingPrice = json['normal_customer_charging_price'];
+    _normalCustomerParkingPrice = json['normal_customer_parking_price'];
+    _normalCustomerStayTimeAfterCharge = json['normal_customer_stay_time_after_charge'];
     if (json['vehicles'] != null) {
       _vehicles = [];
       json['vehicles'].forEach((v) {
@@ -103,6 +115,9 @@ class Response {
   String? _currentMembershipPlanPrice;
   int? _dueBilling;
   int? _paymentFlag;
+  String? _normalCustomerChargingPrice;
+  String? _normalCustomerParkingPrice;
+  String? _normalCustomerStayTimeAfterCharge;
   List<Vehicles>? _vehicles;
 
   String? get name => _name;
@@ -115,6 +130,9 @@ class Response {
   String? get currentMembershipPlanPrice => _currentMembershipPlanPrice;
   int? get dueBilling => _dueBilling;
   int? get paymentFlag => _paymentFlag;
+  String? get normalCustomerChargingPrice => _normalCustomerChargingPrice;
+  String? get normalCustomerParkingPrice => _normalCustomerParkingPrice;
+  String? get normalCustomerStayTimeAfterCharge => _normalCustomerStayTimeAfterCharge;
   List<Vehicles>? get vehicles => _vehicles;
 
   Map<String, dynamic> toJson() {
@@ -129,6 +147,9 @@ class Response {
     map['current_membership_plan_price'] = _currentMembershipPlanPrice;
     map['due_billing'] = _dueBilling;
     map['payment_flag'] = _paymentFlag;
+    map['normal_customer_charging_price'] = _normalCustomerChargingPrice;
+    map['normal_customer_parking_price'] = _normalCustomerParkingPrice;
+    map['normal_customer_stay_time_after_charge'] = _normalCustomerStayTimeAfterCharge;
     if (_vehicles != null) {
       map['vehicles'] = _vehicles?.map((v) => v.toJson()).toList();
     }
@@ -137,14 +158,14 @@ class Response {
 
 }
 
-/// vehicle_id : 18
+/// vehicle_id : 1
 /// brand_id : 1
 /// model_id : 1
 /// brand : "Honda"
 /// model : "ABCD1234"
-/// car_name : "ABCD123"
-/// car_lisense_plate : "EFG1234"
-/// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/vehicles/img_1634634846.jpg"
+/// car_name : "Audi"
+/// car_lisense_plate : "Audi005x"
+/// image : ""
 
 class Vehicles {
   Vehicles({

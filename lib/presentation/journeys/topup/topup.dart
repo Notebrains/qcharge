@@ -266,8 +266,8 @@ class _TopUpState extends State<TopUp> {
                                 listenWhen: (previous, current) => current is WalletRechargeSuccess,
                                 listener: (context, state) async {
                                   if (state is WalletRechargeSuccess) {
-                                    _walletBalance.value = state.model.wallet ?? '0.00';
-                                    await localData.saveWalletBalance(state.model.wallet?? '0.00');
+                                    _walletBalance.value = state.model.wallet.toString();
+                                    await localData.saveWalletBalance(state.model.wallet.toString());
                                     edgeAlert(context,
                                         title: TranslationConstants.message.t(context),
                                         description: state.model.message!,

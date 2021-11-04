@@ -137,4 +137,52 @@ Future<String?> getCardNo() async {
     return "";
 }
 
+
+void addCouponId(String cardNo) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("couponID", cardNo);
+}
+
+Future<String?> getCouponId() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("couponID")) {
+    String? key = _preferences!.getString("couponID");
+    return key;
+  }
+  else
+    return "";
+}
+
+
+void addNormalCustomerChargingPrice(String cardNo) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("NormalCustomerChargingPrice", cardNo);
+}
+
+Future<String?> getNormalCustomerChargingPrice() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("NormalCustomerChargingPrice")) {
+    String? key = _preferences!.getString("NormalCustomerChargingPrice");
+    return key;
+  }
+  else
+    return "";
+}
+
+
+void addNormalCustomerParkingPrice(String cardNo) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("NormalCustomerParkingPrice", cardNo);
+}
+
+Future<String?> getNormalCustomerParkingPrice() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("NormalCustomerParkingPrice")) {
+    String? key = _preferences!.getString("NormalCustomerParkingPrice");
+    return key;
+  }
+  else
+    return "";
+}
+
 }

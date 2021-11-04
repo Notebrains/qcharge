@@ -28,7 +28,7 @@ class ApiConstants {
   static const String addEditVehicles = "addeditmorevehicles";
   static const String walletRecharge = "wallet-recharge";
   static const String chargingBilling = "chargingbilling";
-  static const String chargingCalculation = "chargingcalculation";
+  static const String chargingCalculation = "chargingcalculation"; //have not used
   static const String updateDeviceToken = "updatedevicetoken";
   static const String billPayment = "due-billing-payment";
   static const String chargingDetails = "charging";

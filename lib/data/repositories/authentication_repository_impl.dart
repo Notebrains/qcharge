@@ -144,6 +144,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         await _authenticationLocalDataSource.saveWalletBalance(response.response!.wallet?? '0.00');
         await _authenticationLocalDataSource.saveUserDuePaymentFlag(response.response!.paymentFlag!.toString());
         await _authenticationLocalDataSource.saveUserSubscriptionStatus(response.response!.currentMembershipPlan!.toString());
+        MySharedPreferences().addNormalCustomerChargingPrice(response.response!.normalCustomerChargingPrice!.toString());
+        MySharedPreferences().addNormalCustomerParkingPrice(response.response!.normalCustomerParkingPrice!.toString());
       }
       return Right(response);
     } on SocketException {

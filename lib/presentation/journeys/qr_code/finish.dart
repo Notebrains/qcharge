@@ -33,6 +33,7 @@ class _FinishState extends State<Finish> {
   late String? startDateTime = "";
   late String date = "", time = "", totalUnits = "", totalPrice = "";
   late String? userId = "0";
+  late int? couponId  = 0;
   String elapsedTime = '00:00:00', cardNo = '0';
 
   @override
@@ -54,6 +55,7 @@ class _FinishState extends State<Finish> {
     cardNo = await MySharedPreferences().getCardNo()?? '0';
     startDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now()); //change here
     userId = await AuthenticationLocalDataSourceImpl().getSessionId();
+    couponId = await MySharedPreferences().getChargerId();
 
     date = DateFormat("dd/MM/yyyy").format(DateTime.now());
     return true;
@@ -222,11 +224,11 @@ class _FinishState extends State<Finish> {
 
   void getChargingCalculatedData(String stationId) async {
     try {
-      print('---- userId: $userId');
+      /*print('---- userId: $userId');
       print('---- stationId: $stationId');
       print('---- startDateTime: $startDateTime');
       print('---- time: $time');
-      print('---- totalUnits: $totalUnits');
+      print('---- totalUnits: $totalUnits');*/
 
       Map<String, dynamic> data = Map();
       data["user_id"] = userId;
@@ -237,6 +239,7 @@ class _FinishState extends State<Finish> {
       data["duration"] = elapsedTime;
       data["parking_time"] = elapsedTime;
       data["consume_charge"] = totalUnits;
+      data["id"] = couponId.toString();
 
       http.Response response =
       await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/charging"), body: data);
