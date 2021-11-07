@@ -50,9 +50,11 @@ class Profile extends StatelessWidget {
                         ),
                         Expanded(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(left: 24),
+                                padding: const EdgeInsets.only(left: 12),
                                 child: ImgTxtRow(
                                   txt: state.model.response!.name!,
                                   txtColor: AppColor.app_txt_white,
@@ -63,25 +65,25 @@ class Profile extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(left: 24.0, right: 24.0),
+                                margin: const EdgeInsets.only(left: 12.0),
                                 color: Colors.white,
                                 height: 1,
                               ),
                               InkWell(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 24),
-                                  child: ImgTxtRow(
-                                    txt: state.model.response!.currentMembershipPlan! == 'Unavailable'
-                                        ? TranslationConstants.subscribeNow.t(context)
-                                        : TranslationConstants.member.t(context) +
-                                            ' (' +
-                                            state.model.response!.currentMembershipPlan! +
-                                            ')',
-                                    txtColor: AppColor.app_txt_white,
-                                    txtSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    icon: 'assets/icons/pngs/app_logo.png',
-                                    icColor: AppColor.app_txt_white,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: ImgTxtRow(
+                                      txt: state.model.response!.currentMembershipPlan! == 'Unavailable'
+                                          ? 'Silver Class'
+                                          : state.model.response!.currentMembershipPlan!,
+                                      txtColor: AppColor.app_txt_white,
+                                      txtSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                      icon: 'assets/icons/pngs/user_class.png',
+                                      icColor: AppColor.app_txt_white,
+                                    ),
                                   ),
                                 ),
                                 onTap: () {
@@ -94,24 +96,32 @@ class Profile extends StatelessWidget {
                       ],
                     ),
 
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 12),
-                      child: Txt(
-                        txt: TranslationConstants.collectPoint.t(context),
-                        txtColor: Colors.white,
-                        txtSize: 14,
-                        fontWeight: FontWeight.bold,
-                        padding: 0,
-                        onTap: () {},
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Txt(
+                          txt: TranslationConstants.collectPoint.t(context),
+                          txtColor: Colors.white,
+                          txtSize: 13,
+                          fontWeight: FontWeight.normal,
+                          padding: 0,
+                          onTap: () {},
+                        ),
+                        Txt(
+                          txt: '${state.model.response!.collectPoint!} points',
+                          txtColor: Colors.white,
+                          txtSize: 13,
+                          fontWeight: FontWeight.normal,
+                          padding: 0,
+                          onTap: () {},
+                        ),
+                      ],
                     ),
-
-                    //_AnimatedLiquidLinearProgressIndicator(),
 
                     Container(
                       width: double.infinity,
                       height: 25,
-                      margin: EdgeInsets.only(bottom: 3),
+                      margin: EdgeInsets.only(bottom: 3, top: 8),
                       child: LiquidLinearProgressIndicator(
                         value: double.parse(state.model.response!.collectPoint!) / 1000,
                         backgroundColor: AppColor.grey,
@@ -119,55 +129,39 @@ class Profile extends StatelessWidget {
                         borderColor: Colors.grey,
                         borderWidth: 1.0,
                         borderRadius: 6.0,
-                        center: Text(
-                          '${state.model.response!.collectPoint!} points',
-                          style: TextStyle(color: Colors.white24),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: state.model.response!.currentMembershipPlan! == 'Unavailable',
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 22),
+                        child: Button(
+                          text: TranslationConstants.subscribeNow.t(context),
+                          bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
+                          onPressed: () {
+                            Navigator.pushNamed(context, RouteList.subscription);
+                          },
                         ),
                       ),
                     ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Txt(
-                          txt: TranslationConstants.vip.t(context),
-                          txtColor: Colors.white,
-                          txtSize: 14,
-                          fontWeight: FontWeight.bold,
-                          padding: 0,
-                          onTap: () {},
-                        ),
-                        Txt(
-                          txt: TranslationConstants.vip1.t(context),
-                          txtColor: Colors.white,
-                          txtSize: 14,
-                          fontWeight: FontWeight.bold,
-                          padding: 0,
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
+                    Visibility(
+                      visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          BoxTxt(
+                              txt1: ' ${TranslationConstants.activePlan.t(context)} >',
+                              txt2: state.model.response!.currentMembershipPlan!,
+                              txt3: state.model.response!.currentMembershipPlanPrice!,
+                              rightPadding: 12,
+                              topPadding: 12,
+                              onTap: () {
+                                Navigator.pushNamed(context, RouteList.subscription);
+                              }),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        BoxTxt(
-                            txt1:
-                                state.model.response!.currentMembershipPlan! != 'Unavailable' ? ' Active Plan >' : ' All Plans >',
-                            txt2: state.model.response!.currentMembershipPlan! != 'Unavailable'
-                                ? state.model.response!.currentMembershipPlan!
-                                : '',
-                            txt3: state.model.response!.currentMembershipPlan! != 'Unavailable'
-                                ? state.model.response!.currentMembershipPlanPrice!
-                                : 'View',
-                            rightPadding: 12,
-                            topPadding: state.model.response!.currentMembershipPlan! != 'Unavailable' ? 12 : 3,
-                            onTap: () {
-                              Navigator.pushNamed(context, RouteList.subscription);
-                            }),
-                        Visibility(
-                          visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
-                          child: BoxTxt(
+                          BoxTxt(
                               txt1: ' ${TranslationConstants.dueBill.t(context)} >',
                               txt2: TranslationConstants.total.t(context),
                               txt3: convertStrToDoubleStr(state.model.response!.dueBilling.toString()),
@@ -176,12 +170,14 @@ class Profile extends StatelessWidget {
                               onTap: () async {
                                 Navigator.pushNamed(context, RouteList.billing);
                               }),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
 
+
+
                     Padding(
-                      padding: const EdgeInsets.only(top: 22),
+                      padding: const EdgeInsets.only(top: 12),
                       child: TextFormField(
                         initialValue: state.model.response!.email!,
                         autocorrect: true,

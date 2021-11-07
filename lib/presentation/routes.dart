@@ -5,13 +5,14 @@ import 'package:qcharge_flutter/presentation/journeys/contents/faqs.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
 import 'package:qcharge_flutter/presentation/journeys/subscription/billing.dart';
 import 'journeys/home_screen/call_center.dart';
+import 'journeys/home_screen/notifications.dart';
 import 'journeys/profile/update_profile.dart';
 import 'journeys/profile/profile.dart';
 import 'journeys/qr_code/finish.dart';
 import 'journeys/qr_code/qr_code.dart';
 import 'journeys/qr_code/start.dart';
 import 'journeys/qr_code/stop.dart';
-import 'journeys/setting/setting.dart';
+import 'journeys/map_screen/filters.dart';
 import 'journeys/home_screen/home_nav_bar.dart';
 
 import '../common/constants/route_constants.dart';
@@ -37,7 +38,8 @@ class Routes {
         RouteList.qrcode: (context) => QrCode(),
         RouteList.start: (context) => Start(),
         RouteList.stop: (context) => Stop(),
-        //RouteList.finish: (context) => Finish(),
+        RouteList.finish: (context) => Finish(),
         RouteList.billing: (context) => Billing(),
+        RouteList.notificationsScreen: (context) => NotificationsScreen(),
       };
 }

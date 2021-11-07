@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 
 class BoxTxt extends StatelessWidget {
@@ -24,7 +26,7 @@ class BoxTxt extends StatelessWidget {
     return Expanded(
       child: Container(
         height: 100,
-        margin: EdgeInsets.only(top: 22, right: rightPadding,),
+        margin: EdgeInsets.only(top: 34, right: rightPadding, bottom: 12),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppColor.grey,
@@ -69,7 +71,8 @@ class BoxTxt extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(text: txt3,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white)),
-                      TextSpan(text: txt3 !='View' ? ' thb /month' : '',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white)),
+                      TextSpan(text: txt3 != TranslationConstants.view.t(context) ? TranslationConstants.thbMonth.t(context) : '',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white)),
                     ],
                   ),
                 ),

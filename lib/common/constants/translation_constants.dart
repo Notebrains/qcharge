@@ -73,7 +73,6 @@ class TranslationConstants {
   static const String unit = 'unit';
   static const String start = 'start';
   static const String stop = 'stop';
-  static const String dateIg = 'dateIg';
   static const String price = 'price';
   static const String finish = 'finish';
   static const String thanksForUsingServc = 'thanksForUsingServc';
@@ -169,4 +168,27 @@ class TranslationConstants {
   static const String priceRegular = 'priceRegular';
   static const String select = 'select';
   static const String to = 'to';
+  static const String distance = 'distance';
+  static const String paymentFailed = 'paymentFailed';
+  static const String parkingChargeTxt = 'parkingChargeTxt';
+  static const String connectorNotConnectedTxt = 'connectorNotConnectedTxt';
+  static const String balanceReached = 'balanceReached';
+  static const String unplugTxt = 'unplugTxt';
+  static const String avCouponCode = 'avCouponCode';
+  static const String couponCodeHere = 'couponCodeHere';
+  static const String notification = 'notification';
+  static const String thb = 'thb';
+  static const String enterTopUpAmount = 'enterTopUpAmount';
+  static const String activePlan = 'activePlan';
+  static const String thbMonth = 'thbMonth';
+  static const String apply = 'apply';
+  static const String applied = 'applied';
+  static const String code = 'code';
+  static const String chargerStatus = 'chargerStatus';
+  static const String locationStatus = 'locationStatus';
+  static const String noOfCharger = 'noOfCharger';
+  static const String totalDistance = 'totalDistance';
+  static const String invoice = 'invoice';
+  static const String note = 'note';
+  static const String points = 'points';
 }

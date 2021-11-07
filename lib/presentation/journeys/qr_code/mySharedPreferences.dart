@@ -185,4 +185,20 @@ Future<String?> getNormalCustomerParkingPrice() async {
     return "";
 }
 
+
+void addUserName(String userName) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("UserName", userName);
+}
+
+Future<String?> getUserName() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("UserName")) {
+    String? key = _preferences!.getString("UserName");
+    return key;
+  }
+  else
+    return "";
+}
+
 }

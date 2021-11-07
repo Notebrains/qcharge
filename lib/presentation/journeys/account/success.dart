@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 
 class AccountSuccess extends StatefulWidget {
@@ -11,6 +12,15 @@ class AccountSuccess extends StatefulWidget {
 
 class _AccountSuccessState extends State<AccountSuccess> {
   bool isAgreed = true ;
+  String? userName = '' ;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getLocalData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +49,7 @@ class _AccountSuccessState extends State<AccountSuccess> {
                 ),
               ),
               child: Text(
-                TranslationConstants.carLicencePlate.t(context),
+                userName?? 'WELCOME',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
               ),
@@ -60,5 +70,12 @@ class _AccountSuccessState extends State<AccountSuccess> {
         ),
       ),
     );
+  }
+
+  void getLocalData() async {
+    userName = await MySharedPreferences().getUserName();
+    setState(() {
+
+    });
   }
 }

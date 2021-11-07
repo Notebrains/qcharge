@@ -113,7 +113,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
 
       if (userSubscriptionStatus != 'Unavailable' && userDuePaymentStatus == '1') {
         showDuePaymentDialog(context);
-      } else if (userSubscriptionStatus == 'Unavailable' && walletBalance == 0 || walletBalance < 500) {
+      } else if (userSubscriptionStatus == 'Unavailable' && walletBalance == 0 || walletBalance < 100) {
         showInsufficientWalletBalanceDialog(context);
       } else {
         this.controller = controller;
@@ -261,7 +261,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
             Navigator.pushNamed(context, RouteList.home_screen);
           },
           child: Text(
-            TranslationConstants.close.t(context),
+            TranslationConstants.topUp.t(context),
             style: TextStyle(color: Colors.black, fontSize: 14),
           ),
         ),

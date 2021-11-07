@@ -120,6 +120,13 @@ class NavigationDrawer extends StatelessWidget {
                   },
                 ),
 
+                NavigationListItem(
+                  title: TranslationConstants.notification.t(context),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(RouteList.notificationsScreen);
+                  },
+                ),
+
                 BlocListener<LoginCubit, LoginState>(
                   listenWhen: (previous, current) => current is LogoutSuccess,
                   listener: (context, state) {

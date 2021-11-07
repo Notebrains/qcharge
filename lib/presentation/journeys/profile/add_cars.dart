@@ -159,7 +159,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                       icColor: Colors.white,
                       hint: widget.carName.isEmpty? '${TranslationConstants.name.t(context)} *': widget.carName,
                       textInputType: TextInputType.text,
-                      controller: _carNamesController,
+                      controller: _carNamesController,obscureText: false,
                     ),
                   ),
                   Visibility(
@@ -296,7 +296,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                       icColor: Colors.white,
                       hint: widget.carLicencePlate.isEmpty? '${TranslationConstants.carLicencePlate.t(context)} *': widget.carLicencePlate,
                       textInputType: TextInputType.visiblePassword,
-                      controller: _carLicencePlateController,
+                      controller: _carLicencePlateController,obscureText: false,
                     ),
                   ),
                   Container(

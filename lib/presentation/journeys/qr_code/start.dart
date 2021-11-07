@@ -103,7 +103,7 @@ class _StartState extends State<Start> {
                                 icColor: AppColor.app_txt_white,
                             ),
                             ImgTxtRow(
-                                txt: '${TranslationConstants.unit.t(context)} 0 kwh',
+                                txt: '${TranslationConstants.unit.t(context)} 0 kWh',
                                 txtColor: AppColor.app_txt_white,
                                 txtSize: 12,
                                 fontWeight: FontWeight.normal,
@@ -144,7 +144,7 @@ class _StartState extends State<Start> {
                         padding: const EdgeInsets.only(left: 34, right: 34, bottom: 8),
                         child: VoucherCodeUi(
                             controller: _controller,
-                            hint: 'Coupon Code Here',
+                            hint: TranslationConstants.couponCodeHere.t(context),
                             textInputType: TextInputType.text,
                             onSaved: (value){
 
@@ -181,7 +181,7 @@ class _StartState extends State<Start> {
                             } catch (error) {
                               print("charging: $error");
                             }
-                          }, applyBtnTxt: applyBtnTxt,
+                          }, applyBtnTxt: applyBtnTxt == 'APPLY'? TranslationConstants.apply.t(context): TranslationConstants.applied.t(context),
                         )
                       ),
 
@@ -221,8 +221,6 @@ class _StartState extends State<Start> {
                             }catch(error){
                               print("startCharge: $error");
                             }
-
-
                           },
                         ),
                       ),
@@ -269,7 +267,7 @@ class _StartState extends State<Start> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16, bottom: 16),
                     child: Text(
-                      "AVAILABLE COUPON CODE",
+                      TranslationConstants.avCouponCode.t(context),
                       textAlign: TextAlign.start,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -322,7 +320,7 @@ class _StartState extends State<Start> {
 
                                   Padding(
                                     padding: const EdgeInsets.only(left: 36, top: 2, bottom: 2),
-                                    child: Text('Code: ${response[index].couponCode!}',
+                                    child: Text('${TranslationConstants.code.t(context)} ${response[index].couponCode!}',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(fontSize: 12, color: Colors.white),
                                     ),
@@ -383,7 +381,7 @@ class _StartState extends State<Start> {
             applyBtnTxt = 'APPLIED';
           });
         }else
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wrong. Please try again."),));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(TranslationConstants.somethingWentWrong.t(context)),));
 
       }catch(error){
         print("startCharge: $error");

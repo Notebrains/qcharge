@@ -57,9 +57,7 @@ class LiquidPullToRefresh extends StatefulWidget {
     this.springAnimationDurationInMilliseconds = 1000,
     this.borderWidth = 2.0,
     this.showChildOpacityTransition = true,
-  })  : assert(child != null),
-        assert(onRefresh != null),
-        assert(animSpeedFactor >= 1.0),
+  })  : assert(animSpeedFactor >= 1.0),
         super(key: key);
 
   /// The widget below this widget in the tree.
@@ -104,7 +102,7 @@ class LiquidPullToRefresh extends StatefulWidget {
   final RefreshCallback onRefresh;
 
   /// The progress indicator's foreground color. The current theme's
-  /// [ThemeData.accentColor] by default.
+  /// [ThemeData.primaryColor] by default.
   final Color? color;
 
   /// The progress indicator's background color. The current theme's
@@ -235,8 +233,8 @@ class LiquidPullToRefreshState extends State<LiquidPullToRefresh>
     final ThemeData theme = Theme.of(context);
     _valueColor = _positionController.drive(
       ColorTween(
-          begin: (widget.color ?? theme.accentColor).withOpacity(0.0),
-          end: (widget.color ?? theme.accentColor).withOpacity(1.0))
+          begin: (widget.color ?? theme.primaryColor).withOpacity(0.0),
+          end: (widget.color ?? theme.primaryColor).withOpacity(1.0))
           .chain(CurveTween(
           curve: const Interval(0.0, 1.0 / _kDragSizeFactorLimit))),
     );
@@ -499,7 +497,6 @@ class LiquidPullToRefreshState extends State<LiquidPullToRefresh>
         curve: Curves.elasticOut)
         .then<void>((void value) {
       if (mounted && _mode == _LiquidPullToRefreshMode.snap) {
-        assert(widget.onRefresh != null);
 
         setState(() {
           // Show the indeterminate progress indicator.
@@ -532,8 +529,6 @@ class LiquidPullToRefreshState extends State<LiquidPullToRefresh>
           }
           return true;
         }());
-
-        if (refreshResult == null) return;
 
         refreshResult.whenComplete(() {
           if (mounted && _mode == _LiquidPullToRefreshMode.refresh) {
@@ -578,7 +573,7 @@ class LiquidPullToRefreshState extends State<LiquidPullToRefresh>
     assert(debugCheckHasMaterialLocalizations(context));
 
     // assigning default color and background color
-    Color _defaultColor = Theme.of(context).accentColor;
+    Color _defaultColor = Theme.of(context).primaryColor;
     Color _defaultBackgroundColor = Theme.of(context).canvasColor;
 
     // assigning default height

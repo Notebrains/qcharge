@@ -1,17 +1,9 @@
-import 'dart:convert';
-import 'dart:io' show Platform;
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my2c2psdk/models/my2c2psdk_type.dart';
-import 'package:my2c2psdk/my2c2psdk.dart';
-import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
-import 'package:qcharge_flutter/common/extensions/validation.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/wallet_recharge_cubit.dart';
@@ -22,44 +14,58 @@ import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
+import 'package:qcharge_flutter/presentation/widgets/select_drop_list.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_if_ic_round.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_img_row.dart';
 
+import '../../2c2p_payment_gateway.dart';
+
 class TopUp extends StatefulWidget {
+  final TopUpCubit cubit;
+
+  const TopUp({Key? key, required this.cubit}) : super(key: key);
+
   @override
   _TopUpState createState() => _TopUpState();
 }
 
 class _TopUpState extends State<TopUp> {
-  //late WalletRechargeCubit walletRechargeCubit;
-
   AuthenticationLocalDataSourceImpl localData = AuthenticationLocalDataSourceImpl();
 
   bool isTopUpBtnSelected = false;
   bool isAddMoneyActive = false;
 
-  String userId = '';
+  String userId = '', dropdownAmount = '';
   late TextEditingController? _topupAmountController;
   final ValueNotifier<String> _walletBalance = ValueNotifier<String>('0.00');
+
+
+
+  OptionItem optionItemSelected = OptionItem(id: '0', title: "Select amount");
+
+  DropListModel amountDropDownList = DropListModel([
+    OptionItem(id: '0', title: "500"),
+    OptionItem(id: '0', title: "1000"),
+    OptionItem(id: '0', title: "1500"),
+    OptionItem(id: '0', title: "2000"),
+    OptionItem(id: '0', title: "2500"),
+    OptionItem(id: '0', title: "3000"),
+  ]);
 
   @override
   void initState() {
     super.initState();
 
-    //walletRechargeCubit = getItInstance<WalletRechargeCubit>();
-
     getLocalData();
     _topupAmountController = TextEditingController();
     _topupAmountController!.text = '500.00';
-
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    //walletRechargeCubit.close();
     _topupAmountController?.dispose();
   }
 
@@ -117,10 +123,9 @@ class _TopUpState extends State<TopUp> {
                                   onTap: () {},
                                 ),
                               ),
-
-
                               ValueListenableBuilder(
-                                builder: (BuildContext context, String walletValue, Widget? child) {  // widget under builder will rebuild
+                                builder: (BuildContext context, String walletValue, Widget? child) {
+                                  // widget under builder will rebuild
                                   // This builder will only get called when the _walletBalanc
                                   // is updated.
                                   return Padding(
@@ -134,7 +139,7 @@ class _TopUpState extends State<TopUp> {
                                               text: convertStrToDoubleStr(walletValue),
                                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white)),
                                           TextSpan(
-                                              text: ' THB',
+                                              text: TranslationConstants.thb.t(context),
                                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white)),
                                         ],
                                       ),
@@ -143,8 +148,6 @@ class _TopUpState extends State<TopUp> {
                                 },
                                 valueListenable: _walletBalance,
                               ),
-
-
                             ],
                           ),
                         ),
@@ -178,10 +181,9 @@ class _TopUpState extends State<TopUp> {
                                   style: TextStyle(fontSize: 14, color: Colors.white),
                                 ),
                               ),
-
                               InkWell(
                                 child: TxtImgRow(
-                                  txt: 'Online Top Up',
+                                  txt: TranslationConstants.onlineTopup.t(context),
                                   txtColor: AppColor.app_txt_white,
                                   txtSize: 16,
                                   img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
@@ -193,13 +195,42 @@ class _TopUpState extends State<TopUp> {
                                 },
                               ),
 
-                             Visibility(
+                              InkWell(
+                                child: TxtImgRow(
+                                  txt: TranslationConstants.creditDebitCard.t(context),
+                                  txtColor: AppColor.app_txt_white,
+                                  txtSize: 16,
+                                  img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    isAddMoneyActive ? isAddMoneyActive = false : isAddMoneyActive = true;
+                                  });
+                                },
+                              ),
+                              Visibility(
                                 visible: isAddMoneyActive,
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 24),
-                                    child: Image.asset('assets/images/payment-credit-card.png', width: 120, height: 120,),
+                                    child: Image.asset(
+                                      'assets/images/payment-credit-card.png',
+                                      width: 120,
+                                      height: 120,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: isAddMoneyActive,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 6),
+                                  child: IfIconRound(
+                                    hint: TranslationConstants.enterTopUpAmount.t(context),
+                                    icon: Icons.account_balance_wallet_rounded,
+                                    controller: _topupAmountController,
+                                    textInputType: TextInputType.number,
                                   ),
                                 ),
                               ),
@@ -207,12 +238,19 @@ class _TopUpState extends State<TopUp> {
                               Visibility(
                                 visible: isAddMoneyActive,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 6),
-                                  child: IfIconRound(
-                                    hint: 'Enter top-up amount',
-                                    icon: Icons.account_balance_wallet_rounded,
-                                    controller: _topupAmountController,
-                                    textInputType: TextInputType.number,
+                                  padding: const EdgeInsets.only(left: 36, right: 36,),
+                                  child: SelectDropList(
+                                    ic: Icons.account_balance_wallet_outlined,
+                                    icColor: AppColor.app_txt_white,
+                                    itemSelected: optionItemSelected,
+                                    onOptionSelected: (OptionItem optionItem) {
+                                      print('----Selected Amount: ${optionItem.title}');
+                                      setState(() {
+                                        _topupAmountController!.text = optionItem.title;
+                                        optionItemSelected.title = optionItem.title;
+                                      });
+                                    },
+                                    dropListModel: amountDropDownList,
                                   ),
                                 ),
                               ),
@@ -227,13 +265,14 @@ class _TopUpState extends State<TopUp> {
                                     onPressed: () {
                                       if (_topupAmountController!.text.isEmpty) {
                                         edgeAlert(context,
-                                            title: 'Warning', description: 'Please enter amount', gravity: Gravity.top);
+                                            title: TranslationConstants.warning.t(context), description: TranslationConstants.enterTopUpAmount.t(context), gravity: Gravity.top);
                                       } else if (userId.isNotEmpty) {
                                         openPaymentGateway();
+                                        //requestPayment();
                                       } else {
                                         edgeAlert(context,
                                             title: TranslationConstants.message.t(context),
-                                            description: 'Something went wrong! Please try again.',
+                                            description: TranslationConstants.somethingWentWrong.t(context),
                                             gravity: Gravity.top);
                                       }
                                     },
@@ -252,7 +291,6 @@ class _TopUpState extends State<TopUp> {
                               SizedBox(
                                 height: 80,
                               ),
-
                               BlocConsumer<WalletRechargeCubit, WalletRechargeState>(
                                 buildWhen: (previous, current) => current is WalletRechargeError,
                                 builder: (context, state) {
@@ -278,70 +316,70 @@ class _TopUpState extends State<TopUp> {
                             ],
                           ),
                         )
-                      : TopUpHistory(
-                          response: state.model.response,
-                        ),
+                      : TopUpHistory(model: state.model,),
                 ],
               ),
             );
           } else {
             return NoDataFound(
-              txt: 'No DATA FOUND',
+              txt: 'NO DATA FOUND',
               onRefresh: () {},
             );
           }
         },
       ),
+      floatingActionButton: Visibility(
+        visible: !isTopUpBtnSelected,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 70),
+          child: FloatingActionButton(
+            heroTag: '90',
+            mini: true,
+            onPressed: () async {
+              widget.cubit.initiateTopUp(userId, "${DateTime.now().year}-${DateTime.now().month}");
+            },
+            child: Icon(
+              Icons.refresh_rounded,
+              color: Colors.white,
+              size: 24,
+            ),
+            backgroundColor: AppColor.alert_color,
+            tooltip: 'Reload Screen',
+            elevation: 5,
+            splashColor: Colors.grey,
+          ),
+        ),
+      ),
     );
   }
 
+  //credentials are live
   void openPaymentGateway() async {
     try {
-      final sdk = My2c2pSDK(privateKey: Platform.isAndroid? Strings.androidPrivateKey : Strings.iosPrivateKey);
-      sdk.paymentUI = true; // false to direct payment and true to see payment ui to manual payment
-      sdk.productionMode = false;
-      sdk.merchantId = "764764000001966";
-      sdk.uniqueTransactionCode = (Random().nextInt(912319541) + 154145).toString();
-      sdk.desc = "product item 1";
-      sdk.amount = double.parse(_topupAmountController!.text);
-      sdk.currencyCode = "764";
-      sdk.pan = "5105105105105100";
-      sdk.cardExpireMonth = 12;
-      sdk.cardExpireYear = 2025;
-      sdk.cardHolderName = "Mr. John";
-      sdk.cardPin = "4111111111111111";
-      sdk.cardType = CardType.OPEN_LOOP;
-      sdk.panCountry = "TH";
-      sdk.panBank = 'Kasikom Bank';
-      sdk.secretKey = "24ABCC819638916E7DD47D09F2DEA4588FAE70636B085B8DE47A9592C4FD034F";
-      //set optional fields
-      sdk.securityCode = "2234523";
-      sdk.cardHolderEmail = 'Thanpilin@arrow-energy.com';
+      openProductionPaymentGateway(_topupAmountController!.text).then((responseJson) => {
+            /*
+              String amount = responseJson["amt"];
+              String respCode = responseJson["respCode"],
+              print('----amount: ${responseJson["amt"]}');
+              print('----uniqueTransactionCode: ${responseJson["uniqueTransactionCode"]}');
+              print('----tranRef: ${responseJson["tranRef"]}');
+              print('----approvalCode: ${responseJson["approvalCode"]}');
+              print('----refNumber: ${responseJson["refNumber"]}');
+              */
 
-      final result = await sdk.proceed();
-      print('----2c2p payment result: $result');
-
-      Map<String, dynamic> responseJson = json.decode(result!);
-
-      String uniqueTransactionCode = responseJson["uniqueTransactionCode"];
-
-      /*String amount = responseJson["amt"];
-
-      print('----amount: ${responseJson["amt"]}');
-      print('----uniqueTransactionCode: ${responseJson["uniqueTransactionCode"]}');
-      print('----tranRef: ${responseJson["tranRef"]}');
-      print('----approvalCode: ${responseJson["approvalCode"]}');
-      print('----refNumber: ${responseJson["refNumber"]}');*/
-
-      if (uniqueTransactionCode.isNotEmpty) {
-        BlocProvider.of<WalletRechargeCubit>(context).initiateWalletRecharge(
-          userId,
-          responseJson["uniqueTransactionCode"],
-          _topupAmountController!.text,
-        );
-      } else {
-        edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Payment Failed', gravity: Gravity.top);
-      }
+            if (responseJson["uniqueTransactionCode"].isNotEmpty && responseJson["respCode"] == '00')
+              {
+                BlocProvider.of<WalletRechargeCubit>(context).initiateWalletRecharge(
+                  userId,
+                  responseJson["uniqueTransactionCode"],
+                  _topupAmountController!.text,
+                ),
+              }
+            else
+              {
+                edgeAlert(context, title: TranslationConstants.message.t(context), description: TranslationConstants.paymentFailed.t(context), gravity: Gravity.top),
+              }
+          });
     } catch (e) {
       print('----Error : $e');
     }
@@ -349,13 +387,11 @@ class _TopUpState extends State<TopUp> {
 
   void getLocalData() async {
     await localData.getSessionId().then((id) => {
-      userId = id ?? '',
-    });
+          userId = id ?? '',
+        });
 
     await localData.getWalletBalance().then((amount) => {
-    _walletBalance.value = amount ?? '00.00 ',
-    });
-
-
+          _walletBalance.value = amount ?? '00.00 ',
+        });
   }
 }

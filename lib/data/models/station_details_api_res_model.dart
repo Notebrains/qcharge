@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "EV Stations Details"
-/// response : {"station_name":"Station 2","city":"Pune","state":"Maharashtra","country":"Thailand","zipcode":"700091","address":"Pune","latitude":"13.785699","longitude":"99.957632","type":"Ac","space_type":"Available","secure":"Public","image":"","description":"test1","status":1}
+/// response : {"station_name":"โรงพยาบาลวิมุต : Vimut hospital","owner":"POLYTECH","city":"","state":"","country":"","zipcode":"","address":"โรงพยาบาลวิมุต : Vimut hospital","latitude":"13.7886073","longitude":"100.5461087","type":"","space_type":"","secure":"Private","numberOfCharger":"0","image":"","description":"","status":1,"charging_status":1}
 
 class StationDetailsApiResModel {
   StationDetailsApiResModel({
@@ -37,24 +37,28 @@ class StationDetailsApiResModel {
 
 }
 
-/// station_name : "Station 2"
-/// city : "Pune"
-/// state : "Maharashtra"
-/// country : "Thailand"
-/// zipcode : "700091"
-/// address : "Pune"
-/// latitude : "13.785699"
-/// longitude : "99.957632"
-/// type : "Ac"
-/// space_type : "Available"
-/// secure : "Public"
+/// station_name : "โรงพยาบาลวิมุต : Vimut hospital"
+/// owner : "POLYTECH"
+/// city : ""
+/// state : ""
+/// country : ""
+/// zipcode : ""
+/// address : "โรงพยาบาลวิมุต : Vimut hospital"
+/// latitude : "13.7886073"
+/// longitude : "100.5461087"
+/// type : ""
+/// space_type : ""
+/// secure : "Private"
+/// numberOfCharger : "0"
 /// image : ""
-/// description : "test1"
+/// description : ""
 /// status : 1
+/// charging_status : 1
 
 class Response {
   Response({
       String? stationName, 
+      String? owner, 
       String? city, 
       String? state, 
       String? country, 
@@ -65,10 +69,13 @@ class Response {
       String? type, 
       String? spaceType, 
       String? secure, 
+      String? numberOfCharger, 
       String? image, 
       String? description, 
-      int? status,}){
+      int? status, 
+      int? chargingStatus,}){
     _stationName = stationName;
+    _owner = owner;
     _city = city;
     _state = state;
     _country = country;
@@ -79,13 +86,16 @@ class Response {
     _type = type;
     _spaceType = spaceType;
     _secure = secure;
+    _numberOfCharger = numberOfCharger;
     _image = image;
     _description = description;
     _status = status;
+    _chargingStatus = chargingStatus;
 }
 
   Response.fromJson(dynamic json) {
     _stationName = json['station_name'];
+    _owner = json['owner'];
     _city = json['city'];
     _state = json['state'];
     _country = json['country'];
@@ -96,11 +106,14 @@ class Response {
     _type = json['type'];
     _spaceType = json['space_type'];
     _secure = json['secure'];
+    _numberOfCharger = json['numberOfCharger'];
     _image = json['image'];
     _description = json['description'];
     _status = json['status'];
+    _chargingStatus = json['charging_status'];
   }
   String? _stationName;
+  String? _owner;
   String? _city;
   String? _state;
   String? _country;
@@ -111,11 +124,14 @@ class Response {
   String? _type;
   String? _spaceType;
   String? _secure;
+  String? _numberOfCharger;
   String? _image;
   String? _description;
   int? _status;
+  int? _chargingStatus;
 
   String? get stationName => _stationName;
+  String? get owner => _owner;
   String? get city => _city;
   String? get state => _state;
   String? get country => _country;
@@ -126,13 +142,16 @@ class Response {
   String? get type => _type;
   String? get spaceType => _spaceType;
   String? get secure => _secure;
+  String? get numberOfCharger => _numberOfCharger;
   String? get image => _image;
   String? get description => _description;
   int? get status => _status;
+  int? get chargingStatus => _chargingStatus;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['station_name'] = _stationName;
+    map['owner'] = _owner;
     map['city'] = _city;
     map['state'] = _state;
     map['country'] = _country;
@@ -143,9 +162,11 @@ class Response {
     map['type'] = _type;
     map['space_type'] = _spaceType;
     map['secure'] = _secure;
+    map['numberOfCharger'] = _numberOfCharger;
     map['image'] = _image;
     map['description'] = _description;
     map['status'] = _status;
+    map['charging_status'] = _chargingStatus;
     return map;
   }
 

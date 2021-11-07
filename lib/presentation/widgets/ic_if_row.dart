@@ -12,6 +12,7 @@ class IcIfRow extends StatelessWidget {
   final String hint;
   final TextInputType textInputType;
   final TextEditingController? controller;
+  final bool obscureText;
 
   const IcIfRow({
     Key? key,
@@ -24,6 +25,7 @@ class IcIfRow extends StatelessWidget {
     required this.hint,
     required this.textInputType,
     required this.controller,
+    required this.obscureText,
   }) : super(key: key);
 
   @override
@@ -47,6 +49,7 @@ class IcIfRow extends StatelessWidget {
           margin: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
           child: TextFormField(
             autocorrect: true,
+            obscureText: obscureText,
             keyboardType: textInputType,
             controller: controller,
             //validator: validator,

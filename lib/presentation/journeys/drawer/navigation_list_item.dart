@@ -25,7 +25,7 @@ class NavigationListItem extends StatelessWidget {
         ),
 
         subtitle: Padding(
-          padding: const EdgeInsets.only(right: 24, top: 12),
+          padding: const EdgeInsets.only(right: 24, top: 6),
           child: Divider(
             color: Colors.white.withOpacity(0.8),
           ),

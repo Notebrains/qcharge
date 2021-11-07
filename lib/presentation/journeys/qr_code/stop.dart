@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
@@ -49,6 +50,7 @@ class _StopState extends State<Stop> {
   String? cardNo = '', walletBalance = '', normalCustomerParkingPrice = "", normalCustomerChargingPrice = "", userSubscriptionStatus = "";
   String actualUnit = '0';
   double minusUnit = 0.00;
+  double usedAmount = 0.00;
 
   updateTime(Timer timer) {
     if (stopwatch.isRunning) {
@@ -107,6 +109,9 @@ class _StopState extends State<Stop> {
   @override
   void dispose() {
     super.dispose();
+
+    //stopWatch();
+    timer.cancel();
   }
 
   Future<bool> getConnectorDetails() async {
@@ -118,7 +123,7 @@ class _StopState extends State<Stop> {
     //int? stationId = await MySharedPreferences().getStationId();
     //int? chargerId = await MySharedPreferences().getStationId();
     http.Response checkStatus = await http.get(Uri.parse(
-        "https://qcharge.hashtrix.in/public/api/getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}"));
+        "${Constants.APP_BASE_URL}getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}"));
     print("checkStatus: ${checkStatus.statusCode}");
     print("checkStatus: ${checkStatus.body}");
     dynamic data1 = jsonDecode(checkStatus.body);
@@ -131,25 +136,40 @@ class _StopState extends State<Stop> {
       units = statusData["kwhValue"];
       statusTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
         http.Response checkStatus = await http.get(Uri.parse(
-            "https://qcharge.hashtrix.in/public/api/getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}"));
+            "${Constants.APP_BASE_URL}getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}"));
         print("getchargerstatus code: ${checkStatus.statusCode}");
         print("get charger status res: ${checkStatus.body}");
         dynamic data = jsonDecode(checkStatus.body);
         statusData = data["data"];
+
         setState(() {
-          connectorStatus = statusData["status"].toString().capitalize();
           units = statusData["kwhValue"];
-          elapsedTime = transformMilliSeconds(timer.tick);
-          if (minusUnit == 0.00) {
-            minusUnit = double.parse(units);
-          } else {
-            actualUnit = (double.parse(units) - minusUnit).toString();
+          if (statusData["status"].toString() != "sensor") {
+            connectorStatus = statusData["status"].toString().capitalize();
+            elapsedTime = transformMilliSeconds(timer.tick);
+            if (minusUnit == 0.00) {
+              minusUnit = double.parse(convertStrToDoubleStr(units));
+            } else {
+              actualUnit = (double.parse(units) - minusUnit).toString();
+            }
+
+            usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(actualUnit);
+            if(usedAmount >= double.parse(walletBalance!)){
+              setState(() {
+                isWalletBalanceFinished = true;
+              });
+            }
+          }
+
+          if (statusData["status"].toString() != "charged") {
+            actualUnit = statusData["kwhValue"];
           }
         });
 
-        print('-----1  ${timer.tick}');
+        //print('-----1  ${timer.tick}');
+        //print('-----3  $isChargingStart');
         print('-----2  ${statusData["status"].toString()}');
-        print('-----3  $isChargingStart');
+        print('-----4  $actualUnit');
 
         if (timer.tick == 15 && (statusData["status"].toString() == "occupied" || statusData["status"].toString() == "available")) {
           stopWatch();
@@ -158,7 +178,7 @@ class _StopState extends State<Stop> {
         }
 
         if (isWalletBalanceFinished && userSubscriptionStatus == 'Unavailable') {
-          stopCharging( 'You have used all your wallet balance. Please top up and continue charging', onTap: () {
+          stopCharging( TranslationConstants.balanceReached.t(context), onTap: () {
             Navigator.pushReplacementNamed(context, RouteList.finish);
           });
         }
@@ -169,12 +189,12 @@ class _StopState extends State<Stop> {
         }
 
         if(isChargingStart && statusData["status"].toString() == "available"){
-          stopCharging( 'You have unplug from the charger', onTap: () {
+          stopCharging( TranslationConstants.unplugTxt.t(context), onTap: () {
             Navigator.pushReplacementNamed(context, RouteList.finish);
           });
         }
 
-        if (statusData["status"].toString() == "charged" ) {
+        if (statusData["status"].toString() == "charged") {
           stopCharging(TranslationConstants.carChargedTxt.t(context), onTap: () {
             Navigator.pushReplacementNamed(context, RouteList.finish);
           });
@@ -187,8 +207,12 @@ class _StopState extends State<Stop> {
   stopCharging(String dialogText,  {
     required Function() onTap,
   }) async {
-    stopWatch();
-    timer.cancel();
+    try {
+      stopWatch();
+      timer.cancel();
+    } catch (e) {
+      print(e);
+    }
     setState(() {
       isLoading = true;
     });
@@ -219,7 +243,7 @@ class _StopState extends State<Stop> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('Message'),
+                title: Text(TranslationConstants.message.t(context)),
                 content: Text(dialogText,),
                 actions: [
                   AnimatedContainer(
@@ -306,7 +330,7 @@ class _StopState extends State<Stop> {
                                     icColor: AppColor.app_txt_white,
                                   ),
                                   ImgTxtRow(
-                                    txt: '${TranslationConstants.unit.t(context)} $actualUnit',
+                                    txt: '${TranslationConstants.unit.t(context)} ${convertStrToDoubleStr(actualUnit)} kWh',
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
@@ -314,11 +338,11 @@ class _StopState extends State<Stop> {
                                     icColor: AppColor.app_txt_white,
                                   ),
                                   ImgTxtRow(
-                                    txt: TranslationConstants.priceRegular.t(context) + ': ${getTotalAmountUsed()}' ,
+                                    txt: TranslationConstants.priceRegular.t(context) + ': ${convertStrToDoubleStr(usedAmount.toString())}${TranslationConstants.thb.t(context)}' ,
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
-                                    icon: 'assets/icons/pngs/scan_qr_for_filter_10_charge_ac.png',
+                                    icon: 'assets/icons/pngs/thai_baht.png',
                                     icColor: AppColor.app_txt_white,
                                   ),
                                 ],
@@ -455,16 +479,57 @@ class _StopState extends State<Stop> {
   String getTotalAmountUsed() {
     double usedAmount = 0.00;
     try {
-      usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(units);
+      usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(actualUnit);
       if(usedAmount >= double.parse(walletBalance!)){
-            setState(() {
-              isWalletBalanceFinished = true;
-            });
-          }
+        setState(() {
+          isWalletBalanceFinished = true;
+        });
+      }
     } catch (e) {
       print(e);
     }
     //print('----used Amount: $usedAmount');
     return usedAmount.toString();
+  }
+
+  void showConnectorNotConnectedDialog() {
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(TranslationConstants.warning.t(context),),
+            content: Text( TranslationConstants.connectorNotConnectedTxt.t(context)),
+            actions: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeIn,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                  gradient: LinearGradient(
+                      begin: Alignment.centerRight,
+                      end: Alignment.centerLeft,
+                      colors: [Color(0xFFEFE07D), Color(0xFFB49839)]),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
+                margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h, horizontal: 24),
+                width: 130,
+                height: 35,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, RouteList.qrcode);
+                  },
+                  child: Text(
+                    TranslationConstants.goBack.t(context),
+                    style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+            ],
+          );
+        });
   }
 }

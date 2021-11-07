@@ -11,6 +11,7 @@ import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/validation.dart';
 import 'package:qcharge_flutter/presentation/blocs/register/car_model_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/register/register_cubit.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
@@ -31,9 +32,8 @@ class _RegisterFormState extends State<RegisterForm> {
   late File? xFile = File('');
   String base64Image = '';
   bool isEnabled = true ;
-  String carBrandId = '', carModelId = '';
   late TextEditingController? _mobileController, _passwordController, _firstNameController, _lastNameController, _emailController,
-      _confPasswordController, _carModelController, _carNameController, _carBrandController, _carLicencePlateController;
+      _confPasswordController;
 
   DropListModel carBrandDropDownList = DropListModel([]);
   DropListModel carModelDropDownList = DropListModel([]);
@@ -50,10 +50,6 @@ class _RegisterFormState extends State<RegisterForm> {
     _mobileController = TextEditingController();
     _passwordController = TextEditingController();
     _confPasswordController = TextEditingController();
-    _carNameController = TextEditingController();
-    _carBrandController = TextEditingController();
-    _carModelController = TextEditingController();
-    _carLicencePlateController = TextEditingController();
 
     _firstNameController?.addListener(() {
       setState(() {
@@ -92,32 +88,6 @@ class _RegisterFormState extends State<RegisterForm> {
       });
     });
 
-    _carNameController?.addListener(() {
-      setState(() {
-        isEnabled = (_carNameController?.text.isNotEmpty ?? false);
-      });
-    });
-
-    _carBrandController?.addListener(() {
-      setState(() {
-        isEnabled = (_carBrandController?.text.isNotEmpty ?? false);
-      });
-    });
-
-    _carModelController?.addListener(() {
-      setState(() {
-        isEnabled = (_carModelController?.text.isNotEmpty ?? false);
-      });
-    });
-
-    _carLicencePlateController?.addListener(() {
-      setState(() {
-        isEnabled = (_carLicencePlateController?.text.isNotEmpty ?? false);
-      });
-    });
-
-    BlocProvider.of<CarBrandCubit>(context).loadCarBrand();
-    BlocProvider.of<CarModelCubit>(context).loadCarModel('1');
   }
 
   Future getImage() async {
@@ -177,10 +147,6 @@ class _RegisterFormState extends State<RegisterForm> {
     _lastNameController?.dispose();
     _emailController?.dispose();
     _confPasswordController?.dispose();
-    _carModelController?.dispose();
-    _carNameController?.dispose();
-    _carBrandController?.dispose();
-    _carLicencePlateController?.dispose();
     super.dispose();
   }
 
@@ -223,7 +189,7 @@ class _RegisterFormState extends State<RegisterForm> {
               child: IcIfRow(txt: 'Full name *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_6.png', icColor: Colors.white,
                 hint: 'Enter first name *', textInputType: TextInputType.text,
-                controller: _firstNameController,
+                controller: _firstNameController, obscureText: false,
               ),
             ),
 
@@ -232,7 +198,7 @@ class _RegisterFormState extends State<RegisterForm> {
               child: IcIfRow(txt: 'Last name *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_6.png', icColor: Colors.white,
                 hint: 'Enter last name *', textInputType: TextInputType.text,
-                controller: _lastNameController,
+                controller: _lastNameController, obscureText: false,
               ),
             ),
 
@@ -241,7 +207,7 @@ class _RegisterFormState extends State<RegisterForm> {
               child: IcIfRow(txt: 'Email *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_7.png', icColor: Colors.white,
                 hint: 'Enter email *', textInputType: TextInputType.text,
-                controller: _emailController,
+                controller: _emailController, obscureText: false,
               ),
             ),
 
@@ -250,7 +216,7 @@ class _RegisterFormState extends State<RegisterForm> {
               child: IcIfRow(txt: 'Password *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_8.png', icColor: Colors.white,
                 hint: 'Enter password *', textInputType: TextInputType.visiblePassword,
-                controller: _passwordController,
+                controller: _passwordController, obscureText: true,
               ),
             ),
 
@@ -259,81 +225,19 @@ class _RegisterFormState extends State<RegisterForm> {
               child: IcIfRow(txt: 'Confirm password *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_9.png', icColor: Colors.white,
                 hint: 'Enter confirm password *', textInputType: TextInputType.visiblePassword,
-                controller: _confPasswordController,
+                controller: _confPasswordController, obscureText: true,
               ),
             ),
 
             Container(
-              margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+              margin: const EdgeInsets.fromLTRB(8, 0, 8, 24),
               child: IcIfRow(txt: 'Mobile number *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_1.png', icColor: Colors.white,
                 hint: 'Enter mobile number *', textInputType: TextInputType.phone,
-                controller: _mobileController,
+                controller: _mobileController, obscureText: false,
               ),
             ),
 
-            Container(
-              margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-              child: IcIfRow(txt: 'Car name *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
-                icon: 'assets/icons/pngs/account_Register_11.png', icColor: Colors.white,
-                hint: 'Enter car name *', textInputType: TextInputType.text,
-                controller: _carNameController,
-              ),
-            ),
-
-            Container(
-              margin: const EdgeInsets.fromLTRB(45, 12, 55, 22),
-              child: SelectDropList(
-                ic: Icons.directions_car_outlined,
-                icColor: AppColor.app_txt_white,
-                itemSelected: optionItemSelected,
-                onOptionSelected: (OptionItem optionItem) {
-                  print('----Car brand: ${optionItem.title}');
-                  BlocProvider.of<CarModelCubit>(context).loadCarModel(optionItem.id);
-                  setState(() {
-                    carBrandId = optionItem.id;
-                    optionItemSelected.title = optionItem.title;
-                    carModelId = '';
-                  });
-                },
-                dropListModel: carBrandDropDownList,
-              ),
-            ),
-
-            Container(
-              margin: const EdgeInsets.fromLTRB(45, 0, 55, 12),
-              child: SelectDropList(
-                ic: Icons.local_car_wash_outlined,
-                icColor: AppColor.app_txt_white,
-                itemSelected: optionItemSelected2,
-                onOptionSelected: (OptionItem optionItem){
-                  try{
-                    if (carBrandId.isNotEmpty) {
-                      print('----Car model: ${optionItem.title}');
-
-                      setState(() {
-                        carModelId = optionItem.id;
-                        optionItemSelected2.title = optionItem.title;
-                      });
-                    } else {
-                      edgeAlert(context, title: 'Warning', description: 'Please select car brand first', gravity: Gravity.top);
-                    }
-                  } catch (e){
-                    print('---- : $e');
-                  }
-                },
-                dropListModel: carModelDropDownList,
-              ),
-            ),
-
-            Container(
-              margin: const EdgeInsets.fromLTRB(24, 0, 8, 8),
-              child: IcIfRow(txt: 'Car licence plate *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
-                icon: 'assets/icons/pngs/account_Register_10.png', icColor: Colors.white,
-                hint: 'Enter car licence plate *', textInputType: TextInputType.text,
-                controller: _carLicencePlateController,
-              ),
-            ),
 
             Padding(
               padding: const EdgeInsets.only(left: 45, right: 45),
@@ -354,15 +258,8 @@ class _RegisterFormState extends State<RegisterForm> {
                     edgeAlert(context, title: 'Warning', description: 'Please enter confirm password', gravity: Gravity.top);
                   } else if(_passwordController!.text != _confPasswordController!.text){
                     edgeAlert(context, title: 'Warning', description: 'Password and confirm password did not matched', gravity: Gravity.top);
-                  } else if(_carNameController!.text.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please select car name', gravity: Gravity.top);
-                  } else if(carBrandId.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please enter car brand', gravity: Gravity.top);
-                  } else if(carModelId.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please select car model', gravity: Gravity.top);
-                  } else if(_carLicencePlateController!.text.isEmpty){
-                    edgeAlert(context, title: 'Warning', description: 'Please enter car licence plate no.', gravity: Gravity.top);
-                  } else if (isEnabled) {
+                  }  else if (isEnabled) {
+                      //ch
                       BlocProvider.of<RegisterCubit>(context).initiateRegister(
                         _firstNameController?.text ?? '',
                         _lastNameController?.text ?? '',
@@ -370,74 +267,15 @@ class _RegisterFormState extends State<RegisterForm> {
                         _mobileController?.text ?? '',
                         _passwordController?.text ?? '',
                         _confPasswordController?.text ?? '',
-                        _carNameController?.text ?? '',
-                        carBrandId,
-                        carModelId,
-                        _carLicencePlateController?.text ?? '',
+                        '0',
+                        '0',
+                        '0',
+                        '0',
                         base64Image,
                       );
                   }
                 },
               ),
-            ),
-
-            BlocConsumer<CarBrandCubit, CarBrandState>(
-              buildWhen: (previous, current) => current is CarBrandError,
-              builder: (context, state) {
-                if (state is CarBrandError)
-                  return Text(
-                    'Could not fetch data',
-                    style: TextStyle(color: Colors.black),
-                  );
-                return const SizedBox.shrink();
-              },
-              listenWhen: (previous, current) => current is CarBrandLoaded,
-              listener: (context, state) {
-                if (state is CarBrandLoaded) {
-                  print('---- Car data loaded: ${state.carBrandEntity[0].name}');
-                  var dataList = state.carBrandEntity;
-                  for(int i =0; i<dataList.length; i++){
-                    carBrandDropDownList.listOptionItems.add(
-                      OptionItem(
-                        id: dataList[i].brandId.toString(),
-                        title: dataList[i].name.toString(),
-                      ),
-                    );
-                  }
-
-                  setState(() {
-
-                  });
-                }
-              },
-            ),
-
-            BlocConsumer<CarModelCubit, CarModelState>(
-              buildWhen: (previous, current) => current is CarModelError,
-              builder: (context, state) {
-                if (state is CarBrandError)
-                  return Text(
-                    'Could not fetch data',
-                    style: TextStyle(color: Colors.black),
-                  );
-                return const SizedBox.shrink();
-              },
-              listenWhen: (previous, current) => current is CarModelLoaded,
-              listener: (context, state) {
-                if (state is CarModelLoaded) {
-                  print('---- Car data loaded: ${state.carModelEntity[0].name}');
-                  var dataList = state.carModelEntity;
-                  for(int i =0; i<dataList.length; i++){
-                    carModelDropDownList.listOptionItems.add(
-                      OptionItem(id: dataList[i].id.toString(), title: dataList[i].name.toString()),
-                    );
-                  }
-
-                  setState(() {
-
-                  });
-                }
-              },
             ),
 
             BlocConsumer<RegisterCubit, RegisterState>(
@@ -458,6 +296,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
                 if (state is RegisterSuccess) {
                   if (state.model.status == 1) {
+                    MySharedPreferences().addUserName("${_firstNameController!.text} ${_lastNameController!.text}");
                     edgeAlert(
                       context,
                       duration: 2,

@@ -91,9 +91,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       color: AppColor.grey,
                       borderRadius: BorderRadius.circular(3.0),
                     ),
-                    child: suggestionList[index].type == 'Ac'?
-                    Image.asset('assets/icons/pngs/map__type_1.png') :
-                    Image.asset('assets/icons/pngs/map__type_12.png'),
+                    child: Image.asset('assets/icons/pngs/create_account_layer_2.png', height: 35,),
                   ),
                 ),
                 Expanded(
@@ -115,7 +113,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       Padding(
                         padding: const EdgeInsets.only(left: 12, bottom: 3),
                         child: Text(
-                          '${suggestionList[index].city}, ${suggestionList[index].state}, ${suggestionList[index].country}, ${suggestionList[index].zipcode},',
+                          suggestionList[index].address!,
                           style: TextStyle( fontSize: 12, color: Colors.white),
                           maxLines: 8,
                           softWrap: false,

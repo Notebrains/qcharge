@@ -124,7 +124,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                 case 'Map':
                   return MapScreen();
                 case 'Top Up':
-                  return TopUp();
+                  return TopUp(cubit: _topUpCubit,);
                 case 'Home':
                   return Home();
                 case 'QrCode':
@@ -147,7 +147,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
       context: context,
       builder: (context) =>
       new AlertDialog(
-        title: Text( TranslationConstants.exitDialogTitle.t(context), style: TextStyle(color: AppColor.border),),
+        title: Text( ''),
         content: Text( TranslationConstants.exitDialogContent.t(context), style: TextStyle(color: AppColor.border),),
         actions: <Widget>[
           TextButton(

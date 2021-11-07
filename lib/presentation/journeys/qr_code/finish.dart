@@ -9,17 +9,20 @@ import 'package:intl/intl.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
+import 'package:qcharge_flutter/data/data_sources/language_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
+import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
-
+import 'Constants.dart' as Constants;
 import 'mySharedPreferences.dart';
 
 class Finish extends StatefulWidget {
@@ -31,17 +34,19 @@ class _FinishState extends State<Finish> {
   bool isPaymentDone = false;
   late Future _future;
   late String? startDateTime = "";
-  late String date = "", time = "", totalUnits = "", totalPrice = "";
+  late String date = "", time = "", totalUnits = "", totalPrice = "", stayTimeAfterCharge = "", parkingPrice = "" ;
   late String? userId = "0";
   late int? couponId  = 0;
-  String elapsedTime = '00:00:00', cardNo = '0';
+  String elapsedTime = '00:00:00', cardNo = '0' , language = 'en', dialogTxt = '';
+
 
   @override
   void initState() {
     super.initState();
     _future = getChargingDetails();
 
-    getTransactionDetails();
+    getCardNo();
+
   }
 
   @override
@@ -77,16 +82,37 @@ class _FinishState extends State<Finish> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 36, top: 100),
+                        padding: const EdgeInsets.only(bottom: 12, top: 45),
+                        child: Icon(Icons.notifications_active_rounded, size: 45, color: AppColor.border,),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(66, 0, 66, 12),
+                        child: Txt(
+                            txt: dialogTxt,
+                            txtColor: Colors.white,
+                            txtSize: 11,
+                            fontWeight: FontWeight.normal,
+                            padding: 0,
+                            onTap: () {},
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 36, top: 50),
                         child: Txt(
                             txt: TranslationConstants.thanksForUsingServc.t(context),
                             txtColor: Colors.white,
                             txtSize: 18,
                             fontWeight: FontWeight.normal,
                             padding: 0,
-                            onTap: () {}),
+                            onTap: () {},
+                        ),
                       ),
+
+
                       Container(
                         width: Sizes.dimen_280.w,
                         padding: const EdgeInsets.all(24),
@@ -100,7 +126,7 @@ class _FinishState extends State<Finish> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ImgTxtRow(
-                              txt: '${TranslationConstants.date.t(context)}: $date',
+                              txt: '${TranslationConstants.date.t(context)} $date',
                               txtColor: AppColor.app_txt_white,
                               txtSize: 12,
                               fontWeight: FontWeight.normal,
@@ -108,7 +134,7 @@ class _FinishState extends State<Finish> {
                               icColor: AppColor.app_txt_white,
                             ),
                             ImgTxtRow(
-                              txt: '${TranslationConstants.time.t(context)}: $time',
+                              txt: '${TranslationConstants.time.t(context)} $time',
                               txtColor: AppColor.app_txt_white,
                               txtSize: 12,
                               fontWeight: FontWeight.normal,
@@ -116,7 +142,7 @@ class _FinishState extends State<Finish> {
                               icColor: AppColor.app_txt_white,
                             ),
                             ImgTxtRow(
-                              txt: "${TranslationConstants.unit.t(context)} $totalUnits",
+                              txt: "${TranslationConstants.unit.t(context)} $totalUnits kWh",
                               txtColor: AppColor.app_txt_white,
                               txtSize: 12,
                               fontWeight: FontWeight.normal,
@@ -124,13 +150,15 @@ class _FinishState extends State<Finish> {
                               icColor: AppColor.app_txt_white,
                             ),
                             ImgTxtRow(
-                              txt: TranslationConstants.price.t(context) + " " + totalPrice + 'thb',
+                              txt: TranslationConstants.price.t(context) + " " + convertStrToDoubleStr(totalPrice) + TranslationConstants.thb.t(context),
                               txtColor: AppColor.app_txt_white,
                               txtSize: 12,
                               fontWeight: FontWeight.normal,
                               icon: 'assets/icons/pngs/scan_qr_for_filter_3.png',
                               icColor: AppColor.app_txt_white,
                             ),
+
+
                           ],
                         ),
                       ),
@@ -154,18 +182,23 @@ class _FinishState extends State<Finish> {
                       ),
 
 
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(36, 34, 36, 20),
+                      Container(
+                        width: 280,
+                        margin: EdgeInsets.only(left: 12, top: 34, bottom: 20),
                         child: Button(
                           text: TranslationConstants.finish.t(context),
                           bgColor: isPaymentDone? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Color(0xFF8D8D8D), Color(0xFFD2D2D2)],
                           onPressed: () {
                             if (isPaymentDone) {
-                              Navigator.pushReplacementNamed(context, RouteList.home_screen);
+                              showParkingChargeDialog(context);
                             } edgeAlert(context, title: TranslationConstants.warning.t(context), description: 'Please wait until processing is done', gravity: Gravity.top);
                           },
                         ),
                       ),
+
+
+
+
                     ],
                   ),
                 ),
@@ -180,10 +213,11 @@ class _FinishState extends State<Finish> {
     );
   }
 
-  void getTransactionDetails() async {
+  void getTransactionDetails(String cardNo) async {
     try {
+      print('---- cardNo: $cardNo');
       http.Response response =
-      await http.get(Uri.parse("https://qcharge.hashtrix.in/public/api/transaction/$cardNo"));
+      await http.get(Uri.parse("${Constants.APP_BASE_URL}transaction/$cardNo"));
       print("Transaction API response: ${response.body}");
 
       if (response.statusCode == 200) {
@@ -203,11 +237,8 @@ class _FinishState extends State<Finish> {
 
             getChargingCalculatedData(stationId);
           });
-          
+
         } else {
-          setState(() {
-            isPaymentDone = true;
-          });
           edgeAlert(context, title: TranslationConstants.warning.t(context), description: resData["message"], gravity: Gravity.top);
         }
 
@@ -237,7 +268,6 @@ class _FinishState extends State<Finish> {
       data["start_time"] = startDateTime;
       data["end_time"] = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
       data["duration"] = elapsedTime;
-      data["parking_time"] = elapsedTime;
       data["consume_charge"] = totalUnits;
       data["id"] = couponId.toString();
 
@@ -255,6 +285,14 @@ class _FinishState extends State<Finish> {
         
         setState(() {
           totalPrice = resData["total_price"].toString();
+          stayTimeAfterCharge = resData["stay_time_after_charge"].toString();
+          parkingPrice = resData["parking_price"].toString();
+
+          if (language != 'en') {
+            dialogTxt = "การชาร์จรถยนต์ของคุณเสร็จสิ้น โปรดย้ายรถออกจากสถานีชาร์จภายใน $stayTimeAfterCharge นาที หลังจากนั้นจะมีการเรียกเก็บค่าบริการที่จอดรถในอัตรา $parkingPrice บาท/ชม.  ขอขอบคุณ.";
+          } else {
+            dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within $stayTimeAfterCharge minutes. After that, the parking charge will be apply at $parkingPrice thb/hr. Thank you.";
+}
         });
         
         updatePaymentStatus(id, totalPrice);
@@ -274,7 +312,7 @@ class _FinishState extends State<Finish> {
     try {
       Map<String, dynamic> data = Map();
       data["id"] = id;
-      data["transaction_id"] = (Random().nextInt(912319541) + 154145).toString();
+      data["transaction_id"] = cardNo;
       data["user_id"] = userId;
       data["total_price"] = totalPrice;
 
@@ -286,16 +324,65 @@ class _FinishState extends State<Finish> {
         setState(() {
           isPaymentDone = true;
         });
-        edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Processing complete. Thank you!', gravity: Gravity.top);
+        //edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Processing complete. Thank you!', gravity: Gravity.top);
         //Navigator.pushReplacementNamed(context, RouteList.home_screen);
       } else
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Error Code : ${response.statusCode}"),
-          ),
+          SnackBar(content: Text("Error Code : ${response.statusCode}"),),
         );
     } catch (error) {
       print("charging pay: $error");
     }
   }
+
+
+  void showParkingChargeDialog(BuildContext context) {
+    Alert(
+      context: context,
+      onWillPopActive: true,
+      title: TranslationConstants.message.t(context),
+      desc:  dialogTxt,
+      image: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Icon(
+            Icons.notifications_active_rounded,
+            color: AppColor.border,
+            size: 120,
+          )),
+      closeIcon: IconButton(
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, RouteList.home_screen);
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.cancel,
+            color: Colors.white70,
+          )),
+      buttons: [
+        DialogButton(
+          color: Colors.amber,
+          onPressed: () {
+            Navigator.pushNamed(context, RouteList.home_screen);
+          },
+          child: Text(
+            TranslationConstants.okay.t(context),
+            style: TextStyle(color: Colors.black, fontSize: 14),
+          ),
+        ),
+      ],
+    ).show();
+  }
+
+  void getCardNo() async {
+    await MySharedPreferences().getCardNo().then((cardNo) => {
+    Future.delayed(const Duration(seconds: 3), () {
+      getTransactionDetails(cardNo!);
+    }),
+    });
+
+
+    language = await LanguageLocalDataSourceImpl().getPreferredLanguage();
+    print('----lang : $language');
+  }
+
 }

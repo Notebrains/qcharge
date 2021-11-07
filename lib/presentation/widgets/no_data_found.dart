@@ -27,7 +27,7 @@ class NoDataFound extends StatelessWidget{
             ),
           ),
 
-          InkWell(
+          /*InkWell(
             child: Container(
               height: 35,
               width: 150,
@@ -46,7 +46,7 @@ class NoDataFound extends StatelessWidget{
             onTap: (){
               onRefresh();
             },
-          ),
+          ),*/
         ],
       ),
     );

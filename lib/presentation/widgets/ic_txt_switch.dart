@@ -10,8 +10,10 @@ class IcTxtSwitch extends StatelessWidget{
   final String img;
   final bool isSwitchOn;
   final bool isVisible;
+  final Function(bool value) onSwitchChange;
 
-  const IcTxtSwitch({Key? key, required this.txt, required this.img, required this.isSwitchOn, required this.isVisible}) : super(key: key);
+  const IcTxtSwitch({Key? key, required this.txt, required this.img, required this.isSwitchOn, required this.isVisible,
+    required this.onSwitchChange}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class IcTxtSwitch extends StatelessWidget{
               CustomSwitch(
                 value: isSwitchOn,
                 onChanged: (bool val){
-
+                  onSwitchChange(val);
                 },
               ),
             ],

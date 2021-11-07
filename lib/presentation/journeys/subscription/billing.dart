@@ -13,6 +13,7 @@ import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
+import 'package:qcharge_flutter/presentation/2c2p_payment_gateway.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/bill_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/bill_pay_cubit.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
@@ -20,6 +21,7 @@ import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.d
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class Billing extends StatefulWidget {
@@ -324,97 +326,96 @@ class _BillingState extends State<Billing> {
         }),
       ),
 
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: FloatingActionButton.extended(
-          backgroundColor: AppColor.alert_color,
-          label: Text(TranslationConstants.payBill.t(context), style: TextStyle(color: AppColor.app_txt_white, fontWeight: FontWeight.bold,),),
-          icon: Icon(Icons.payment, color: AppColor.app_txt_white,),
-          onPressed: () {
-            Alert(
-              context: context,
-              title: TranslationConstants.paymentMethod.t(context),
-              desc: "${TranslationConstants.message.t(context)}\n\n ${TranslationConstants.walletBalance.t(context)}: ${convertStrToDoubleStr(walletBalance)} thb",
-              image: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Image.asset("assets/images/payment-credit-card.png", width: 170, height: 170,),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12, bottom: 12),
+            child: FloatingActionButton.extended(
+              backgroundColor: AppColor.app_bg,
+              label: Text(TranslationConstants.payBill.t(context), style: TextStyle(color: AppColor.app_txt_white, fontWeight: FontWeight.bold,),),
+              icon: Icon(Icons.payment, color: AppColor.app_txt_white,),
+              onPressed: () {
+                Alert(
+                  context: context,
+                  title: TranslationConstants.paymentMethod.t(context),
+                  desc: "${TranslationConstants.message.t(context)}\n\n ${TranslationConstants.walletBalance.t(context)}: ${convertStrToDoubleStr(walletBalance)} thb",
+                  image: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Image.asset("assets/images/payment-credit-card.png", width: 170, height: 170,),
+                  ),
+                  buttons: [
+                    DialogButton(
+                      color: Colors.amber,
+                      onPressed: () {
+                        if (totalBill.isNotEmpty && totalBill != '0.00')billPayCubit.initiateBillPayment(_userId, (Random().nextInt(912319541) + 12319541).toString() , totalBill, 'Wallet');
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        TranslationConstants.wallet.t(context),
+                        style: TextStyle(
+                            color: Colors.black, fontSize: 14),
+                      ),
+                    ),
+                    DialogButton(
+                      color: Colors.amber,
+                      onPressed: () {
+                        if (totalBill.isNotEmpty && totalBill != '0.00')openPaymentGateway();
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        TranslationConstants.payOnline.t(context),
+                        style: TextStyle(color: Colors.black, fontSize: 14),
+                      ),
+                    )
+                  ],
+                ).show();
+              },
+            ),
+          ),
+          Visibility(
+            visible: false,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12, bottom: 12),
+              child: FloatingActionButton.extended(
+                backgroundColor: AppColor.app_bg,
+                label: Text(TranslationConstants.invoice.t(context), style: TextStyle(color: AppColor.app_txt_white, fontWeight: FontWeight.bold,),),
+                icon: Icon(Icons.picture_as_pdf_outlined, color: AppColor.app_txt_white,),
+                onPressed: () {
+                  //_launchInBrowser("https://docs.google.com/gview?embedded=true&url=" + Strings.termAndCondPdfUrl); //to view in browser
+                  _launchInBrowser(Strings.termAndCondPdfUrl); //to view and download
+                },
               ),
-              buttons: [
-                DialogButton(
-                  color: Colors.amber,
-                  onPressed: () {
-                    if (totalBill.isNotEmpty && totalBill != '0.00')billPayCubit.initiateBillPayment(_userId, (Random().nextInt(912319541) + 12319541).toString() , totalBill, 'Wallet');
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    TranslationConstants.wallet.t(context),
-                    style: TextStyle(
-                        color: Colors.black, fontSize: 14),
-                  ),
-                ),
-                DialogButton(
-                  color: Colors.amber,
-                  onPressed: () {
-                    if (totalBill.isNotEmpty && totalBill != '0.00')openPaymentGateway();
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    TranslationConstants.payOnline.t(context),
-                    style: TextStyle(color: Colors.black, fontSize: 14),
-                  ),
-                )
-              ],
-            ).show();
-          },
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-
-
+  Future<void> _launchInBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: false,
+        forceWebView: false,
+        headers: <String, String>{'my_header_key': 'Terms and Condition'},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   void openPaymentGateway() async {
     try {
-      final sdk = My2c2pSDK(
-        privateKey: Platform.isAndroid? Strings.androidPrivateKey : Strings.iosPrivateKey);
-      sdk.paymentUI = true; // false to direct payment and true to see payment ui to manual payment
-      sdk.productionMode = false;
-      sdk.merchantId = "764764000001966";
-      //sdk.uniqueTransactionCode = "1015091923644";
-      sdk.uniqueTransactionCode = (Random().nextInt(912319541) + 12319541).toString();
-      sdk.desc = "product item 1";
-      sdk.amount = double.parse(totalBill);
-      sdk.currencyCode = "764";
-      sdk.pan = "5105105105105100";
-      sdk.cardExpireMonth = 12;
-      sdk.cardExpireYear = 2025;
-      sdk.cardHolderName = "Mr. John";
-      sdk.cardPin = "4111111111111111";
-      sdk.cardType = CardType.OPEN_LOOP;
-      sdk.panCountry = "THAILAND";
-      sdk.panBank = 'Kasikom Bank';
-      sdk.secretKey = "24ABCC819638916E7DD47D09F2DEA4588FAE70636B085B8DE47A9592C4FD034F";
-      //set optional fields
-      sdk.securityCode = "2234523";
-      sdk.cardHolderEmail = 'Thanpilin@arrow-energy.com';
-
-      final result = await sdk.proceed();
-      print('----2c2p payment result: $result');
-
-      Map<String, dynamic> responseJson = json.decode(result!);
-
-      String uniqueTransactionCode = responseJson["uniqueTransactionCode"];
-      //String amount = responseJson["amt"];
-
-      print('----amount: ${responseJson["amt"]}');
-      print('----uniqueTransactionCode: ${responseJson["uniqueTransactionCode"]}');
-
-      if (uniqueTransactionCode.isNotEmpty) {
-        billPayCubit.initiateBillPayment(_userId, uniqueTransactionCode, totalBill, 'Payment Gateway');
-      } else {
-        edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Payment Failed', gravity: Gravity.top);
-      }
+      openProductionPaymentGateway(totalBill).then((responseJson) => {
+        if (responseJson.isNotEmpty  && responseJson["respCode"] == '00') {
+            billPayCubit.initiateBillPayment(_userId, responseJson["uniqueTransactionCode"], totalBill, 'Payment Gateway'),
+        } else {
+          edgeAlert(context, title: TranslationConstants.message.t(context), description: TranslationConstants.paymentFailed.t(context), gravity: Gravity.top),
+        }
+      });
     } catch (e) {
       print('----Error : $e');
     }
@@ -427,7 +428,7 @@ class _BillingState extends State<Billing> {
       if (userId != null)
         {
           _userId = userId,
-          billCubit.initiateBill(userId)
+          billCubit.initiateBill('15')
         }
     });
 

@@ -8,7 +8,7 @@ import 'package:qcharge_flutter/presentation/blocs/language/language_cubit.dart'
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 
 PreferredSizeWidget appBarHome(BuildContext context) {
-  final ValueNotifier<String> _langValueLister = ValueNotifier<String>('ENG');
+  final ValueNotifier<String> _langValueLister = ValueNotifier<String>('EN');
   return AppBar(
     toolbarHeight: Sizes.dimen_70.w,
     title: Image.asset('assets/icons/pngs/q_charge_logo_1.png', fit: BoxFit.cover, width: 30),
@@ -33,11 +33,11 @@ PreferredSizeWidget appBarHome(BuildContext context) {
                 ),
                 onSelected: (value) {
                   //print('----Language 2: $value');
-                  value == 'ENG' ? _onLanguageSelected(0, context) : _onLanguageSelected(1, context);
+                  value == 'EN' ? _onLanguageSelected(0, context) : _onLanguageSelected(1, context);
                   _langValueLister.value = value;
                 },
                 itemBuilder: (BuildContext context) {
-                  return {'ENG', 'TH' }.map((String choice) {
+                  return {'EN', 'TH' }.map((String choice) {
                     return PopupMenuItem<String>(
                       value: choice,
                       child: ListTile(
