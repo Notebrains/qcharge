@@ -69,7 +69,7 @@ class _StartState extends State<Start> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(onTap: (){},),
       body: FutureBuilder(
         future: _future,
         builder: (context, snapShot) {

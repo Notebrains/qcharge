@@ -195,4 +195,5 @@ class TranslationConstants {
   static const String drawerHeader1 = 'drawerHeader1';
   static const String drawerHeader2 = 'drawerHeader2';
   static const String notReady = 'notReady';
+  static const String endTime = 'endTime';
 }

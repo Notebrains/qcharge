@@ -66,7 +66,7 @@ class _TopUpState extends State<TopUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(onTap: (){},),
       body: BlocBuilder<TopUpCubit, TopUpState>(
         builder: (BuildContext context, state) {
           if (state is TopUpSuccess) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
@@ -39,7 +40,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
     // cubit = getItInstance<TopUpCubit>();
     // BlocProvider.of<TopUpCubit>(context).initiateTopUp('2', '2021-09');
 
-
+    getTopUpData();
   }
 
   @override
@@ -51,135 +52,142 @@ class _TopUpHistoryState extends State<TopUpHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return SlideInUp(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 12, bottom: 25),
-                child: Txt(txt: TranslationConstants.usageHistory.t(context), txtColor: Colors.white, txtSize: 16,
-                  fontWeight: FontWeight.bold, padding: 0, onTap: (){},
-                ),
-              ),
-
-              InkWell(
-                child: Container(
-                  height: 60,
-                  width: 130,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade700,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  margin: const EdgeInsets.only(top: 12, bottom: 25),
-                  child: Text(formatDateInMonthYear(currentDate),
-                        style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),)
-                ),
-
-                onTap: () async {
-                  String? userId =  await AuthenticationLocalDataSourceImpl().getSessionId();
-                  showMonthPicker(
-                      context: context,
-                      firstDate: DateTime(DateTime.now().year - 1, 5),
-                      lastDate: DateTime(DateTime.now().year + 1, 9),
-                      initialDate: DateTime(DateTime.now().year, 5)).then((date) => {
-                    if (userId != null && date != null) {
-                      //print('------${date.year}-${date.month}'),
-                      cubit.initiateTopUp(userId, '${date.year}-${date.month}'),
-
-                      setState(() {
-                        currentDate = date;
-                      }),
-                    } else {
-                      edgeAlert(context,
-                          title: TranslationConstants.message.t(context),
-                          description: 'Date not found. Please try again.',
-                          gravity: Gravity.top),
-                    }
-                  });
-
-                },
-              ),
-            ],
-          ),
-
-          Container(
-              height: Sizes.dimen_250.h,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: AppColor.grey,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              margin: const EdgeInsets.only(left: 16, right: 16),
+    return  BlocProvider<TopUpCubit>(
+      create: (context) => cubit,
+      child: BlocBuilder<TopUpCubit, TopUpState>(
+          bloc: cubit,
+          builder: (context, state) {
+            return SlideInUp(
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Flexible(
-                        flex: 1,
-                        child: Container(
-                          height: 60,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: isTopUpTabSelected? AppColor.text : Colors.grey.shade700,
-                          ),
-                          margin: const EdgeInsets.only(bottom: 25),
-                          child: Txt(txt: TranslationConstants.topUpHistory.t(context), txtColor: Colors.white, txtSize: 16,
-                            fontWeight: FontWeight.bold, padding: 0, onTap: (){
-                              setState(() {
-                                isTopUpTabSelected = true;
-                              });
-                            },
-                          ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 12, bottom: 25),
+                        child: Txt(txt: TranslationConstants.usageHistory.t(context), txtColor: Colors.white, txtSize: 16,
+                          fontWeight: FontWeight.bold, padding: 0, onTap: (){},
                         ),
                       ),
 
-                      Flexible(
-                        flex: 1,
+                      InkWell(
                         child: Container(
-                          height: 60,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: isTopUpTabSelected? Colors.grey.shade700: AppColor.text,
-                          ),
-                          margin: const EdgeInsets.only(bottom: 25),
-                          child: Txt(txt: TranslationConstants.chargingHistory.t(context), txtColor: Colors.white, txtSize: 16,
-                            fontWeight: FontWeight.bold, padding: 0, onTap: (){
-                              setState(() {
-                                isTopUpTabSelected = false;
-                              });
-                            },
-                          ),
+                            height: 60,
+                            width: 130,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade700,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            margin: const EdgeInsets.only(top: 12, bottom: 25),
+                            child: Text(formatDateInMonthYear(currentDate),
+                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),)
                         ),
+
+                        onTap: () async {
+                          String? userId =  await AuthenticationLocalDataSourceImpl().getSessionId();
+                          showMonthPicker(
+                              context: context,
+                              firstDate: DateTime(DateTime.now().year - 1, 5),
+                              lastDate: DateTime(DateTime.now().year + 1, 9),
+                              initialDate: DateTime(DateTime.now().year, 5)).then((date) => {
+                            if (userId != null && date != null) {
+                              //print('------${date.year}-${date.month}'),
+                              cubit.initiateTopUp(userId, '${date.year}-${date.month}'),
+
+                              setState(() {
+                                currentDate = date;
+                              }),
+                            } else {
+                              edgeAlert(context,
+                                  title: TranslationConstants.message.t(context),
+                                  description: 'Date not found. Please try again.',
+                                  gravity: Gravity.top),
+                            }
+                          });
+
+                        },
                       ),
                     ],
                   ),
 
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: TxtTxtTxtRow(
-                      text1: isTopUpTabSelected? "Date:" : TranslationConstants.date.t(context),
-                      text2: isTopUpTabSelected? TranslationConstants.time.t(context) : TranslationConstants.duration.t(context),
-                      text3: TranslationConstants.amount.t(context),
-                      text4: TranslationConstants.unit.t(context),
-                      size: 13,
-                      fontWeight: FontWeight.bold,
-                      isTopUpTabSelected: isTopUpTabSelected,
-                    ),
+                  Container(
+                      height: Sizes.dimen_250.h,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColor.grey,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      margin: const EdgeInsets.only(left: 16, right: 16),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                child: Container(
+                                  height: 60,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: isTopUpTabSelected? AppColor.text : Colors.grey.shade700,
+                                  ),
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Txt(txt: TranslationConstants.topUpHistory.t(context), txtColor: Colors.white, txtSize: 16,
+                                    fontWeight: FontWeight.bold, padding: 0, onTap: (){
+                                      setState(() {
+                                        isTopUpTabSelected = true;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+
+                              Flexible(
+                                flex: 1,
+                                child: Container(
+                                  height: 60,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: isTopUpTabSelected? Colors.grey.shade700: AppColor.text,
+                                  ),
+                                  margin: const EdgeInsets.only(bottom: 25),
+                                  child: Txt(txt: TranslationConstants.chargingHistory.t(context), txtColor: Colors.white, txtSize: 16,
+                                    fontWeight: FontWeight.bold, padding: 0, onTap: (){
+                                      setState(() {
+                                        isTopUpTabSelected = false;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: TxtTxtTxtRow(
+                              text1: isTopUpTabSelected? "Date:" : TranslationConstants.date.t(context),
+                              text2: isTopUpTabSelected? TranslationConstants.time.t(context) : TranslationConstants.duration.t(context),
+                              text3: TranslationConstants.amount.t(context),
+                              text4: TranslationConstants.unit.t(context),
+                              size: 13,
+                              fontWeight: FontWeight.bold,
+                              isTopUpTabSelected: isTopUpTabSelected,
+                            ),
+                          ),
+
+
+                          Expanded(child: buildList(widget.model!)),
+                        ],
+                      )
                   ),
-
-
-                  Expanded(child: buildList(widget.model!)),
                 ],
-              )
-          ),
-        ],
-      ),
+              ),
+            );
+          }),
     );
   }
 
@@ -206,5 +214,12 @@ class _TopUpHistoryState extends State<TopUpHistory> {
     } else return Container(
 
     );
+  }
+
+  void getTopUpData() async {
+    await AuthenticationLocalDataSourceImpl().getSessionId().then((id) => {
+    cubit.initiateTopUp(id!, "${DateTime.now().year}-${DateTime.now().month}"),
+    });
+
   }
 }

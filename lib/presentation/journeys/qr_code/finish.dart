@@ -59,6 +59,7 @@ class _FinishState extends State<Finish> {
   Future<bool> getChargingDetails() async {
     // startDateTime = await MySharedPreferences().getStartDateTime();
     elapsedTime = await MySharedPreferences().getElapsedTime()?? '00:00:00';
+    endTime = await MySharedPreferences().getEndTime()?? '00:00:00';
     cardNo = await MySharedPreferences().getCardNo()?? '0';
     startDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime); //change here
     userId = await AuthenticationLocalDataSourceImpl().getSessionId();
@@ -72,7 +73,7 @@ class _FinishState extends State<Finish> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(onTap: (){},),
       body: FutureBuilder(
           future: _future,
           builder: (context, snapShot) {
@@ -144,7 +145,7 @@ class _FinishState extends State<Finish> {
                             ),
 
                             ImgTxtRow(
-                              txt: 'End time: $endTime',
+                              txt: '${TranslationConstants.endTime.t(context)} $endTime',
                               txtColor: AppColor.app_txt_white,
                               txtSize: 12,
                               fontWeight: FontWeight.normal,
@@ -205,9 +206,6 @@ class _FinishState extends State<Finish> {
                           },
                         ),
                       ),
-
-
-
 
                     ],
                   ),
@@ -298,7 +296,6 @@ class _FinishState extends State<Finish> {
           totalPrice = resData["total_price"].toString();
           stayTimeAfterCharge = resData["stay_time_after_charge"].toString();
           parkingPrice = resData["parking_price"].toString();
-          endTime = "${dateTime.hour.toString() + ":" + dateTime.minute.toString()}";
 
           if (language != 'en') {
             dialogTxt = "การชาร์จรถยนต์ของคุณเสร็จสิ้น โปรดย้ายรถออกจากสถานีชาร์จภายใน $stayTimeAfterCharge นาที หลังจากนั้นจะมีการเรียกเก็บค่าบริการที่จอดรถในอัตรา $parkingPrice บาท/ชม.  ขอขอบคุณ.";

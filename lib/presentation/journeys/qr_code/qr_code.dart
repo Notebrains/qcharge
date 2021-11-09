@@ -65,6 +65,7 @@ class _QrCodeState extends State<QrCode> {
 
     leftConnectorId = connectors[0]["status"];
     rightConnectorId = connectors[1]["status"];
+
 /*
     if(connectors[0]["status"] == "1") {
         //print('----11---- : ${connectors[0]["status"]}');
@@ -173,7 +174,13 @@ class _QrCodeState extends State<QrCode> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(onTap: (){
+        try {
+          timer.cancel();
+        } catch (e) {
+          print(e);
+        }
+      },),
       body: FutureBuilder(
         future: _future,
         builder: (context, snapShot) {

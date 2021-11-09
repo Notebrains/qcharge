@@ -87,10 +87,10 @@ class CustomSearchDelegate extends SearchDelegate {
                     margin: const EdgeInsets.all(12),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColor.grey,
+                      color: Colors.grey.shade800,
                       borderRadius: BorderRadius.circular(3.0),
                     ),
-                    child: Image.asset('assets/icons/pngs/create_account_layer_2.png', height: 35,),
+                    child: Image.asset(suggestionList[index].secure! == 'Private'? 'assets/icons/pngs/create_account_layer_1.png' : 'assets/icons/pngs/create_account_layer_2.png', height: 35,),
                   ),
                 ),
                 Expanded(
@@ -102,7 +102,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       Padding(
                         padding: const EdgeInsets.only(left: 12),
                         child: Text(
-                          '${suggestionList[index].stationName}  (Type-${suggestionList[index].type})',
+                          suggestionList[index].stationName!,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color:  Colors.white),
                           maxLines: 8,
                           softWrap: false,

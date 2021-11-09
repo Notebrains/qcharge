@@ -17,7 +17,9 @@ import '../../widgets/logo.dart';
 import 'navigation_list_item.dart';
 
 class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer();
+  //this onTap required to cancel timer on QrScan and Stop screen
+  final Function onTap;
+  const NavigationDrawer({Key? key, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +101,7 @@ class NavigationDrawer extends StatelessWidget {
                 NavigationListItem(
                   title: TranslationConstants.home.t(context),
                   onPressed: () {
+                    onTap();
                     Navigator.of(context).pushNamed(RouteList.home_screen);
                   },
                 ),
@@ -106,7 +109,7 @@ class NavigationDrawer extends StatelessWidget {
                 NavigationListItem(
                   title: TranslationConstants.newsAndUpdate.t(context),
                   onPressed: () {
-                    //Navigator.of(context).pop();
+                    onTap();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -121,6 +124,7 @@ class NavigationDrawer extends StatelessWidget {
                 NavigationListItem(
                   title: TranslationConstants.subscribePlan.t(context),
                   onPressed: () {
+                    onTap();
                     //Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(RouteList.subscription);
                   },
@@ -128,6 +132,7 @@ class NavigationDrawer extends StatelessWidget {
                 NavigationListItem(
                   title: TranslationConstants.faq.t(context),
                   onPressed: () {
+                    onTap();
                     Navigator.of(context).pushNamed(RouteList.faq);
                   },
                 ),
@@ -135,6 +140,7 @@ class NavigationDrawer extends StatelessWidget {
                 NavigationListItem(
                   title: TranslationConstants.notification.t(context),
                   onPressed: () {
+                    onTap();
                     Navigator.of(context).pushNamed(RouteList.notificationsScreen);
                   },
                 ),
@@ -147,6 +153,7 @@ class NavigationDrawer extends StatelessWidget {
                   child: NavigationListItem(
                     title: TranslationConstants.logout.t(context),
                     onPressed: () {
+                      onTap();
                       BlocProvider.of<LoginCubit>(context).logout();
                     },
                   ),

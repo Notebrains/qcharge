@@ -155,8 +155,6 @@ class _StopState extends State<Stop> {
         dynamic data = jsonDecode(checkStatus.body.toString());
         statusData = data["data"];
 
-        elapsedTime = transformMilliSeconds(timer.tick);
-
         setState(() {
           units = statusData["kwhValue"].toString();
           amount = statusData["price"].toString();
@@ -227,6 +225,9 @@ class _StopState extends State<Stop> {
     setState(() {
       isLoading = true;
     });
+
+    MySharedPreferences().addEndTime("${DateTime.now().hour.toString() + ":" + DateTime.now().minute.toString()}");
+
     Map<String, dynamic> data = Map();
     data["chargerId"] = connectorData["chargerId"].toString();
     data["connectorId"] = connectorData["connector"]["connectorId"].toString();
@@ -297,7 +298,14 @@ class _StopState extends State<Stop> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(onTap: (){
+        try {
+          stopWatch();
+          timer.cancel();
+        } catch (e) {
+          print(e);
+        }
+      },),
       body: FutureBuilder(
           future: _future,
           builder: (context, snapShot) {

@@ -19,8 +19,7 @@ Qrscan api fail response:
 
 qrscan api success res body:
 {"station":{"stationId":74,"name":"POLYTECH","owner":"POLYTECH","lat":"13.978145","lon":"100.678476","numberOfCharger":2,"images":null,"type":"Private","status":"1"},
-"charger":{"id":"7401",
-"detail":{"name":"TH0321070053","brand":"Schneider Electric","model":"MONOBLOCK",
+"charger":{"id":"7401","detail":{"name":"TH0321070053","brand":"Schneider Electric","model":"MONOBLOCK",
 "connector":[{"connectorId":1,"type":"Socket T2","status":"1","cardNo":"-","startTime":"-","meterValue":0,"etf":0,"images":null},
 {"connectorId":2,"type":"Socket T2","status":"1","cardNo":"-","startTime":"-","meterValue":0,"etf":0,"images":null}],"images":null},
 "statusId":1,"status":"Ready","location":{"station":"POLYTECH","lat":"13.978145","lon":"100.678476"},
@@ -38,18 +37,36 @@ check Status of Connector fail res:
 {"status":false,"data":[]}
 
 
-
-
-
 Charging api response:
  {"status":1,"message":"Vehicle charged Successfully","id":144,"total_price":510}
 
 
+1. top up - add unit, change time 00:00:00, also add time with date, increase title size
+2. space before thb
+3. user unplug during charging then unit is showing wrong
+4. kWh
+5. Calender show month only
+6. Refresh after charge
+7. Unit showing 7.6 but actual is 0.1
+8. Show 2 decimal  unit on finish
+8. parking charge time text show according to user type
+9. Show time in notification list
+10. show kwh value after charged status
+11. Language change error
 
+-----------------------------------------------------------
 
-
-
-
+12. Remove input from top up
+13. Map station info update, search on tap move to location
+14. Top Up- should show only top up data
+15. date - stop time , column duration
+16. subs wallet thb thai, btn dialog txt
+17. Loguot-> Logout
+18. Follow process First letter caps
+19. AC type 2, 22kW >> check by api,
+20. Finish time at FINISH page, parking time is wrong, unit wrong, amount wrong,
+21. Charging history not updating
+22. Top charge history date show only monthly wise.
 
 
 

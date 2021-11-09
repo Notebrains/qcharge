@@ -86,7 +86,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
       child: WillPopScope(
         onWillPop: onWillPop,
         child: Scaffold(
-          drawer: NavigationDrawer(),
+          drawer: NavigationDrawer(onTap: (){},),
           extendBody: true,
           backgroundColor: AppColor.app_bg,
           bottomNavigationBar: PandaBar(

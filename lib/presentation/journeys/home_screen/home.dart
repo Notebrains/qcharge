@@ -89,7 +89,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(onTap: (){},),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: BlocBuilder<HomeBannerCubit, HomeBannerState>(

@@ -72,5 +72,3 @@
  -dontwarn com.ut.device.**
  -dontwarn com.alipay.mobilesecuritysdk.**
  -dontwarn com.alipay.security.**
- -dontwarn io.flutter.embedding.**
- -ignorewarnings

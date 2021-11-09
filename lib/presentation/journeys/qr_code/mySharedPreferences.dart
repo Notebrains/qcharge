@@ -34,7 +34,7 @@ Future<int?> getStationId() async {
 
 void addChargerId(int chargerId)async{
   _preferences = await SharedPreferences.getInstance();
-  bool temp = await _preferences!.setInt("chargerId", chargerId);
+  await _preferences!.setInt("chargerId", chargerId);
 }
 
 Future<int?> getChargerId() async {
@@ -109,13 +109,28 @@ Future<String?> getConnectorData() async {
 
 void addElapsedTime(String time) async {
   _preferences = await SharedPreferences.getInstance();
-  bool temp = await _preferences!.setString("time", time);
+  await _preferences!.setString("time", time);
 }
 
 Future<String?> getElapsedTime() async {
   _preferences = await SharedPreferences.getInstance();
   if(_preferences!.containsKey("time")) {
     String? key = _preferences!.getString("time");
+    return key;
+  }
+  else
+    return "";
+}
+
+void addEndTime(String endTime) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("endTime", endTime);
+}
+
+Future<String?> getEndTime() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("endTime")) {
+    String? key = _preferences!.getString("endTime");
     return key;
   }
   else

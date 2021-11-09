@@ -25,7 +25,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(onTap: (){},),
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (BuildContext context, state) {
           if (state is ProfileSuccess) {

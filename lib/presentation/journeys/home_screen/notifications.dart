@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 
 
 class NotificationsScreen extends StatefulWidget {
+
+
   @override
   _NotificationsScreenState createState() => _NotificationsScreenState();
 }

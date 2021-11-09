@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
@@ -16,7 +15,6 @@ import 'package:qcharge_flutter/di/get_it.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/map_station_details_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
-import 'package:qcharge_flutter/presentation/journeys/qr_code/finish.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -26,7 +24,6 @@ import 'package:qcharge_flutter/presentation/widgets/show_snack_bar.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 
-import 'filters.dart';
 import 'search_screen.dart';
 
 class MapScreen extends StatefulWidget {
@@ -82,7 +79,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(),
+      drawer: NavigationDrawer(onTap: (){},),
       body: BlocBuilder<MapCubit, MapState>(
         builder: (BuildContext context, state) {
           if (state is MapSuccess) {
@@ -123,7 +120,7 @@ class _MapScreenState extends State<MapScreen> {
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  isViewAllAcStation? isViewAllAcStation = false: isViewAllAcStation = true;
+                                  isViewAllAcStation ? isViewAllAcStation = false : isViewAllAcStation = true;
                                 });
                                 updateMarkers(state.model.response!);
                               },
@@ -297,10 +294,9 @@ class _MapScreenState extends State<MapScreen> {
                     ],
                   ),
                 ),
-
                 Align(
                   alignment: Alignment.bottomRight,
-                  child:  Padding(
+                  child: Padding(
                     padding: const EdgeInsets.only(bottom: 100, left: 28, right: 16),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -333,14 +329,14 @@ class _MapScreenState extends State<MapScreen> {
                           },
                           child: !isCurrentLocFetched
                               ? CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.amber.shade600,
-                          )
+                                  strokeWidth: 2,
+                                  color: Colors.amber.shade600,
+                                )
                               : Icon(
-                            Icons.my_location_rounded,
-                            color: Colors.white,
-                            size: 24,
-                          ),
+                                  Icons.my_location_rounded,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
                           backgroundColor: AppColor.grey,
                           tooltip: 'Current Location',
                           elevation: 5,
@@ -391,8 +387,9 @@ class _MapScreenState extends State<MapScreen> {
       isCurrentLocFetched = false;
       if (error is TimeoutException) {
         Geolocator.getLastKnownPosition(
-          //forceAndroidLocationManager: true,
-        ).then((position) async {
+                //forceAndroidLocationManager: true,
+                )
+            .then((position) async {
           //getting last known position
           //print('---- Loc 2: $position');
 
@@ -510,41 +507,44 @@ class _MapScreenState extends State<MapScreen> {
     double markerLong = double.parse(response[i].longitude!);
 
     Geolocator.isLocationServiceEnabled().then((isLocationEnabled) => {
-          if (isLocationEnabled) {
-            Geolocator.getCurrentPosition(
-              //desiredAccuracy: LocationAccuracy.bestForNavigation,
-              //forceAndroidLocationManager: true,
-            ).then((curLoc) async {
-              //totalDistance = Geolocator.distanceBetween(_currentPosition.latitude, _currentPosition.longitude, markerLat, markerLong);
-              //double totalDistance = _coordinateDistance(22.608355, 88.426884, markerLat, markerLong);
-              double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);
-              //print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
+          if (isLocationEnabled)
+            {
+              Geolocator.getCurrentPosition(
+                      //desiredAccuracy: LocationAccuracy.bestForNavigation,
+                      //forceAndroidLocationManager: true,
+                      )
+                  .then((curLoc) async {
+                //totalDistance = Geolocator.distanceBetween(_currentPosition.latitude, _currentPosition.longitude, markerLat, markerLong);
+                //double totalDistance = _coordinateDistance(22.608355, 88.426884, markerLat, markerLong);
+                double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);
+                //print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
 
-              markers.add(
-                Marker(
-                  markerId: MarkerId("${i + 1}"),
-                  position: LatLng(double.parse(response[i].latitude!), double.parse(response[i].longitude!)),
-                  //position: LatLng(13.736717 + i, 100.523186 + i),
-                  infoWindow: InfoWindow(
-                      title: '${response[i].stationName},       ${totalDistance.toStringAsFixed(2)} km',
-                      snippet: response[i].address,
-                      onTap: () {
-                        BlocProvider.of<MapStationDetailsCubit>(context)
-                            .initiateMapStationDetails(response[i].stationId.toString());
-                        showBottomSheetUi(response[i].stationId.toString(), markerLat, markerLong, "${totalDistance.toStringAsFixed(2)} km");
-                      }),
-                  icon: await BitmapDescriptor.fromAssetImage(
-                    ImageConfiguration(devicePixelRatio: 2.5),
-                    response[i].secure == 'Private'
-                        ? 'assets/icons/pngs/create_account_layer_1.png'
-                        : 'assets/icons/pngs/create_account_layer_2.png',
+                markers.add(
+                  Marker(
+                    markerId: MarkerId("${i + 1}"),
+                    position: LatLng(double.parse(response[i].latitude!), double.parse(response[i].longitude!)),
+                    //position: LatLng(13.736717 + i, 100.523186 + i),
+                    infoWindow: InfoWindow(
+                        title: '${response[i].stationName},       ${totalDistance.toStringAsFixed(2)} km',
+                        snippet: response[i].address,
+                        onTap: () {
+                          BlocProvider.of<MapStationDetailsCubit>(context)
+                              .initiateMapStationDetails(response[i].stationId.toString());
+                          showBottomSheetUi(
+                              response[i].stationId.toString(), markerLat, markerLong, "${totalDistance.toStringAsFixed(2)} km");
+                        }),
+                    icon: await BitmapDescriptor.fromAssetImage(
+                      ImageConfiguration(devicePixelRatio: 2.5),
+                      response[i].secure == 'Private'
+                          ? 'assets/icons/pngs/create_account_layer_1.png'
+                          : 'assets/icons/pngs/create_account_layer_2.png',
+                    ),
                   ),
-                ),
-              );
+                );
 
-              setState(() {});
-            })
-          },
+                setState(() {});
+              })
+            },
         });
   }
 
@@ -604,7 +604,7 @@ class _MapScreenState extends State<MapScreen> {
                                 gradient: LinearGradient(
                                     begin: Alignment.centerRight,
                                     end: Alignment.centerLeft,
-                                    colors: [AppColor.border, AppColor.text.withOpacity(0.8)]),
+                                    colors: [Color(0xFFEFE07D), Color(0xFFB49839)]),
                               ),
                               padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
                               margin: EdgeInsets.only(bottom: Sizes.dimen_8.h),
@@ -629,66 +629,126 @@ class _MapScreenState extends State<MapScreen> {
                             ),
                             Container(
                               width: double.maxFinite,
-                              padding: const EdgeInsets.all(24),
+                              padding: const EdgeInsets.all(16),
                               margin: const EdgeInsets.only(bottom: 12),
                               decoration: BoxDecoration(
                                 color: AppColor.grey,
                                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: Txt(
-                                      txt:"${TranslationConstants.chargerStatus.t(context)} - ${state.stationDetailsApiResModel.response!.chargingStatus == 1 ?"Available" : "Occupied"}" ,
-                                      txtColor: Colors.white,
-                                      txtSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      padding: 0,
-                                      onTap: () {},
+                                    padding: const EdgeInsets.only(right: 24),
+                                    child: Image.asset(
+                                      'assets/icons/pngs/create_account_map_3.png',
+                                      width: 25,
+                                      height: 25,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 12),
+                                        child: Txt(
+                                          txt: state.stationDetailsApiResModel.response!.stationName!,
+                                          txtColor: Colors.white,
+                                          txtSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          padding: 0,
+                                          onTap: () {},
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 12),
+                                        child: Txt(
+                                          txt: state.stationDetailsApiResModel.response!.address!,
+                                          txtColor: Colors.white,
+                                          txtSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          padding: 0,
+                                          onTap: () {},
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 12),
+                                        child: Txt(
+                                          txt: state.stationDetailsApiResModel.response!.secure!,
+                                          txtColor: AppColor.border,
+                                          txtSize: 14,
+                                          fontWeight: FontWeight.normal,
+                                          padding: 0,
+                                          onTap: () {},
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: double.maxFinite,
+                              padding: const EdgeInsets.all(16),
+                              margin: const EdgeInsets.only(bottom: 12),
+                              decoration: BoxDecoration(
+                                color: AppColor.grey,
+                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 24),
+                                    child: Image.asset(
+                                      state.stationDetailsApiResModel.response!.type! == "DC"?
+                                      'assets/icons/pngs/dcConnector.png':
+                                      'assets/icons/pngs/filter_type_1.png',
+                                      width: 25,
+                                      height: 25,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 12),
+                                          child: Txt(
+                                            //txt: state.stationDetailsApiResModel.response!.type!,
+                                            txt: 'Connector 1',
+                                            txtColor: Colors.white,
+                                            txtSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                            padding: 0,
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 12),
+                                          child: Txt(
+                                            txt: 'AC Type 2, 22 kWh',
+                                            txtColor: Colors.white,
+                                            txtSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                            padding: 0,
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 12),
                                     child: Txt(
-                                      txt: "${TranslationConstants.locationStatus.t(context)} - ${state.stationDetailsApiResModel.response!.secure}",
-                                      txtColor: Colors.white,
-                                      txtSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      padding: 0,
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: Txt(
-                                      txt: "${TranslationConstants.noOfCharger.t(context)} - " + state.stationDetailsApiResModel.response!.numberOfCharger!,
-                                      txtColor: Colors.white,
-                                      txtSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      padding: 0,
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: Txt(
-                                      txt: "${TranslationConstants.address.t(context)} - ${state.stationDetailsApiResModel.response!.address!}",
-                                      txtColor: Colors.white,
-                                      txtSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                      padding: 0,
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: Txt(
-                                      txt: "${TranslationConstants.totalDistance.t(context)} - $totalDistance",
-                                      txtColor: Colors.white,
-                                      txtSize: 14,
+                                      txt: state.stationDetailsApiResModel.response!.chargingStatus == 1
+                                          ? "Available"
+                                          : "Occupied",
+                                      txtColor: state.stationDetailsApiResModel.response!.chargingStatus == 1? Colors.greenAccent : Colors.redAccent,
+                                      txtSize: 12,
                                       fontWeight: FontWeight.normal,
                                       padding: 0,
                                       onTap: () {},
@@ -697,7 +757,77 @@ class _MapScreenState extends State<MapScreen> {
                                 ],
                               ),
                             ),
-                            cachedNetImgWithRadius(state.stationDetailsApiResModel.response!.image!, double.infinity, Sizes.dimen_50.h, 6),
+                            Container(
+                              width: double.maxFinite,
+                              padding: const EdgeInsets.all(16),
+                              margin: const EdgeInsets.only(bottom: 12),
+                              decoration: BoxDecoration(
+                                color: AppColor.grey,
+                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 24),
+                                    child: Image.asset(
+                                      state.stationDetailsApiResModel.response!.type! == "DC"?
+                                      'assets/icons/pngs/dcConnector.png':
+                                      'assets/icons/pngs/filter_type_1.png',
+                                      width: 25,
+                                      height: 25,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 12),
+                                          child: Txt(
+                                            //txt: state.stationDetailsApiResModel.response!.type!,
+                                            txt: 'Connector 2',
+                                            txtColor: Colors.white,
+                                            txtSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                            padding: 0,
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 12),
+                                          child: Txt(
+                                            txt: 'AC Type 2, 22 kWh',
+                                            txtColor: Colors.white,
+                                            txtSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                            padding: 0,
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: Txt(
+                                      txt: state.stationDetailsApiResModel.response!.chargingStatus == 1
+                                          ? "Available"
+                                          : "Occupied",
+                                      txtColor: state.stationDetailsApiResModel.response!.chargingStatus == 1? Colors.greenAccent : Colors.redAccent,
+                                      txtSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                      padding: 0,
+                                      onTap: () {},
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            cachedNetImgWithRadius(
+                                state.stationDetailsApiResModel.response!.image!, double.infinity, Sizes.dimen_50.h, 6),
                             Container(
                               width: double.maxFinite,
                               padding: const EdgeInsets.all(14),
