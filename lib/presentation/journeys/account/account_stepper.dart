@@ -84,7 +84,7 @@ class _AccountStepperState extends State<AccountStepper> {
                         circleRadius: 24,
                         onComplete: () {
                           if (isTermConditionStepComplete && isVerifyStepComplete && isRegisterStepComplete) {
-                            Navigator.of(context).pushNamed(RouteList.initial);
+                            Navigator.of(context).pushNamed(RouteList.home_screen);
                           } else if(!isTermConditionStepComplete){
                             edgeAlert(context, title: 'Warning', description: 'Please complete Terms & conditions step', gravity: Gravity.top);
                           } else if(!isVerifyStepComplete){
@@ -111,6 +111,7 @@ class _AccountStepperState extends State<AccountStepper> {
                             state: HorizontalStepState.SELECTED,
                             isValid: isTermConditionStepComplete,
                           ),
+/*
 
                           HorizontalStep(
                             title: TranslationConstants.verify.t(context),
@@ -123,6 +124,20 @@ class _AccountStepperState extends State<AccountStepper> {
                             }
                             ),
                             isValid: isVerifyStepComplete,
+                          ),
+*/
+
+                          HorizontalStep(
+                            title: TranslationConstants.register.t(context),
+                            widget: RegisterScreen(isProcessCompleted: (){
+                              print("isRegisterStepComplete: $isRegisterStepComplete");
+                              setState(() {
+                                isRegisterStepComplete = true;
+                                callNextScreen();
+                              });
+                            },
+                            ),
+                            isValid: isRegisterStepComplete,
                           ),
 
                           HorizontalStep(

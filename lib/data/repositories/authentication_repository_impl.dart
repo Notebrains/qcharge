@@ -28,8 +28,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
   final AuthenticationLocalDataSource _authenticationLocalDataSource;
 
-  AuthenticationRepositoryImpl(this._authenticationRemoteDataSource,
-      this._authenticationLocalDataSource,);
+  AuthenticationRepositoryImpl(this._authenticationRemoteDataSource, this._authenticationLocalDataSource,);
 
   @override
   Future<Either<AppError, LoginApiResModel>> loginUser(Map<String, dynamic> body) async {
@@ -78,6 +77,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<Either<AppError, RegisterApiResModel>> registerUser(Map<String, dynamic> body) async {
     try {
       final register = await _authenticationRemoteDataSource.doRegister(body);
+      if (register.status == 1) {
+        await _authenticationLocalDataSource.saveSessionId(register.response!.userId.toString());
+      }
       return Right(register);
     } on SocketException {
       return Left(AppError(AppErrorType.network));

@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intl/intl.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
@@ -41,7 +40,8 @@ class _StartState extends State<Start> {
   String? cardNo = '';
   String couponId = '';
   TextEditingController _controller = TextEditingController();
-  String applyBtnTxt = 'APPLY';
+  String applyBtnTxt = 'Apply';
+
 
   @override
   void initState() {
@@ -59,6 +59,7 @@ class _StartState extends State<Start> {
   Future<bool> getConnectorDetails()async{
     String? data = await MySharedPreferences().getConnectorData();
     cardNo = await MySharedPreferences().getCardNo();
+
     print(data);
     connectorData = jsonDecode(data.toString());
     print(connectorData);
@@ -172,16 +173,12 @@ class _StartState extends State<Start> {
                                 }
 
 
-                              } else
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("Error Code : ${response.statusCode}"),
-                                  ),
-                                );
+                              }
+                                //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),),);
                             } catch (error) {
                               print("charging: $error");
                             }
-                          }, applyBtnTxt: applyBtnTxt == 'APPLY'? TranslationConstants.apply.t(context): TranslationConstants.applied.t(context),
+                          }, applyBtnTxt: applyBtnTxt == 'Apply'? TranslationConstants.apply.t(context): TranslationConstants.applied.t(context),
                         )
                       ),
 
@@ -196,7 +193,8 @@ class _StartState extends State<Start> {
                               isLoading = true;
                             });
 
-                            //print('----- cardNo: $cardNo');
+                            print('----- 1: ${connectorData["chargerId"]}');
+                            print('----- 1: ${connectorData["connector"]["connectorId"]}');
 
                             Map<String, dynamic> data = Map();
                             data["chargerId"] = connectorData["chargerId"].toString();
@@ -215,8 +213,7 @@ class _StartState extends State<Start> {
 
                               if(response.statusCode == 200)
                                 Navigator.pushReplacementNamed(context, RouteList.stop);
-                              else
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),));
+                              //else ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),));
 
                             }catch(error){
                               print("startCharge: $error");
@@ -340,7 +337,7 @@ class _StartState extends State<Start> {
                               setState(() {
                                 _controller.text = response[index].couponCode!;
                                 couponId = response[index].id.toString();
-                                applyBtnTxt = 'APPLY';
+                                applyBtnTxt = 'Apply';
                                 Navigator.pop(context);
                               });
                             },
@@ -378,7 +375,7 @@ class _StartState extends State<Start> {
           edgeAlert(context, title: TranslationConstants.message.t(context), description: model.message!, gravity: Gravity.top);
           MySharedPreferences().addCouponId(couponId);
           setState(() {
-            applyBtnTxt = 'APPLIED';
+            applyBtnTxt = 'Applied';
           });
         }else
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(TranslationConstants.somethingWentWrong.t(context)),));

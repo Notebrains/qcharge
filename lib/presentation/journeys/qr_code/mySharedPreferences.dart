@@ -4,7 +4,7 @@ SharedPreferences? _preferences;
 
 void addApiToken(String apiToken) async {
   _preferences = await SharedPreferences.getInstance();
-  bool temp = await _preferences!.setString("apiToken", apiToken);
+  await _preferences!.setString("apiToken", apiToken);
 }
 
 Future<String?> getApiToken() async {
@@ -19,7 +19,7 @@ Future<String?> getApiToken() async {
 
 void addStationId(int stationId)async{
   _preferences = await SharedPreferences.getInstance();
-  bool temp = await _preferences!.setInt("stationId", stationId);
+  await _preferences!.setInt("stationId", stationId);
 }
 
 Future<int?> getStationId() async {
@@ -47,9 +47,39 @@ Future<int?> getChargerId() async {
     return 0;
 }
 
+void addLeftConnectorId(String id)async{
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("LeftConnectorId", id);
+}
+
+Future<String?> getLeftConnectorId() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("LeftConnectorId")) {
+    String? key = _preferences!.getString("LeftConnectorId");
+    return key;
+  }
+  else
+    return '';
+}
+
+void addRightConnectorId(String id)async{
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("RightConnectorId", id);
+}
+
+Future<String?> getRightConnectorId() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("RightConnectorId")) {
+    String? key = _preferences!.getString("RightConnectorId");
+    return key;
+  }
+  else
+    return '';
+}
+
 void addChargerData(String chargerData) async {
   _preferences = await SharedPreferences.getInstance();
-  bool temp = await _preferences!.setString("chargerData", chargerData);
+  await _preferences!.setString("chargerData", chargerData);
 }
 
 Future<String?> getChargerData() async {
@@ -94,7 +124,7 @@ Future<String?> getElapsedTime() async {
 
 void addTotalUnits(String units) async {
   _preferences = await SharedPreferences.getInstance();
-  bool temp = await _preferences!.setString("units", units);
+  await _preferences!.setString("units", units);
 }
 
 Future<String?> getTotalUnits() async {
@@ -153,6 +183,37 @@ Future<String?> getCouponId() async {
     return "";
 }
 
+void addUserChargingStatus(String userChargingStatus) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("userChargingStatus", userChargingStatus);
+}
+
+Future<String?> getUserChargingStatus() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("userChargingStatus")) {
+    String? key = _preferences!.getString("userChargingStatus");
+    return key;
+  }
+  else
+    return "";
+}
+
+
+void addUserChargingFinishStatus(String userChargingFinishStatus) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("userChargingFinishStatus", userChargingFinishStatus);
+}
+
+Future<String?> getUserChargingFinishStatus() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("userChargingFinishStatus")) {
+    String? key = _preferences!.getString("userChargingFinishStatus");
+    return key;
+  }
+  else
+    return "";
+}
+
 
 void addNormalCustomerChargingPrice(String cardNo) async {
   _preferences = await SharedPreferences.getInstance();
@@ -195,6 +256,22 @@ Future<String?> getUserName() async {
   _preferences = await SharedPreferences.getInstance();
   if(_preferences!.containsKey("UserName")) {
     String? key = _preferences!.getString("UserName");
+    return key;
+  }
+  else
+    return "";
+}
+
+
+void addUserMob(String userMob) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("UserMob", userMob);
+}
+
+Future<String?> getUserMob() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("UserMob")) {
+    String? key = _preferences!.getString("UserMob");
     return key;
   }
   else

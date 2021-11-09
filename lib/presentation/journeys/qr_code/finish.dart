@@ -15,6 +15,7 @@ import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/data/data_sources/language_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
+import 'package:qcharge_flutter/presentation/journeys/home_screen/home_nav_bar.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -37,8 +38,9 @@ class _FinishState extends State<Finish> {
   late String date = "", time = "", totalUnits = "", totalPrice = "", stayTimeAfterCharge = "", parkingPrice = "" ;
   late String? userId = "0";
   late int? couponId  = 0;
-  String elapsedTime = '00:00:00', cardNo = '0' , language = 'en', dialogTxt = '';
-
+  String elapsedTime = '00:00:00', endTime = '00:00', cardNo = '0' , language = 'en';
+  String dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within -- minutes. After that, the parking charge will be apply at -- thb/hr. Thank you.";
+  DateTime dateTime = DateTime.now();
 
   @override
   void initState() {
@@ -55,14 +57,14 @@ class _FinishState extends State<Finish> {
   }
 
   Future<bool> getChargingDetails() async {
-    //startDateTime = await MySharedPreferences().getStartDateTime();
+    // startDateTime = await MySharedPreferences().getStartDateTime();
     elapsedTime = await MySharedPreferences().getElapsedTime()?? '00:00:00';
     cardNo = await MySharedPreferences().getCardNo()?? '0';
-    startDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now()); //change here
+    startDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime); //change here
     userId = await AuthenticationLocalDataSourceImpl().getSessionId();
     couponId = await MySharedPreferences().getChargerId();
 
-    date = DateFormat("dd/MM/yyyy").format(DateTime.now());
+    date = DateFormat("dd/MM/yyyy").format(dateTime);
     return true;
   }
 
@@ -82,18 +84,17 @@ class _FinishState extends State<Finish> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12, top: 45),
                         child: Icon(Icons.notifications_active_rounded, size: 45, color: AppColor.border,),
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(66, 0, 66, 12),
+                        padding: const EdgeInsets.fromLTRB(55, 0, 55, 12),
                         child: Txt(
                             txt: dialogTxt,
                             txtColor: Colors.white,
-                            txtSize: 11,
+                            txtSize: 12,
                             fontWeight: FontWeight.normal,
                             padding: 0,
                             onTap: () {},
@@ -101,7 +102,7 @@ class _FinishState extends State<Finish> {
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 36, top: 50),
+                        padding: const EdgeInsets.only(bottom: 36, top: 35),
                         child: Txt(
                             txt: TranslationConstants.thanksForUsingServc.t(context),
                             txtColor: Colors.white,
@@ -135,6 +136,15 @@ class _FinishState extends State<Finish> {
                             ),
                             ImgTxtRow(
                               txt: '${TranslationConstants.time.t(context)} $time',
+                              txtColor: AppColor.app_txt_white,
+                              txtSize: 12,
+                              fontWeight: FontWeight.normal,
+                              icon: 'assets/icons/pngs/scan_qr_for_filter_5.png',
+                              icColor: AppColor.app_txt_white,
+                            ),
+
+                            ImgTxtRow(
+                              txt: 'End time: $endTime',
                               txtColor: AppColor.app_txt_white,
                               txtSize: 12,
                               fontWeight: FontWeight.normal,
@@ -191,7 +201,7 @@ class _FinishState extends State<Finish> {
                           onPressed: () {
                             if (isPaymentDone) {
                               showParkingChargeDialog(context);
-                            } edgeAlert(context, title: TranslationConstants.warning.t(context), description: 'Please wait until processing is done', gravity: Gravity.top);
+                            } else edgeAlert(context, title: TranslationConstants.warning.t(context), description: 'Please wait until processing is done', gravity: Gravity.top);
                           },
                         ),
                       ),
@@ -235,6 +245,7 @@ class _FinishState extends State<Finish> {
             //String chargerId = resData["chargerId"].toString();
             totalUnits = resData["data"]["kwhValue"].toString();
 
+
             getChargingCalculatedData(stationId);
           });
 
@@ -266,7 +277,7 @@ class _FinishState extends State<Finish> {
       data["station_id"] = stationId;
       data["vehicle_id"] = '1';
       data["start_time"] = startDateTime;
-      data["end_time"] = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+      data["end_time"] = DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime);
       data["duration"] = elapsedTime;
       data["consume_charge"] = totalUnits;
       data["id"] = couponId.toString();
@@ -287,6 +298,7 @@ class _FinishState extends State<Finish> {
           totalPrice = resData["total_price"].toString();
           stayTimeAfterCharge = resData["stay_time_after_charge"].toString();
           parkingPrice = resData["parking_price"].toString();
+          endTime = "${dateTime.hour.toString() + ":" + dateTime.minute.toString()}";
 
           if (language != 'en') {
             dialogTxt = "การชาร์จรถยนต์ของคุณเสร็จสิ้น โปรดย้ายรถออกจากสถานีชาร์จภายใน $stayTimeAfterCharge นาที หลังจากนั้นจะมีการเรียกเก็บค่าบริการที่จอดรถในอัตรา $parkingPrice บาท/ชม.  ขอขอบคุณ.";
@@ -362,7 +374,12 @@ class _FinishState extends State<Finish> {
         DialogButton(
           color: Colors.amber,
           onPressed: () {
-            Navigator.pushNamed(context, RouteList.home_screen);
+            //Navigator.pushNamed(context, RouteList.home_screen);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeNavbar(page: 'Top Up',),
+              ),
+            );
           },
           child: Text(
             TranslationConstants.okay.t(context),
@@ -374,8 +391,9 @@ class _FinishState extends State<Finish> {
   }
 
   void getCardNo() async {
+    MySharedPreferences().addUserChargingStatus('Charged');
     await MySharedPreferences().getCardNo().then((cardNo) => {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 5), () {
       getTransactionDetails(cardNo!);
     }),
     });

@@ -47,7 +47,7 @@ Future<Map<String, dynamic>> openProductionPaymentGateway(String amount) async {
   sdk.desc = "Payment";
   sdk.amount = double.parse(amount);
   sdk.currencyCode = "764";
-  sdk.secretKey = "08CFED8839E8E8655F7970D57DEBED59BF408B1DF03C7D0F751FD162BA5928AF";
+  sdk.secretKey = "AC19D405FE0CFA2ADEC5E167DA6576CBF2E3C913091785560D1760437288072B";
   //sdk.hashValue = "7647640000093354280361${amount}"; //Signature String is merchantID + tranRef + amt
 
 

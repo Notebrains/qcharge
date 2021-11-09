@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/data/models/top_up_api_res_model.dart';
@@ -59,7 +60,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 12, bottom: 25),
-                child: Txt(txt: TranslationConstants.usageHistory.t(context), txtColor: Colors.white, txtSize: 14,
+                child: Txt(txt: TranslationConstants.usageHistory.t(context), txtColor: Colors.white, txtSize: 16,
                   fontWeight: FontWeight.bold, padding: 0, onTap: (){},
                 ),
               ),
@@ -74,7 +75,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   margin: const EdgeInsets.only(top: 12, bottom: 25),
-                  child: Text('${currentDate.month}, ${currentDate.year}',
+                  child: Text(formatDateInMonthYear(currentDate),
                         style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),)
                 ),
 
@@ -88,6 +89,10 @@ class _TopUpHistoryState extends State<TopUpHistory> {
                     if (userId != null && date != null) {
                       //print('------${date.year}-${date.month}'),
                       cubit.initiateTopUp(userId, '${date.year}-${date.month}'),
+
+                      setState(() {
+                        currentDate = date;
+                      }),
                     } else {
                       edgeAlert(context,
                           title: TranslationConstants.message.t(context),
@@ -158,11 +163,11 @@ class _TopUpHistoryState extends State<TopUpHistory> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: TxtTxtTxtRow(
-                      text1: TranslationConstants.date.t(context),
-                      text2: TranslationConstants.time.t(context),
+                      text1: isTopUpTabSelected? "Date:" : TranslationConstants.date.t(context),
+                      text2: isTopUpTabSelected? TranslationConstants.time.t(context) : TranslationConstants.duration.t(context),
                       text3: TranslationConstants.amount.t(context),
                       text4: TranslationConstants.unit.t(context),
-                      size: 14,
+                      size: 13,
                       fontWeight: FontWeight.bold,
                       isTopUpTabSelected: isTopUpTabSelected,
                     ),

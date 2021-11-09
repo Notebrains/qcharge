@@ -49,7 +49,7 @@ class _AccountSuccessState extends State<AccountSuccess> {
                 ),
               ),
               child: Text(
-                userName?? 'WELCOME',
+                userName?? 'Q CHARGE EV STATION',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
               ),

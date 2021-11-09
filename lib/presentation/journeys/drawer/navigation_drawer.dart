@@ -39,7 +39,19 @@ class NavigationDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 12, bottom: 5),
                 child: Txt(
-                  txt: TranslationConstants.hello.t(context),
+                  txt: TranslationConstants.drawerHeader1.t(context),
+                  txtColor: Colors.white,
+                  txtSize: 12,
+                  fontWeight: FontWeight.bold,
+                  padding: 0,
+                  onTap: () {},
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(right: 12, bottom: 12),
+                child: Txt(
+                  txt: TranslationConstants.drawerHeader2.t(context),
                   txtColor: Colors.white,
                   txtSize: 24,
                   fontWeight: FontWeight.bold,

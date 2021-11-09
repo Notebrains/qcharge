@@ -108,7 +108,7 @@ class Profile extends StatelessWidget {
                           onTap: () {},
                         ),
                         Txt(
-                          txt: '${state.model.response!.collectPoint!} points',
+                          txt: '${state.model.response!.collectPoint!}/500 ${TranslationConstants.points.t(context)}',
                           txtColor: Colors.white,
                           txtSize: 13,
                           fontWeight: FontWeight.normal,

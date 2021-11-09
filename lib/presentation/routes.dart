@@ -24,7 +24,7 @@ class Routes {
         RouteList.initial: (context) => LoginScreen(),
         RouteList.registration: (context) => AccountStepper(),
         RouteList.forgotPassword: (context) => ForgotPassword(),
-        RouteList.home_screen: (context) => HomeNavbar(),
+        RouteList.home_screen: (context) => HomeNavbar(page: 'Home',),
         RouteList.profile: (context) => Profile(),
         RouteList.setting: (context) => Setting(),
         RouteList.faq: (context) => Faqs(),

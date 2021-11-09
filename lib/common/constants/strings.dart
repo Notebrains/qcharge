@@ -19,7 +19,7 @@ class Strings {
       'https://static.vecteezy.com/system/resources/thumbnails/002/151/987/small/limited-time-offer-rgb-color-icon-vector.jpg';
   static const String imgUrlCar = 'https://mridayaitservices.com/demo/qcharge/public/assets/admin/img/carimg.jpeg';
  static const String imgUrlNotFound = 'https://png.pngtree.com/png-vector/20190215/ourmid/pngtree-picture-icon-graphic-design-template-vector-png-image_530828.jpg';
-  static const String imgUrlNotFoundYellowAvatar = 'https://firebasestorage.googleapis.com/v0/b/qcharge-31e4c.appspot.com/o/icon.png?alt=media&token=67cbc68a-29ab-48a4-97b9-7f74bee73148';
+  static const String imgUrlNotFoundYellowAvatar = 'https://firebasestorage.googleapis.com/v0/b/qcharge-31e4c.appspot.com/o/user_icon.png?alt=media&token=af7446d5-a33c-4e33-97e2-1751a4971048';
   static const String imgUrlEmptyCart = 'https://i.pinimg.com/originals/2e/ac/fa/2eacfa305d7715bdcd86bb4956209038.png';
   static const String imgUrlMeeting = 'https://www.davincimeetingrooms.com/Content/Assets/ImageLinkWidget/dmr-home-page-image.png';
   static const String imgUrlMap = 'https://cdn.filestackcontent.com/qfzkumr0RE27pdC8tqeH';

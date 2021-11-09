@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
@@ -27,6 +28,7 @@ class _LoginFormState extends State<LoginForm> {
   bool enableSignIn = false;
   //bool isRememberMeChecked = true;
   bool isPasswordVisible = false;
+  String? userMob = '';
 
   @override
   void initState() {
@@ -270,10 +272,17 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void checkIfUserLogin() async {
-    final sessionId = await AuthenticationLocalDataSourceImpl().getSessionId();
-    print('------ : $sessionId');
-    if (sessionId != '' && sessionId != null) {
-      Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
+    try {
+      final sessionId = await AuthenticationLocalDataSourceImpl().getSessionId();
+      print('------ : $sessionId');
+      if (sessionId != '' && sessionId != null) {
+            Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
+          }
+
+      userMob = await MySharedPreferences().getUserMob();
+      _mobileController!.text = userMob ?? '';
+    } catch (e) {
+      print(e);
     }
   }
 

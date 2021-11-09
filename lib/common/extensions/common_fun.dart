@@ -48,6 +48,7 @@ String convertStrToDoubleStrWithZeroDecimal(String value) =>
     value.isNotEmpty ? double.parse(value).toStringAsFixed(0).toString() : '0';
 
 String formatDateForTopUp(DateTime date) => new DateFormat("yyyy-MM").format(date);
+String formatDateInMonthYear(DateTime date) => new DateFormat("MMM yyyy").format(date);
 
 String formatDateForServer(DateTime date) => new DateFormat("yyyy-MM-dd").format(date);
 

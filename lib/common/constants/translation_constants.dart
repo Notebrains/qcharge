@@ -191,4 +191,8 @@ class TranslationConstants {
   static const String invoice = 'invoice';
   static const String note = 'note';
   static const String points = 'points';
+  static const String selectAmount = 'selectAmount';
+  static const String drawerHeader1 = 'drawerHeader1';
+  static const String drawerHeader2 = 'drawerHeader2';
+  static const String notReady = 'notReady';
 }

@@ -175,7 +175,7 @@ class _VerifyState extends State<Verify> {
                     listenWhen: (previous, current) => current is VerifySuccess,
                     listener: (context, state) {
                       if (state is VerifySuccess) {
-                        if (state.model.message == "Mobile verify successfully.") {
+                        if (state.model.status == 1) {
                           edgeAlert(context, title: 'Warning', description: state.model.message! + '\n Register now.', gravity: Gravity.top);
                           widget.isProcessCompleted();
                         } else {

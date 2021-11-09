@@ -14,18 +14,23 @@ import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.d
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home.dart';
 import 'package:qcharge_flutter/presentation/journeys/map_screen/map_screen.dart';
 import 'package:qcharge_flutter/presentation/journeys/profile/profile.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/qr_scan.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/stop.dart';
 import 'package:qcharge_flutter/presentation/journeys/topup/topup.dart';
 import 'package:qcharge_flutter/presentation/libraries/bottom_navbar_center_round/pandabar.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 
 class HomeNavbar extends StatefulWidget {
+  String page = 'Home';
+
+  HomeNavbar({Key? key, required this.page}) : super(key: key);
+
   @override
   _HomeNavbarState createState() => _HomeNavbarState();
 }
 
 class _HomeNavbarState extends State<HomeNavbar> {
-  String page = 'Home';
   late HomeBannerCubit _homeBannerCubit;
   late ProfileCubit _profileCubit;
   late TopUpCubit _topUpCubit;
@@ -33,6 +38,8 @@ class _HomeNavbarState extends State<HomeNavbar> {
   late MapStationDetailsCubit _mapStationDetailsCubit;
   late WalletRechargeCubit walletRechargeCubit;
   late FirebaseTokenCubit _firebaseTokenCubit;
+
+  String? userChargingStatus = '';
 
 
   @override
@@ -47,6 +54,8 @@ class _HomeNavbarState extends State<HomeNavbar> {
     _firebaseTokenCubit = getItInstance<FirebaseTokenCubit>();
 
     _homeBannerCubit.initiateHomeBanner();
+
+    getLocalData();
   }
 
   @override
@@ -108,19 +117,20 @@ class _HomeNavbarState extends State<HomeNavbar> {
             ],
             onChange: (id) {
               setState(() {
-                page = id;
+                widget.page = id;
               });
             },
             onFabButtonPressed: () {
               setState(() {
-                page = 'QrCode';
+                widget.page = 'QrCode';
               });
             },
           ),
 
           body: Builder(
             builder: (context) {
-              switch (page) {
+              print('----userChargingStatus : $userChargingStatus');
+              switch (widget.page) {
                 case 'Map':
                   return MapScreen();
                 case 'Top Up':
@@ -128,7 +138,9 @@ class _HomeNavbarState extends State<HomeNavbar> {
                 case 'Home':
                   return Home();
                 case 'QrCode':
-                  return QRScan();
+                  if (userChargingStatus == 'Charging') {
+                    return Stop();
+                  } else return QRScan();
                 case 'Profile':
                   return Profile();
                 default:
@@ -161,5 +173,9 @@ class _HomeNavbarState extends State<HomeNavbar> {
         ],
       ),
     )) ?? false;
+  }
+
+  void getLocalData() async {
+    userChargingStatus = await MySharedPreferences().getUserChargingStatus();
   }
 }

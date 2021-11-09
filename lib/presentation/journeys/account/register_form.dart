@@ -32,13 +32,14 @@ class _RegisterFormState extends State<RegisterForm> {
   late File? xFile = File('');
   String base64Image = '';
   bool isEnabled = true ;
+  String carBrandId = '', carModelId = '';
   late TextEditingController? _mobileController, _passwordController, _firstNameController, _lastNameController, _emailController,
-      _confPasswordController;
+      _confPasswordController, _carModelController, _carNameController, _carBrandController, _carLicencePlateController;
 
   DropListModel carBrandDropDownList = DropListModel([]);
   DropListModel carModelDropDownList = DropListModel([]);
-  OptionItem optionItemSelected = OptionItem(id: '0', title: "Select car brand *");
-  OptionItem optionItemSelected2 = OptionItem(id: '0', title: "Select car model *");
+  OptionItem optionItemSelected = OptionItem(id: '0', title: "Select car brand");
+  OptionItem optionItemSelected2 = OptionItem(id: '0', title: "Select car model");
 
   @override
   void initState() {
@@ -50,6 +51,10 @@ class _RegisterFormState extends State<RegisterForm> {
     _mobileController = TextEditingController();
     _passwordController = TextEditingController();
     _confPasswordController = TextEditingController();
+    _carNameController = TextEditingController();
+    _carBrandController = TextEditingController();
+    _carModelController = TextEditingController();
+    _carLicencePlateController = TextEditingController();
 
     _firstNameController?.addListener(() {
       setState(() {
@@ -88,6 +93,8 @@ class _RegisterFormState extends State<RegisterForm> {
       });
     });
 
+    BlocProvider.of<CarBrandCubit>(context).loadCarBrand();
+    //BlocProvider.of<CarModelCubit>(context).loadCarModel('1');
   }
 
   Future getImage() async {
@@ -105,7 +112,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   setImage(String path) {
     try {
-      print('----path: $path');
+      //print('----path: $path');
       if (path.isEmpty) {
             return cachedNetImgWithRadius(
               Strings.imgUrlNotFoundYellowAvatar,
@@ -147,6 +154,10 @@ class _RegisterFormState extends State<RegisterForm> {
     _lastNameController?.dispose();
     _emailController?.dispose();
     _confPasswordController?.dispose();
+    _carModelController?.dispose();
+    _carNameController?.dispose();
+    _carBrandController?.dispose();
+    _carLicencePlateController?.dispose();
     super.dispose();
   }
 
@@ -230,7 +241,7 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
 
             Container(
-              margin: const EdgeInsets.fromLTRB(8, 0, 8, 24),
+              margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
               child: IcIfRow(txt: 'Mobile number *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                 icon: 'assets/icons/pngs/account_Register_1.png', icColor: Colors.white,
                 hint: 'Enter mobile number *', textInputType: TextInputType.phone,
@@ -238,28 +249,94 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
             ),
 
+            Container(
+              margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+              child: IcIfRow(txt: 'Car name', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
+                icon: 'assets/icons/pngs/account_Register_11.png', icColor: Colors.white,
+                hint: 'Enter car name', textInputType: TextInputType.text,
+                controller: _carNameController,obscureText: false,
+              ),
+            ),
+
+            Container(
+              margin: const EdgeInsets.fromLTRB(45, 12, 55, 22),
+              child: SelectDropList(
+                ic: Icons.directions_car_outlined,
+                icColor: AppColor.app_txt_white,
+                itemSelected: optionItemSelected,
+                onOptionSelected: (OptionItem optionItem) {
+                  //print('----Car brand: ${optionItem.title}');
+                  BlocProvider.of<CarModelCubit>(context).loadCarModel(optionItem.id);
+                  setState(() {
+                    carBrandId = optionItem.id;
+                    optionItemSelected.title = optionItem.title;
+                    carModelId = '';
+                  });
+                },
+                dropListModel: carBrandDropDownList,
+              ),
+            ),
+
+            Container(
+              margin: const EdgeInsets.fromLTRB(45, 0, 55, 12),
+              child: SelectDropList(
+                ic: Icons.local_car_wash_outlined,
+                icColor: AppColor.app_txt_white,
+                itemSelected: optionItemSelected2,
+                onOptionSelected: (OptionItem optionItem){
+                  try{
+                    if (carBrandId.isNotEmpty) {
+                      print('----Car model: ${optionItem.title}');
+
+                      setState(() {
+                        carModelId = optionItem.id;
+                        optionItemSelected2.title = optionItem.title;
+                      });
+                    } else {
+                      edgeAlert(context, title: 'Warning', description: 'Please select car brand first', gravity: Gravity.top);
+                    }
+                  } catch (e){
+                    print('---- : $e');
+                  }
+                },
+                dropListModel: carModelDropDownList,
+              ),
+            ),
+
+            Container(
+              margin: const EdgeInsets.fromLTRB(24, 0, 8, 24),
+              child: IcIfRow(txt: 'Car licence plate', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
+                icon: 'assets/icons/pngs/account_Register_10.png', icColor: Colors.white,
+                hint: 'Enter car licence plate', textInputType: TextInputType.text,
+                controller: _carLicencePlateController, obscureText: false,
+              ),
+            ),
 
             Padding(
               padding: const EdgeInsets.only(left: 45, right: 45),
               child: Button(text: TranslationConstants.register.t(context),
                 bgColor: isEnabled? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Colors.grey.shade400, Colors.grey.shade400],
                 onPressed: () {
-                  if (_mobileController!.text.isEmpty  || _mobileController!.text.length < 7 || _mobileController!.text.length > 14) {
+                  if (_mobileController!.text.isEmpty || _mobileController!.text.length < 7 || _mobileController!.text.length > 14) {
                     edgeAlert(context, title: 'Warning', description: 'Please enter valid mobile number', gravity: Gravity.top);
-                  } else if(_firstNameController!.text.isEmpty){
+                  } else if (_firstNameController!.text.isEmpty) {
                     edgeAlert(context, title: 'Warning', description: 'Please enter first name', gravity: Gravity.top);
-                  } else if(_lastNameController!.text.isEmpty){
+                  } else if (_lastNameController!.text.isEmpty) {
                     edgeAlert(context, title: 'Warning', description: 'Please enter last name', gravity: Gravity.top);
-                  } else if(!validateEmail(_emailController!.text)){
+                  } else if (!validateEmail(_emailController!.text)) {
                     edgeAlert(context, title: 'Warning', description: 'Please enter valid email id', gravity: Gravity.top);
-                  } else if(_passwordController!.text.isEmpty || _passwordController!.text.length < 5){
+                  } else if (_passwordController!.text.isEmpty || _passwordController!.text.length < 5) {
                     edgeAlert(context, title: 'Warning', description: 'Please enter minimum 5 digit password ', gravity: Gravity.top);
-                  }  else if(_confPasswordController!.text.isEmpty){
+                  } else if (_confPasswordController!.text.isEmpty) {
                     edgeAlert(context, title: 'Warning', description: 'Please enter confirm password', gravity: Gravity.top);
-                  } else if(_passwordController!.text != _confPasswordController!.text){
-                    edgeAlert(context, title: 'Warning', description: 'Password and confirm password did not matched', gravity: Gravity.top);
-                  }  else if (isEnabled) {
-                      //ch
+                  } else if (_passwordController!.text != _confPasswordController!.text) {
+                    edgeAlert(context, title: 'Warning',
+                        description: 'Password and confirm password did not matched',
+                        gravity: Gravity.top);
+                  } else if (base64Image.isEmpty) {
+                    edgeAlert(context, title: 'Warning', description: 'Please pick profile image.', gravity: Gravity.top);
+                  } else {
+                    if (isEnabled) {
                       BlocProvider.of<RegisterCubit>(context).initiateRegister(
                         _firstNameController?.text ?? '',
                         _lastNameController?.text ?? '',
@@ -267,15 +344,75 @@ class _RegisterFormState extends State<RegisterForm> {
                         _mobileController?.text ?? '',
                         _passwordController?.text ?? '',
                         _confPasswordController?.text ?? '',
-                        '0',
-                        '0',
-                        '0',
-                        '0',
+                        _carNameController?.text ?? '',
+                        carBrandId,
+                        carModelId,
+                        _carLicencePlateController?.text ?? '',
                         base64Image,
                       );
+                    }
+                  };
+                }
+              )
+            ),
+
+            BlocConsumer<CarBrandCubit, CarBrandState>(
+              buildWhen: (previous, current) => current is CarBrandError,
+              builder: (context, state) {
+                if (state is CarBrandError)
+                  return Text(
+                    'Could not fetch data',
+                    style: TextStyle(color: Colors.black),
+                  );
+                return const SizedBox.shrink();
+              },
+              listenWhen: (previous, current) => current is CarBrandLoaded,
+              listener: (context, state) {
+                if (state is CarBrandLoaded) {
+                  print('---- Car data loaded: ${state.carBrandEntity[0].name}');
+                  var dataList = state.carBrandEntity;
+                  for(int i =0; i<dataList.length; i++){
+                    carBrandDropDownList.listOptionItems.add(
+                      OptionItem(
+                        id: dataList[i].brandId.toString(),
+                        title: dataList[i].name.toString(),
+                      ),
+                    );
                   }
-                },
-              ),
+
+                  setState(() {
+
+                  });
+                }
+              },
+            ),
+
+            BlocConsumer<CarModelCubit, CarModelState>(
+              buildWhen: (previous, current) => current is CarModelError,
+              builder: (context, state) {
+                if (state is CarBrandError)
+                  return Text(
+                    'Could not fetch data',
+                    style: TextStyle(color: Colors.black),
+                  );
+                return const SizedBox.shrink();
+              },
+              listenWhen: (previous, current) => current is CarModelLoaded,
+              listener: (context, state) {
+                if (state is CarModelLoaded) {
+                  print('---- Car data loaded: ${state.carModelEntity[0].name}');
+                  var dataList = state.carModelEntity;
+                  for(int i =0; i<dataList.length; i++){
+                    carModelDropDownList.listOptionItems.add(
+                      OptionItem(id: dataList[i].id.toString(), title: dataList[i].name.toString()),
+                    );
+                  }
+
+                  setState(() {
+
+                  });
+                }
+              },
             ),
 
             BlocConsumer<RegisterCubit, RegisterState>(
@@ -297,6 +434,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 if (state is RegisterSuccess) {
                   if (state.model.status == 1) {
                     MySharedPreferences().addUserName("${_firstNameController!.text} ${_lastNameController!.text}");
+                    MySharedPreferences().addUserMob(_mobileController!.text);
                     edgeAlert(
                       context,
                       duration: 2,

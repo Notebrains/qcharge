@@ -556,7 +556,7 @@ class _MapScreenState extends State<MapScreen> {
             double.parse(list[index].latitude!),
             double.parse(list[index].longitude!),
           ),
-          zoom: 9.0,
+          zoom: 18.0,
         ),
       ),
     );

@@ -174,7 +174,7 @@ class _HorizontalStepperState extends State<StatefulWidget> {
         bloc: cubit,
         builder: (context, state) {
           if (state is StepperOnNext) {
-            print('---- : next called 3');
+            //print('---- : next called 3');
           }
           return Column(
             children: _getTopTypeWidget(width),
@@ -237,7 +237,7 @@ class _HorizontalStepperState extends State<StatefulWidget> {
           //'Password has send to your email. Please get your new password from email and login.',
           //Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial,(route) => false,);
           if (state is StepperOnNext) {
-            print('---- : next called 2 ');
+            //print('---- : next called 2 ');
             //edgeAlert(context, title: 'Note', description: 'On Next Called', gravity: Gravity.top);
             goToNextPage();
           }

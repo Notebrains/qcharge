@@ -45,11 +45,10 @@ class _StopState extends State<Stop> {
   late Timer timer;
   late Timer statusTimer;
   late String elapsedTime = '00:00:00';
-  late String connectorStatus = '';
+  late String connectorStatus = 'Waiting';
   late String units = '0';
-  String? cardNo = '', walletBalance = '', normalCustomerParkingPrice = "", normalCustomerChargingPrice = "", userSubscriptionStatus = "";
-  String actualUnit = '0';
-  double minusUnit = 0.00;
+  String amount = '0';
+  String? cardNo = '', walletBalance = '', normalCustomerParkingPrice = "", normalCustomerChargingPrice = "", userSubscriptionStatus = "", userID = "";
   double usedAmount = 0.00;
 
   updateTime(Timer timer) {
@@ -117,61 +116,71 @@ class _StopState extends State<Stop> {
   Future<bool> getConnectorDetails() async {
     String? data = await MySharedPreferences().getConnectorData();
     cardNo = await MySharedPreferences().getCardNo();
-    print(data);
+
+    //print(data);
     connectorData = jsonDecode(data.toString());
     print(connectorData);
-    //int? stationId = await MySharedPreferences().getStationId();
-    //int? chargerId = await MySharedPreferences().getStationId();
+
+    userID = await AuthenticationLocalDataSourceImpl().getSessionId();
+    /*try {
+      print('----- 2: ${connectorData["stationId"]}');
+      print('----- 2: ${connectorData["chargerId"]}');
+      print('----- 2: ${connectorData["connector"]["connectorId"]}');
+      print('----- 2: $cardNo');
+      print('----- 2: $userID');
+    } catch (e) {
+      print(e);
+    }*/
+
+
     http.Response checkStatus = await http.get(Uri.parse(
         "${Constants.APP_BASE_URL}getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}"));
-    print("checkStatus: ${checkStatus.statusCode}");
-    print("checkStatus: ${checkStatus.body}");
+    //print("checkStatus: ${checkStatus.statusCode}");
+    //print("checkStatus: ${checkStatus.body}");
     dynamic data1 = jsonDecode(checkStatus.body);
     if (data1["status"]) {
       isLoaded = true;
       statusData = data1["data"];
 //      String temp = statusData["status"];
 //      elapsedTime = "${temp.substring(0,1).toUpperCase}${temp.substring(1)}";
-      connectorStatus = statusData["status"].toString().capitalize();
-      units = statusData["kwhValue"];
-      statusTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      //connectorStatus = statusData["status"].toString().capitalize();
+      //units = statusData["kwhValue"];
+      //https://mridayaitservices.com/demo/qcharge2/api/getchargerstatus/74/7401/1/440911753/1
+
+      statusTimer = Timer.periodic(Duration(seconds: 5), (timer) async {
         http.Response checkStatus = await http.get(Uri.parse(
-            "${Constants.APP_BASE_URL}getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}"));
+            "${Constants.APP_BASE_URL}getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}/$cardNo/$userID"));
         print("getchargerstatus code: ${checkStatus.statusCode}");
         print("get charger status res: ${checkStatus.body}");
-        dynamic data = jsonDecode(checkStatus.body);
+        dynamic data = jsonDecode(checkStatus.body.toString());
         statusData = data["data"];
 
-        setState(() {
-          units = statusData["kwhValue"];
-          if (statusData["status"].toString() != "sensor") {
-            connectorStatus = statusData["status"].toString().capitalize();
-            elapsedTime = transformMilliSeconds(timer.tick);
-            if (minusUnit == 0.00) {
-              minusUnit = double.parse(convertStrToDoubleStr(units));
-            } else {
-              actualUnit = (double.parse(units) - minusUnit).toString();
-            }
+        elapsedTime = transformMilliSeconds(timer.tick);
 
-            usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(actualUnit);
+        setState(() {
+          units = statusData["kwhValue"].toString();
+          amount = statusData["price"].toString();
+          connectorStatus = statusData["status"].toString().capitalize();
+
+          try {
+            usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(units);
             if(usedAmount >= double.parse(walletBalance!)){
               setState(() {
                 isWalletBalanceFinished = true;
               });
             }
+          } catch (e) {
+            print(e);
           }
 
-          if (statusData["status"].toString() != "charged") {
-            actualUnit = statusData["kwhValue"];
-          }
+          print('-----units 1: $units');
         });
 
         //print('-----1  ${timer.tick}');
         //print('-----3  $isChargingStart');
-        print('-----2  ${statusData["status"].toString()}');
-        print('-----4  $actualUnit');
+        //print('-----2  ${statusData["status"].toString()}');
 
-        if (timer.tick == 15 && (statusData["status"].toString() == "occupied" || statusData["status"].toString() == "available")) {
+        if (timer.tick == 15 && !isChargingStart) {
           stopWatch();
           timer.cancel();
           showWrongConnectorDialog();
@@ -184,8 +193,10 @@ class _StopState extends State<Stop> {
         }
 
         if (statusData["status"].toString() == "charging") {
+          MySharedPreferences().addUserChargingStatus('Charging');
           isChargingStart = true;
           if (!stopwatch.isRunning) startWatch();
+
         }
 
         if(isChargingStart && statusData["status"].toString() == "available"){
@@ -194,7 +205,7 @@ class _StopState extends State<Stop> {
           });
         }
 
-        if (statusData["status"].toString() == "charged") {
+        if (statusData["status"].toString() == "total") {
           stopCharging(TranslationConstants.carChargedTxt.t(context), onTap: () {
             Navigator.pushReplacementNamed(context, RouteList.finish);
           });
@@ -330,7 +341,7 @@ class _StopState extends State<Stop> {
                                     icColor: AppColor.app_txt_white,
                                   ),
                                   ImgTxtRow(
-                                    txt: '${TranslationConstants.unit.t(context)} ${convertStrToDoubleStr(actualUnit)} kWh',
+                                    txt: '${TranslationConstants.unit.t(context)} $units kWh',
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
@@ -338,7 +349,7 @@ class _StopState extends State<Stop> {
                                     icColor: AppColor.app_txt_white,
                                   ),
                                   ImgTxtRow(
-                                    txt: TranslationConstants.priceRegular.t(context) + ': ${convertStrToDoubleStr(usedAmount.toString())}${TranslationConstants.thb.t(context)}' ,
+                                    txt: TranslationConstants.priceRegular.t(context) + ': $amount${TranslationConstants.thb.t(context)}' ,
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
@@ -476,21 +487,6 @@ class _StopState extends State<Stop> {
     userSubscriptionStatus = await AuthenticationLocalDataSourceImpl().getUserSubscriptionStatus();
   }
 
-  String getTotalAmountUsed() {
-    double usedAmount = 0.00;
-    try {
-      usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(actualUnit);
-      if(usedAmount >= double.parse(walletBalance!)){
-        setState(() {
-          isWalletBalanceFinished = true;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-    //print('----used Amount: $usedAmount');
-    return usedAmount.toString();
-  }
 
   void showConnectorNotConnectedDialog() {
 

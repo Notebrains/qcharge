@@ -112,7 +112,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               else
                 return Center(child: Text("No Notifications to show!"));
             }else
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(
+                color: Colors.amber,
+              ));
           },
         ),
       ),

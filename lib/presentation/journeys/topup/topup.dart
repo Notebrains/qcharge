@@ -36,21 +36,18 @@ class _TopUpState extends State<TopUp> {
   bool isTopUpBtnSelected = false;
   bool isAddMoneyActive = false;
 
-  String userId = '', dropdownAmount = '';
-  late TextEditingController? _topupAmountController;
+  String userId = '', dropdownTopUpAmount = '';
   final ValueNotifier<String> _walletBalance = ValueNotifier<String>('0.00');
-
-
 
   OptionItem optionItemSelected = OptionItem(id: '0', title: "Select amount");
 
   DropListModel amountDropDownList = DropListModel([
-    OptionItem(id: '0', title: "500"),
-    OptionItem(id: '0', title: "1000"),
-    OptionItem(id: '0', title: "1500"),
-    OptionItem(id: '0', title: "2000"),
-    OptionItem(id: '0', title: "2500"),
-    OptionItem(id: '0', title: "3000"),
+    OptionItem(id: '500', title: "500 THB"),
+    OptionItem(id: '1000', title: "1,000 THB"),
+    OptionItem(id: '2000', title: "2,000 THB"),
+    OptionItem(id: '3000', title: "3,000 THB"),
+    OptionItem(id: '5000', title: "5,000 THB"),
+    OptionItem(id: '10000', title: "10,000 THB"),
   ]);
 
   @override
@@ -58,15 +55,11 @@ class _TopUpState extends State<TopUp> {
     super.initState();
 
     getLocalData();
-    _topupAmountController = TextEditingController();
-    _topupAmountController!.text = '500.00';
   }
 
   @override
   void dispose() {
     super.dispose();
-
-    _topupAmountController?.dispose();
   }
 
   @override
@@ -222,18 +215,6 @@ class _TopUpState extends State<TopUp> {
                                   ),
                                 ),
                               ),
-                              Visibility(
-                                visible: isAddMoneyActive,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 6),
-                                  child: IfIconRound(
-                                    hint: TranslationConstants.enterTopUpAmount.t(context),
-                                    icon: Icons.account_balance_wallet_rounded,
-                                    controller: _topupAmountController,
-                                    textInputType: TextInputType.number,
-                                  ),
-                                ),
-                              ),
 
                               Visibility(
                                 visible: isAddMoneyActive,
@@ -244,9 +225,9 @@ class _TopUpState extends State<TopUp> {
                                     icColor: AppColor.app_txt_white,
                                     itemSelected: optionItemSelected,
                                     onOptionSelected: (OptionItem optionItem) {
-                                      print('----Selected Amount: ${optionItem.title}');
+                                      print('----Selected Amount: ${optionItem.id}');
                                       setState(() {
-                                        _topupAmountController!.text = optionItem.title;
+                                        dropdownTopUpAmount = optionItem.id;
                                         optionItemSelected.title = optionItem.title;
                                       });
                                     },
@@ -263,7 +244,7 @@ class _TopUpState extends State<TopUp> {
                                     text: TranslationConstants.continueNotCaps.t(context),
                                     bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                                     onPressed: () {
-                                      if (_topupAmountController!.text.isEmpty) {
+                                      if (dropdownTopUpAmount.isEmpty) {
                                         edgeAlert(context,
                                             title: TranslationConstants.warning.t(context), description: TranslationConstants.enterTopUpAmount.t(context), gravity: Gravity.top);
                                       } else if (userId.isNotEmpty) {
@@ -356,7 +337,7 @@ class _TopUpState extends State<TopUp> {
   //credentials are live
   void openPaymentGateway() async {
     try {
-      openProductionPaymentGateway(_topupAmountController!.text).then((responseJson) => {
+      openProductionPaymentGateway(dropdownTopUpAmount).then((responseJson) => {
             /*
               String amount = responseJson["amt"];
               String respCode = responseJson["respCode"],
@@ -372,7 +353,7 @@ class _TopUpState extends State<TopUp> {
                 BlocProvider.of<WalletRechargeCubit>(context).initiateWalletRecharge(
                   userId,
                   responseJson["uniqueTransactionCode"],
-                  _topupAmountController!.text,
+                  dropdownTopUpAmount,
                 ),
               }
             else

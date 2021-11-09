@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animator/widgets/fading_entrances/fade_in.dart';
 import 'package:qcharge_flutter/data/models/map_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   final List<Response> locationList;
