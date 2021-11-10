@@ -361,7 +361,7 @@ class _BillingState extends State<Billing> {
                     DialogButton(
                       color: Colors.amber,
                       onPressed: () {
-                        if (totalBill.isNotEmpty && totalBill != '0.00')openPaymentGateway();
+                        if (totalBill.isNotEmpty && totalBill != '0.00')openPaymentGateway(context);
                         Navigator.of(context).pop();
                       },
                       child: Text(
@@ -407,7 +407,7 @@ class _BillingState extends State<Billing> {
     }
   }
 
-  void openPaymentGateway() async {
+  void openPaymentGateway(BuildContext context) async {
     try {
       openProductionPaymentGateway(totalBill).then((responseJson) => {
         if (responseJson.isNotEmpty  && responseJson["respCode"] == '00') {

@@ -79,6 +79,7 @@ class _StopState extends State<Stop> {
     var timeSoFar = stopwatch.elapsedMilliseconds;
     setState(() {
       elapsedTime = transformMilliSeconds(timeSoFar);
+      MySharedPreferences().addEndTime("${DateTime.now().hour.toString() + ":" + DateTime.now().minute.toString()}");
       MySharedPreferences().addElapsedTime(elapsedTime);
       MySharedPreferences().addTotalUnits(units);
     });
@@ -225,8 +226,6 @@ class _StopState extends State<Stop> {
     setState(() {
       isLoading = true;
     });
-
-    MySharedPreferences().addEndTime("${DateTime.now().hour.toString() + ":" + DateTime.now().minute.toString()}");
 
     Map<String, dynamic> data = Map();
     data["chargerId"] = connectorData["chargerId"].toString();

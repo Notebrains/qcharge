@@ -111,7 +111,6 @@ class _AccountStepperState extends State<AccountStepper> {
                             state: HorizontalStepState.SELECTED,
                             isValid: isTermConditionStepComplete,
                           ),
-/*
 
                           HorizontalStep(
                             title: TranslationConstants.verify.t(context),
@@ -124,20 +123,6 @@ class _AccountStepperState extends State<AccountStepper> {
                             }
                             ),
                             isValid: isVerifyStepComplete,
-                          ),
-*/
-
-                          HorizontalStep(
-                            title: TranslationConstants.register.t(context),
-                            widget: RegisterScreen(isProcessCompleted: (){
-                              print("isRegisterStepComplete: $isRegisterStepComplete");
-                              setState(() {
-                                isRegisterStepComplete = true;
-                                callNextScreen();
-                              });
-                            },
-                            ),
-                            isValid: isRegisterStepComplete,
                           ),
 
                           HorizontalStep(

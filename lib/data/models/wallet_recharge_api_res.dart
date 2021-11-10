@@ -1,12 +1,12 @@
 /// status : 1
 /// message : "Wallet Recharged Successfully"
-/// wallet : "460"
+/// wallet : "9,849.20"
 
 class WalletRechargeApiRes {
   WalletRechargeApiRes({
       int? status, 
       String? message, 
-      int? wallet,}){
+      String? wallet,}){
     _status = status;
     _message = message;
     _wallet = wallet;
@@ -19,11 +19,11 @@ class WalletRechargeApiRes {
   }
   int? _status;
   String? _message;
-  int? _wallet;
+  String? _wallet;
 
   int? get status => _status;
   String? get message => _message;
-  int? get wallet => _wallet;
+  String? get wallet => _wallet;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

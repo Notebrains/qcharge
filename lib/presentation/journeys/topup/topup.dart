@@ -42,6 +42,7 @@ class _TopUpState extends State<TopUp> {
   OptionItem optionItemSelected = OptionItem(id: '0', title: "Select amount");
 
   DropListModel amountDropDownList = DropListModel([
+    OptionItem(id: '5', title: "5 THB"),
     OptionItem(id: '500', title: "500 THB"),
     OptionItem(id: '1000', title: "1,000 THB"),
     OptionItem(id: '2000', title: "2,000 THB"),
@@ -129,7 +130,7 @@ class _TopUpState extends State<TopUp> {
                                         style: DefaultTextStyle.of(context).style,
                                         children: <TextSpan>[
                                           TextSpan(
-                                              text: convertStrToDoubleStr(walletValue),
+                                              text: walletValue,
                                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white)),
                                           TextSpan(
                                               text: TranslationConstants.thb.t(context),
@@ -248,7 +249,7 @@ class _TopUpState extends State<TopUp> {
                                         edgeAlert(context,
                                             title: TranslationConstants.warning.t(context), description: TranslationConstants.enterTopUpAmount.t(context), gravity: Gravity.top);
                                       } else if (userId.isNotEmpty) {
-                                        openPaymentGateway();
+                                        openPaymentGateway(context);
                                         //requestPayment();
                                       } else {
                                         edgeAlert(context,
@@ -335,10 +336,14 @@ class _TopUpState extends State<TopUp> {
   }
 
   //credentials are live
-  void openPaymentGateway() async {
+  void openPaymentGateway(BuildContext context) async {
     try {
       openProductionPaymentGateway(dropdownTopUpAmount).then((responseJson) => {
             /*
+              print('-------respCode: ${responseJson["respCode"]}'),
+              print('-------failReason: ${responseJson["failReason"]}'),
+              print('-------status: ${responseJson["status"]}'),
+
               String amount = responseJson["amt"];
               String respCode = responseJson["respCode"],
               print('----amount: ${responseJson["amt"]}');

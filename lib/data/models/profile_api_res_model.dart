@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Profile Details."
-/// response : {"name":"Imdadul Haque","email":"imdadulhaque.bt@gmail.com","mobile":"0909564636","wallet":"15005","collect_point":"50","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635783069.jpg","current_membership_plan":"Unavailable","current_membership_plan_price":"","due_billing":0,"payment_flag":0,"normal_customer_charging_price":"10","normal_customer_parking_price":"5","normal_customer_stay_time_after_charge":"20","vehicles":[{"vehicle_id":1,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi005x","image":""}]}
+/// response : {"name":"Imdadul Haque","email":"imdadulhaque.bt@gmail.com","mobile":"0909564636","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635783069.jpg","wallet":"9839.2","collect_point":"50","current_membership_plan":"Unavailable","current_membership_plan_price":"","user_level":"Lv 1 Copper","due_billing":1040,"payment_flag":0,"normal_customer_charging_price":"10","normal_customer_parking_price":"100","normal_customer_stay_time_after_charge":"15","vehicles":[{"vehicle_id":1,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi005x","image":""}]}
 
 class ProfileApiResModel {
   ProfileApiResModel({
@@ -40,16 +40,17 @@ class ProfileApiResModel {
 /// name : "Imdadul Haque"
 /// email : "imdadulhaque.bt@gmail.com"
 /// mobile : "0909564636"
-/// wallet : "15005"
-/// collect_point : "50"
 /// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635783069.jpg"
+/// wallet : "9839.2"
+/// collect_point : "50"
 /// current_membership_plan : "Unavailable"
 /// current_membership_plan_price : ""
-/// due_billing : 0
+/// user_level : "Lv 1 Copper"
+/// due_billing : 1040
 /// payment_flag : 0
 /// normal_customer_charging_price : "10"
-/// normal_customer_parking_price : "5"
-/// normal_customer_stay_time_after_charge : "20"
+/// normal_customer_parking_price : "100"
+/// normal_customer_stay_time_after_charge : "15"
 /// vehicles : [{"vehicle_id":1,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi005x","image":""}]
 
 class Response {
@@ -57,11 +58,12 @@ class Response {
       String? name, 
       String? email, 
       String? mobile, 
+      String? image, 
       String? wallet, 
       String? collectPoint, 
-      String? image, 
       String? currentMembershipPlan, 
       String? currentMembershipPlanPrice, 
+      String? userLevel, 
       int? dueBilling, 
       int? paymentFlag, 
       String? normalCustomerChargingPrice, 
@@ -71,11 +73,12 @@ class Response {
     _name = name;
     _email = email;
     _mobile = mobile;
+    _image = image;
     _wallet = wallet;
     _collectPoint = collectPoint;
-    _image = image;
     _currentMembershipPlan = currentMembershipPlan;
     _currentMembershipPlanPrice = currentMembershipPlanPrice;
+    _userLevel = userLevel;
     _dueBilling = dueBilling;
     _paymentFlag = paymentFlag;
     _normalCustomerChargingPrice = normalCustomerChargingPrice;
@@ -88,11 +91,12 @@ class Response {
     _name = json['name'];
     _email = json['email'];
     _mobile = json['mobile'];
+    _image = json['image'];
     _wallet = json['wallet'];
     _collectPoint = json['collect_point'];
-    _image = json['image'];
     _currentMembershipPlan = json['current_membership_plan'];
     _currentMembershipPlanPrice = json['current_membership_plan_price'];
+    _userLevel = json['user_level'];
     _dueBilling = json['due_billing'];
     _paymentFlag = json['payment_flag'];
     _normalCustomerChargingPrice = json['normal_customer_charging_price'];
@@ -108,11 +112,12 @@ class Response {
   String? _name;
   String? _email;
   String? _mobile;
+  String? _image;
   String? _wallet;
   String? _collectPoint;
-  String? _image;
   String? _currentMembershipPlan;
   String? _currentMembershipPlanPrice;
+  String? _userLevel;
   int? _dueBilling;
   int? _paymentFlag;
   String? _normalCustomerChargingPrice;
@@ -123,11 +128,12 @@ class Response {
   String? get name => _name;
   String? get email => _email;
   String? get mobile => _mobile;
+  String? get image => _image;
   String? get wallet => _wallet;
   String? get collectPoint => _collectPoint;
-  String? get image => _image;
   String? get currentMembershipPlan => _currentMembershipPlan;
   String? get currentMembershipPlanPrice => _currentMembershipPlanPrice;
+  String? get userLevel => _userLevel;
   int? get dueBilling => _dueBilling;
   int? get paymentFlag => _paymentFlag;
   String? get normalCustomerChargingPrice => _normalCustomerChargingPrice;
@@ -140,11 +146,12 @@ class Response {
     map['name'] = _name;
     map['email'] = _email;
     map['mobile'] = _mobile;
+    map['image'] = _image;
     map['wallet'] = _wallet;
     map['collect_point'] = _collectPoint;
-    map['image'] = _image;
     map['current_membership_plan'] = _currentMembershipPlan;
     map['current_membership_plan_price'] = _currentMembershipPlanPrice;
+    map['user_level'] = _userLevel;
     map['due_billing'] = _dueBilling;
     map['payment_flag'] = _paymentFlag;
     map['normal_customer_charging_price'] = _normalCustomerChargingPrice;

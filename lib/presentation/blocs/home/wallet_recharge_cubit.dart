@@ -33,7 +33,7 @@ class WalletRechargeCubit extends Cubit<WalletRechargeState> {
       String transactionId,
       String amount,
       ) async {
-    print('---- -----: $userId , $transactionId , $amount , ');
+    //print('---- -----: $userId , $transactionId , $amount , ');
     loadingCubit.show();
     final Either<AppError, WalletRechargeApiRes> eitherResponse = await walletRechargeUsecase(
       WalletRechargeParams(

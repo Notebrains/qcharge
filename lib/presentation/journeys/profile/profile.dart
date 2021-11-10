@@ -8,6 +8,7 @@ import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/login/login_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
+import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -76,7 +77,7 @@ class Profile extends StatelessWidget {
                                     padding: const EdgeInsets.only(left: 12),
                                     child: ImgTxtRow(
                                       txt: state.model.response!.currentMembershipPlan! == 'Unavailable'
-                                          ? 'Silver Class'
+                                          ? state.model.response!.userLevel!
                                           : state.model.response!.currentMembershipPlan!,
                                       txtColor: AppColor.app_txt_white,
                                       txtSize: 14,
@@ -281,36 +282,51 @@ class Profile extends StatelessWidget {
                           text: TranslationConstants.logoutCaps.t(context),
                           bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                           onPressed: () {
-                            showDialog(
+                            Alert(
                               context: context,
-                              builder: (BuildContext context) => CupertinoAlertDialog(
-                                title: new Text(TranslationConstants.logout.t(context)),
-                                content: new Text(TranslationConstants.logoutDialogContent.t(context)),
-                                actions: <Widget>[
-                                  CupertinoDialogAction(
-                                    isDefaultAction: true,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
+                              onWillPopActive: true,
+                              title: TranslationConstants.logout.t(context),
+                              desc: TranslationConstants.logoutDialogContent.t(context),
+                              image: Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Icon(
+                                    Icons.logout_outlined,
+                                    color: AppColor.border,
+                                    size: 80,
+                                  )),
+                              closeIcon: IconButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, RouteList.home_screen);
+                                  },
+                                  icon: Icon(
+                                    Icons.cancel,
+                                    color: Colors.white70,
+                                  )),
+                              buttons: [
+                                DialogButton(
+                                  color: Colors.amber,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
                                       TranslationConstants.cancel.t(context),
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                                    style: TextStyle(color: Colors.black, fontSize: 14),
                                   ),
-                                  CupertinoDialogAction(
-                                    isDefaultAction: true,
-                                    onPressed: () {
-                                      BlocProvider.of<LoginCubit>(context).logout();
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      TranslationConstants.logout.t(context),
-                                      style: TextStyle(color: Colors.amber),
-                                    ),
+                                ),
+                                DialogButton(
+                                  color: Colors.amber,
+                                  onPressed: () {
+                                    BlocProvider.of<LoginCubit>(context).logout();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    TranslationConstants.logout.t(context),
+                                    style: TextStyle(color: Colors.black, fontSize: 14),
                                   ),
-                                ],
-                              ),
-                            );
+                                )
+                              ],
+                            ).show();
+
                           },
                         ),
                       ),

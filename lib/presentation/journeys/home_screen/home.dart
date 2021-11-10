@@ -11,6 +11,7 @@ import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
+import 'package:qcharge_flutter/presentation/demo/stopwatch_demo.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
@@ -20,6 +21,7 @@ import 'package:qcharge_flutter/presentation/widgets/home_slider.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 
 import '../../../common/extensions/string_extensions.dart';
+import '../../2c2p_payment_gateway.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -138,14 +140,16 @@ class _HomeState extends State<Home> {
                           title: TranslationConstants.callCenter.t(context),
                           img: 'assets/images/home_screen_7.png',
                           onTap: () {
-                            Navigator.pushNamed(context, RouteList.call_center);
+                            //Navigator.pushNamed(context, RouteList.call_center);
 
-                            /*
-                            Navigator.push(
+                           /* Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => HomeNavbar(page: '',),
+                            MaterialPageRoute(builder: (context) => StopWatchTimerPage(),
                             ),
-                          );*/
+                          ); */
+
+
+                            openPaymentGateway();
                           },
                         ),
                       ],
@@ -176,5 +180,26 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void openPaymentGateway() async {
+    try {
+      openProductionPaymentGatewayWithMultipleOption('01').then((responseJson) => {
+          print('-------respCode: ${responseJson["respCode"]}'),
+          print('-------failReason: ${responseJson["failReason"]}'),
+          print('-------status: ${responseJson["status"]}'),
+        /*
+              String amount = responseJson["amt"];
+              String respCode = responseJson["respCode"],
+              print('----amount: ${responseJson["amt"]}');
+              print('----uniqueTransactionCode: ${responseJson["uniqueTransactionCode"]}');
+              print('----tranRef: ${responseJson["tranRef"]}');
+              print('----approvalCode: ${responseJson["approvalCode"]}');
+              print('----refNumber: ${responseJson["refNumber"]}');
+              */
+      });
+    } catch (e) {
+      print('----Error : $e');
+    }
   }
 }

@@ -249,7 +249,7 @@ class _SubscriptionState extends State {
                                   DialogButton(
                                     color: Colors.amber,
                                     onPressed: () {
-                                      if(subscriptionPrice.isNotEmpty)openPaymentGateway();
+                                      if(subscriptionPrice.isNotEmpty)openPaymentGateway(context);
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(
@@ -352,9 +352,7 @@ class _SubscriptionState extends State {
     );
   }
 
-
-
-  void openPaymentGateway() async {
+  void openPaymentGateway(BuildContext context) async {
     try {
       openProductionPaymentGateway(subscriptionPrice).then((responseJson) => {
       if (responseJson["uniqueTransactionCode"].isNotEmpty && subscriptionPrice.isNotEmpty  && responseJson["respCode"] == '00') {
