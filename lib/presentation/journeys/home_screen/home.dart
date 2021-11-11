@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,12 +7,10 @@ import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
-import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/demo/stopwatch_demo.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
-import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_card_list.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_slider.dart';
@@ -29,9 +25,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   String? cardNo = '', walletBalance = '', normalCustomerParkingPrice = "", normalCustomerChargingPrice = "";
-
 
   @override
   void initState() {
@@ -43,7 +37,7 @@ class _HomeState extends State<Home> {
       androidId: 'com.arrowenergy.qcharge',
     );
 
-  /*  //There are test credentials  //change here
+    /*  //There are test credentials  //change here
     final newVersion = NewVersion(
       iOSId: 'itunes.apple.com',
       androidId: 'com.whatsapp.w4b',
@@ -77,21 +71,20 @@ class _HomeState extends State<Home> {
         versionStatus: status,
         dialogTitle: 'App Update Available',
         dialogText: "Current version: ${status.localVersion}\nNew version: ${status.storeVersion}\n\n${Strings.updateDescTxt}",
-        updateButtonText : 'UPDATE',
-        allowDismissal : true,
-        dismissButtonText : 'MAYBE LATER',
-
+        updateButtonText: 'UPDATE',
+        allowDismissal: true,
+        dismissButtonText: 'MAYBE LATER',
       );
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(onTap: (){},),
+      drawer: NavigationDrawer(
+        onTap: () {},
+      ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: BlocBuilder<HomeBannerCubit, HomeBannerState>(
@@ -140,16 +133,16 @@ class _HomeState extends State<Home> {
                           title: TranslationConstants.callCenter.t(context),
                           img: 'assets/images/home_screen_7.png',
                           onTap: () {
-                            //Navigator.pushNamed(context, RouteList.call_center);
+                            Navigator.pushNamed(context, RouteList.call_center);
 
-                           /* Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => StopWatchTimerPage(),
-                            ),
-                          ); */
+                            /*Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StopWatchTimerPage(),
+                              ),
+                            )*/;
 
-
-                            openPaymentGateway();
+                            // openPaymentGateway();
                           },
                         ),
                       ],
@@ -184,11 +177,11 @@ class _HomeState extends State<Home> {
 
   void openPaymentGateway() async {
     try {
-      openProductionPaymentGatewayWithMultipleOption('01').then((responseJson) => {
-          print('-------respCode: ${responseJson["respCode"]}'),
-          print('-------failReason: ${responseJson["failReason"]}'),
-          print('-------status: ${responseJson["status"]}'),
-        /*
+      openProductionPaymentGatewayForQr('01000').then((responseJson) => {
+            print('-------respCode: ${responseJson["respCode"]}'),
+            print('-------failReason: ${responseJson["failReason"]}'),
+            print('-------status: ${responseJson["status"]}'),
+            /*
               String amount = responseJson["amt"];
               String respCode = responseJson["respCode"],
               print('----amount: ${responseJson["amt"]}');
@@ -197,7 +190,7 @@ class _HomeState extends State<Home> {
               print('----approvalCode: ${responseJson["approvalCode"]}');
               print('----refNumber: ${responseJson["refNumber"]}');
               */
-      });
+          });
     } catch (e) {
       print('----Error : $e');
     }

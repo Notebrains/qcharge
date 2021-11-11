@@ -20,33 +20,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   late Future<bool> _future;
   late bool isDataAvailable = false;
   late List<dynamic> notifications = [];
-  late Timer timer;
 
   @override
   void initState() {
     super.initState();
     _future = getNotifications();
-    timer = Timer.periodic(Duration(seconds: 3), (tmr)async{
-      try{
-        http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge/api/v1/notification/1"),);
-        print("notification: ${response.statusCode}");
-        print("notification: ${response.body}");
 
-        if(response.statusCode == 200) {
-          dynamic data = jsonDecode(response.body);
-          setState(() {
-            notifications = data["response"];
-          });
-        }
-      } catch(error){
-         print("notification: $error");
-      }
-    });
   }
 
   @override
   void dispose() {
-    timer.cancel();
     super.dispose();
   }
 

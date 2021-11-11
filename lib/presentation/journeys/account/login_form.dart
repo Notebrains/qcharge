@@ -171,6 +171,7 @@ class _LoginFormState extends State<LoginForm> {
                     edgeAlert(context, title: 'Warning', description: 'Please enter password', gravity: Gravity.top);
                   } else {
                     if (enableSignIn) {
+                      //print('------mob : ${_mobileController?.text}');
                       BlocProvider.of<LoginCubit>(context).initiateLogin(
                         _mobileController?.text ?? '',
                         _passwordController?.text ?? '',

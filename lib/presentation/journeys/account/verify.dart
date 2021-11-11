@@ -150,7 +150,7 @@ class _VerifyState extends State<Verify> {
                     listenWhen: (previous, current) => current is ReqOtpSuccess,
                     listener: (context, state) {
                       if (state is ReqOtpSuccess) {
-                          edgeAlert(context, title: 'Warning', description: state.model.message!, gravity: Gravity.top);
+                          edgeAlert(context, title: TranslationConstants.message.t(context), description: state.model.message!, gravity: Gravity.top);
 
                         if (state.model.message == "OTP send successfully.") {
                           setState(() {
@@ -176,10 +176,10 @@ class _VerifyState extends State<Verify> {
                     listener: (context, state) {
                       if (state is VerifySuccess) {
                         if (state.model.status == 1) {
-                          edgeAlert(context, title: 'Warning', description: state.model.message! + '\n Register now.', gravity: Gravity.top);
+                          edgeAlert(context, title: TranslationConstants.message.t(context), description: state.model.message! + '\nRegister now.', gravity: Gravity.top);
                           widget.isProcessCompleted();
                         } else {
-                          edgeAlert(context, title: 'Warning', description: state.model.message!, gravity: Gravity.top);
+                          edgeAlert(context, title: TranslationConstants.warning.t(context), description: state.model.message!, gravity: Gravity.top);
                         }
                       }
                     },

@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 
+
 import 'di/get_it.dart' as getIt;
 import 'presentation/root_app.dart';
 
@@ -30,5 +31,6 @@ void main() async {
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDir.path);
   unawaited(getIt.init());
+
   runApp(RootApp());
 }

@@ -94,7 +94,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
       setState(() {
         isLoading = false;
       });
-      Navigator.pushReplacementNamed(context, RouteList.qrcode);
+      Navigator.pushReplacementNamed(context, RouteList.stop);
     } catch (error) {
       print("qrscan error 2: $error");
     }

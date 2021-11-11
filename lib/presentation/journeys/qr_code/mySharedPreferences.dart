@@ -293,4 +293,19 @@ Future<String?> getUserMob() async {
     return "";
 }
 
+void addStopWatchTime(String disposeTimerTime) async {
+  _preferences = await SharedPreferences.getInstance();
+  await _preferences!.setString("disposeTimerTime", disposeTimerTime);
+}
+
+Future<String?> getStopWatchTime() async {
+  _preferences = await SharedPreferences.getInstance();
+  if(_preferences!.containsKey("disposeTimerTime")) {
+    String? key = _preferences!.getString("disposeTimerTime");
+    return key;
+  }
+  else
+    return "00:00:00";
+}
+
 }

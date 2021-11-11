@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
@@ -51,10 +52,25 @@ class _StopState extends State<Stop> {
   String? cardNo = '', walletBalance = '', normalCustomerParkingPrice = "", normalCustomerChargingPrice = "", userSubscriptionStatus = "", userID = "";
   double usedAmount = 0.00;
 
-  updateTime(Timer timer) {
+  updateTime(Timer timer) async {
+    String? chargerStatus = await MySharedPreferences().getUserChargingStatus();
+    if(chargerStatus == "Charging"){
+      String? previousTime = await MySharedPreferences().getStopWatchTime();
+      var format = DateFormat("HH:mm:ss");
+      var preTime = format.parse(previousTime!);
+      var currTime = format.parse("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
+      print("---------${currTime.difference(preTime).inSeconds}"); // prints 7:40
+      int timeDifference = currTime.difference(preTime).inSeconds;
+      var duration = Duration(seconds: timeDifference);
+
+      elapsedTime = transformMilliSeconds(duration.inSeconds * 1000);
+    } else {
+      elapsedTime = transformMilliSeconds(stopwatch.elapsedMilliseconds);
+    }
+
     if (stopwatch.isRunning) {
       setState(() {
-        elapsedTime = transformMilliSeconds(stopwatch.elapsedMilliseconds);
+
       });
     }
   }
@@ -79,7 +95,6 @@ class _StopState extends State<Stop> {
     var timeSoFar = stopwatch.elapsedMilliseconds;
     setState(() {
       elapsedTime = transformMilliSeconds(timeSoFar);
-      MySharedPreferences().addEndTime("${DateTime.now().hour.toString() + ":" + DateTime.now().minute.toString()}");
       MySharedPreferences().addElapsedTime(elapsedTime);
       MySharedPreferences().addTotalUnits(units);
     });
@@ -110,7 +125,7 @@ class _StopState extends State<Stop> {
   void dispose() {
     super.dispose();
 
-    //stopWatch();
+    stopWatch();
     timer.cancel();
   }
 
@@ -192,10 +207,14 @@ class _StopState extends State<Stop> {
         }
 
         if (statusData["status"].toString() == "charging") {
-          MySharedPreferences().addUserChargingStatus('Charging');
-          isChargingStart = true;
-          if (!stopwatch.isRunning) startWatch();
 
+          if (!stopwatch.isRunning){
+            startWatch();
+            MySharedPreferences().addUserChargingStatus('Charging');
+            isChargingStart = true;
+          }
+
+          MySharedPreferences().addStopWatchTime("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
         }
 
         if(isChargingStart && statusData["status"].toString() == "available"){
