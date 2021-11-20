@@ -1,14 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
+import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
+import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/login/login_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
+import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -18,10 +24,25 @@ import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart'
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
-
+import 'package:http/http.dart' as http;
 import 'cars.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String? userChargingStatus = "";
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    getLocalData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +157,7 @@ class Profile extends StatelessWidget {
                     Visibility(
                       visible: state.model.response!.currentMembershipPlan! == 'Unavailable',
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 22),
+                        padding: const EdgeInsets.only(top: 20),
                         child: Button(
                           text: TranslationConstants.subscribeNow.t(context),
                           bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
@@ -146,6 +167,68 @@ class Profile extends StatelessWidget {
                         ),
                       ),
                     ),
+
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeIn,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                        gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft,
+                            colors: [Colors.grey.shade600, Colors.grey.shade600]),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
+                      margin: EdgeInsets.only(top: Sizes.dimen_8.h),
+                      width: double.infinity,
+                      height: 45,
+                      child: TextButton(
+                        onPressed: () async {
+                          http.Response tokenResponse = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/token"));
+                          print("token api status code: ${tokenResponse.statusCode}");
+                          print("token api response body: ${tokenResponse.body}");
+                          Map<String, dynamic> tokenResult = jsonDecode(tokenResponse.body);
+                          MySharedPreferences().addApiToken(tokenResult["accessToken"]);
+                          String? cardNo = await MySharedPreferences().getCardNo();
+                          if (tokenResponse.statusCode == 200) {
+                            try {
+                              print('---- cardNo: $cardNo');
+                              http.Response response =
+                              await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/transaction/$cardNo"));
+                              print("Transaction API response: ${response.body}");
+
+                              if (response.statusCode == 200) {
+                                var resData = jsonDecode(response.body.toString());
+
+                                print('----status: ${resData["status"]}');
+                                print('----message: ${resData["message"]}');
+
+                                if(resData["status"]){
+                                  Navigator.pushNamed(context, RouteList.finish);
+                                } else {
+                                  //edgeAlert(context, title: TranslationConstants.warning.t(context), description: resData["message"], gravity: Gravity.top);
+                                  Navigator.pushNamed(context, RouteList.stop);
+                                }
+
+                              } else
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Error Code : ${response.statusCode}"),
+                                  ),
+                                );
+                            } catch (error) {
+                              print("charging: $error");
+                            }
+
+                          }
+                        },
+                        child: Text(
+                          TranslationConstants.chargingStatus.t(context),
+                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+
 
                     Visibility(
                       visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
@@ -157,7 +240,7 @@ class Profile extends StatelessWidget {
                               txt2: state.model.response!.currentMembershipPlan!,
                               txt3: state.model.response!.currentMembershipPlanPrice!,
                               rightPadding: 12,
-                              topPadding: 12,
+                              topPadding: 0,
                               onTap: () {
                                 Navigator.pushNamed(context, RouteList.subscription);
                               }),
@@ -165,9 +248,9 @@ class Profile extends StatelessWidget {
                           BoxTxt(
                               txt1: ' ${TranslationConstants.dueBill.t(context)} >',
                               txt2: TranslationConstants.total.t(context),
-                              txt3: convertStrToDoubleStr(state.model.response!.dueBilling.toString()),
+                              txt3: state.model.response!.dueBilling!,
                               rightPadding: 0,
-                              topPadding: 12,
+                              topPadding: 0,
                               onTap: () async {
                                 Navigator.pushNamed(context, RouteList.billing);
                               }),
@@ -175,10 +258,8 @@ class Profile extends StatelessWidget {
                       ),
                     ),
 
-
-
                     Padding(
-                      padding: const EdgeInsets.only(top: 12),
+                      padding: const EdgeInsets.only(top: 24),
                       child: TextFormField(
                         initialValue: state.model.response!.email!,
                         autocorrect: true,
@@ -203,7 +284,7 @@ class Profile extends StatelessWidget {
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.only(top: 14),
                       child: TextFormField(
                         initialValue: state.model.response!.mobile!,
                         autocorrect: true,
@@ -229,7 +310,7 @@ class Profile extends StatelessWidget {
 
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.only(top: 14),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(width: 1.0, color: Colors.white70),
@@ -262,9 +343,7 @@ class Profile extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Cars(
-                                carList: state.model.response!.vehicles!,
-                              ),
+                              builder: (context) => Cars(),
                             ),
                           );
                         },
@@ -277,7 +356,7 @@ class Profile extends StatelessWidget {
                         Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial, (route) => false);
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: 56, top: 34),
+                        padding: EdgeInsets.only(bottom: 56, top: 16),
                         child: Button(
                           text: TranslationConstants.logoutCaps.t(context),
                           bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
@@ -346,5 +425,12 @@ class Profile extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void getLocalData() async {
+    userChargingStatus = await MySharedPreferences().getUserChargingStatus();
+    setState(() {
+
+    });
   }
 }

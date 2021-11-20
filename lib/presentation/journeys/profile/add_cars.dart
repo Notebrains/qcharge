@@ -266,7 +266,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
 
                           try {
                             if (widget.carBrandId.isNotEmpty) {
-                              print('----Car model: ${optionItem.title}');
+                              //print('----Car model: ${optionItem.title}');
 
                               setState(() {
                                 widget.carModelId = optionItem.id;
@@ -318,7 +318,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                           edgeAlert(context, title: 'Warning', description: 'Please select car model', gravity: Gravity.top);
                         } else {
                           await AuthenticationLocalDataSourceImpl().getSessionId().then((userId) => {
-                                print('---- user id 1: $userId'),
+                                //print('---- user id 1: $userId'),
                                 if (userId != null)
                                   {
                                     addUpdateCarCubit.initiateAddUpdateCar(
@@ -337,6 +337,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                       },
                     ),
                   ),
+
                   BlocConsumer<AddUpdateCarCubit, AddUpdateCarState>(
                     buildWhen: (previous, current) => current is AddUpdateCarError,
                     builder: (context, state) {
@@ -354,7 +355,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                         );*/
 
                       if (state is AddUpdateCarSuccess) {
-                        edgeAlert(context, title: 'Message', description: state.model.message!, gravity: Gravity.top);
+                        edgeAlert(context, title: TranslationConstants.message.t(context), description: state.model.message!, gravity: Gravity.top);
                         if (state.model.status == 1) {
                           Navigator.of(context).pop();
                         }
@@ -375,7 +376,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                     listenWhen: (previous, current) => current is CarBrandLoaded,
                     listener: (context, state) {
                       if (state is CarBrandLoaded) {
-                        print('---- Car data loaded: ${state.carBrandEntity[0].name}');
+                        //print('---- Car data loaded: ${state.carBrandEntity[0].name}');
                         var dataList = state.carBrandEntity;
                         for (int i = 0; i < dataList.length; i++) {
                           carBrandDropDownList.listOptionItems.add(
@@ -390,6 +391,7 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                       }
                     },
                   ),
+
                   BlocConsumer<CarModelCubit, CarModelState>(
                     buildWhen: (previous, current) => current is CarModelError,
                     builder: (context, state) {
@@ -403,8 +405,9 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
                     listenWhen: (previous, current) => current is CarModelLoaded,
                     listener: (context, state) {
                       if (state is CarModelLoaded) {
-                        print('---- Car data loaded: ${state.carModelEntity[0].name}');
+                        //print('---- Car data loaded: ${state.carModelEntity[0].name}');
                         var dataList = state.carModelEntity;
+                        carModelDropDownList.listOptionItems.clear();
                         for (int i = 0; i < dataList.length; i++) {
                           carModelDropDownList.listOptionItems.add(
                             OptionItem(id: dataList[i].id.toString(), title: dataList[i].name.toString()),

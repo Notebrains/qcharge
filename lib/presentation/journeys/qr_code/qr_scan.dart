@@ -10,6 +10,7 @@ import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
+import 'package:qcharge_flutter/presentation/journeys/home_screen/home_nav_bar.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/journeys/subscription/billing.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
@@ -94,7 +95,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
       setState(() {
         isLoading = false;
       });
-      Navigator.pushReplacementNamed(context, RouteList.stop);
+      Navigator.pushReplacementNamed(context, RouteList.qrcode);
     } catch (error) {
       print("qrscan error 2: $error");
     }
@@ -258,7 +259,11 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
         DialogButton(
           color: Colors.amber,
           onPressed: () {
-            Navigator.pushNamed(context, RouteList.home_screen);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeNavbar(page: 'Top Up',),
+              ),
+            );
           },
           child: Text(
             TranslationConstants.topUp.t(context),

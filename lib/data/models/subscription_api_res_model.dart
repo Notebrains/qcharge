@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Vip Class Plans List"
-/// response : [{"id":1,"membership_name":"VIP 1","membership_price":"1500","charging_price":"4","stay_time_after_charge":"2","description":"test","active_plan":0},{"id":2,"membership_name":"VIP 2","membership_price":"3000","charging_price":"2","stay_time_after_charge":"5","description":"Test Check","active_plan":0},{"id":3,"membership_name":"VIP 3","membership_price":"5000","charging_price":"5000","stay_time_after_charge":"23","description":"Monthly Subscription\r\nIncludes 500 message segments.\r\nSent & Received Segments Charged Each sent and received message segment is charged. What is a segment?\r\nDedicated US/CA/FR/GB Number One free the US, Canada, France or United Kingdom number included. Other countries are available starting at $4/mo USD.\r\nRollover Credits Any unused messaging credits roll over for 90 days.\r\nUnlimited Users & Contacts","active_plan":0}]
+/// response : [{"id":1,"membership_name":"VIP Sapphire","membership_price":"1999","charging_price":"8.5","stay_time_after_charge":"60","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/plan/sapphire-1637245548.jpg","description":null,"active_plan":0},{"id":2,"membership_name":"VIP Ruby","membership_price":"2999","charging_price":"7","stay_time_after_charge":"120","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/plan/ruby-1637245527.jpg","description":null,"active_plan":0},{"id":3,"membership_name":"VVIP Diamond","membership_price":"3999","charging_price":"6","stay_time_after_charge":"180","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/plan/diamond-1637245498.jpg","description":null,"active_plan":0}]
 
 class SubscriptionApiResModel {
   SubscriptionApiResModel({
@@ -43,11 +43,12 @@ class SubscriptionApiResModel {
 }
 
 /// id : 1
-/// membership_name : "VIP 1"
-/// membership_price : "1500"
-/// charging_price : "4"
-/// stay_time_after_charge : "2"
-/// description : "test"
+/// membership_name : "VIP Sapphire"
+/// membership_price : "1999"
+/// charging_price : "8.5"
+/// stay_time_after_charge : "60"
+/// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/plan/sapphire-1637245548.jpg"
+/// description : null
 /// active_plan : 0
 
 class Response {
@@ -57,13 +58,15 @@ class Response {
       String? membershipPrice, 
       String? chargingPrice, 
       String? stayTimeAfterCharge, 
-      String? description, 
+      String? image, 
+      dynamic description, 
       int? activePlan,}){
     _id = id;
     _membershipName = membershipName;
     _membershipPrice = membershipPrice;
     _chargingPrice = chargingPrice;
     _stayTimeAfterCharge = stayTimeAfterCharge;
+    _image = image;
     _description = description;
     _activePlan = activePlan;
 }
@@ -74,6 +77,7 @@ class Response {
     _membershipPrice = json['membership_price'];
     _chargingPrice = json['charging_price'];
     _stayTimeAfterCharge = json['stay_time_after_charge'];
+    _image = json['image'];
     _description = json['description'];
     _activePlan = json['active_plan'];
   }
@@ -82,7 +86,8 @@ class Response {
   String? _membershipPrice;
   String? _chargingPrice;
   String? _stayTimeAfterCharge;
-  String? _description;
+  String? _image;
+  dynamic _description;
   int? _activePlan;
 
   int? get id => _id;
@@ -90,7 +95,8 @@ class Response {
   String? get membershipPrice => _membershipPrice;
   String? get chargingPrice => _chargingPrice;
   String? get stayTimeAfterCharge => _stayTimeAfterCharge;
-  String? get description => _description;
+  String? get image => _image;
+  dynamic get description => _description;
   int? get activePlan => _activePlan;
 
   Map<String, dynamic> toJson() {
@@ -100,6 +106,7 @@ class Response {
     map['membership_price'] = _membershipPrice;
     map['charging_price'] = _chargingPrice;
     map['stay_time_after_charge'] = _stayTimeAfterCharge;
+    map['image'] = _image;
     map['description'] = _description;
     map['active_plan'] = _activePlan;
     return map;

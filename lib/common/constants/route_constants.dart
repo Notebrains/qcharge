@@ -26,4 +26,5 @@ class RouteList {
   static const String finish = '/finish';
   static const String billing = '/billing';
   static const String notificationsScreen = '/notificationsScreen';
+  static const String appTutorial = '/appTutorial';
 }

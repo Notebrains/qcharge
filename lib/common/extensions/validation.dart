@@ -43,9 +43,7 @@ String validateZipCode(String value) {
 }
 
 bool validateEmail(String value) {
-  String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regExp = new RegExp(pattern);
-  if (value.length == 0 || !regExp.hasMatch(value)) {
+  if (value.length < 4) {
     return false;
   } else {
     return true;

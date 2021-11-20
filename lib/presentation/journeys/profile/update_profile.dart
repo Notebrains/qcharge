@@ -147,18 +147,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
                     Container(
                       margin: const EdgeInsets.fromLTRB(8, 24, 8, 0),
-                      child: IcIfRow(txt: 'Full name *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
+                      child: IcIfRow(txt: 'First name', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                         icon: 'assets/icons/pngs/account_Register_6.png', icColor: Colors.white,
-                        hint: 'Enter first name *', textInputType: TextInputType.text,
+                        hint: 'Enter first name', textInputType: TextInputType.text,
                         controller: _firstNameController,obscureText: false,
                       ),
                     ),
 
                     Container(
                       margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                      child: IcIfRow(txt: 'Last name *', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
+                      child: IcIfRow(txt: 'Last name', txtColor: Colors.white, txtSize: 12, fontWeight: FontWeight.normal,
                         icon: 'assets/icons/pngs/account_Register_6.png', icColor: Colors.white,
-                        hint: 'Enter last name *', textInputType: TextInputType.text,
+                        hint: 'Enter last name', textInputType: TextInputType.text,
                         controller: _lastNameController,obscureText: false,
                       ),
                     ),

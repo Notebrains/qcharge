@@ -3,8 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my2c2psdk/models/my2c2psdk_type.dart';
-import 'package:my2c2psdk/my2c2psdk.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
@@ -16,6 +14,7 @@ import 'package:qcharge_flutter/presentation/blocs/home/cancel_subscription_cubi
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/purchase_subscription_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/subscription_cubit.dart';
+import 'package:qcharge_flutter/presentation/journeys/payments/payment_methods.dart';
 import 'package:qcharge_flutter/presentation/journeys/subscription/subscription_details.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
@@ -25,7 +24,7 @@ import 'package:qcharge_flutter/presentation/widgets/button.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
-import '../../2c2p_payment_gateway.dart';
+import '../payments/2c2p_payment_gateway.dart';
 
 
 class Subscription extends StatefulWidget {
@@ -189,7 +188,7 @@ class _SubscriptionState extends State {
                                           MaterialPageRoute(builder: (context) =>
                                               SubscriptionDetails(
                                                 subscriptionTitle: state.model.response![i].membershipName!,
-                                                details: state.model.response![i].description!,
+                                                details: state.model.response![i].image!,
                                               )
                                           ),
                                         );
@@ -248,9 +247,17 @@ class _SubscriptionState extends State {
                                   ),
                                   DialogButton(
                                     color: Colors.amber,
-                                    onPressed: () {
-                                      if(subscriptionPrice.isNotEmpty)openPaymentGateway(context);
-                                      Navigator.of(context).pop();
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PaymentMethods(onTap: (selectedIndex){
+                                            print('----selectedIndex : $selectedIndex');
+                                            openPaymentGateway(context, selectedIndex);
+                                          }),
+                                        ),
+                                      );
                                     },
                                     child: Text(
                                       TranslationConstants.payOnline.t(context),
@@ -352,9 +359,9 @@ class _SubscriptionState extends State {
     );
   }
 
-  void openPaymentGateway(BuildContext context) async {
+  void openPaymentGateway(BuildContext context, int selectedIndex) async {
     try {
-      openProductionPaymentGateway(subscriptionPrice).then((responseJson) => {
+      openProductionPaymentGateway(subscriptionPrice, selectedIndex, "Subscription Payment").then((responseJson) => {
       if (responseJson["uniqueTransactionCode"].isNotEmpty && subscriptionPrice.isNotEmpty  && responseJson["respCode"] == '00') {
         purchaseSubscriptionCubit.initiatePurchaseSubscription(
         _userId, responseJson["uniqueTransactionCode"], subscriptionPrice, 'pay', subscriptionId,

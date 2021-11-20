@@ -48,7 +48,8 @@
   "usageHistory": "Usage History",
   "topUpHistory": "Top Up History",
   "chargingHistory": "Charging History",
-  "date": "Date & Time:",
+  "date": "Date",
+  "dateTime": "Date & Time:",
   "time": "Time:",
   "amount": "Amount:",
   "topUpCaps": "Top Up",
@@ -195,6 +196,13 @@
   "drawerHeader1": "Welcome to",
   "drawerHeader2": "Q Charge",
   "notReady": "Not Ready",
-  "endTime": "End time:"
+  "endTime": "End time:",
+  "readMore": "Read More",
+  "termCondition": "Terms & Conditions",
+  "chargingStatus": "Last Charging Status",
+  "notReadyNote1": "Note: If the socket is “Not Ready” please check",
+  "notReadyNote2": "1. Car is parked at the correct slot",
+  "notReadyNote3": "2. Socket connection"
+
 
 }

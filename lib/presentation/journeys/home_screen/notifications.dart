@@ -37,8 +37,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     String? userId = await AuthenticationLocalDataSourceImpl().getSessionId();
     try{
       http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge/api/v1/notification/"+ userId!),);
-      print("${ApiConstants.BASE_URL}notification/1");
-      print("notification: ${response.statusCode}");
+      //print("${ApiConstants.BASE_URL}notification/1");
+      //print("notification: ${response.statusCode}");
       print("notification: ${response.body}");
 
       if(response.statusCode == 200) {
@@ -80,7 +80,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             Row(
                               children: [
                                 Expanded(child: Text(notifications.elementAt(index)["title"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),)),
-                                Text(notifications.elementAt(index)["date"], style: TextStyle( fontSize: 12, color: AppColor.app_txt_white),)
+                                Text(notifications.elementAt(index)["time"] + "  " + notifications.elementAt(index)["date"], style: TextStyle( fontSize: 12, color: AppColor.app_txt_white),)
                               ],
                             ),
                             Padding(

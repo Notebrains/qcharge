@@ -99,6 +99,10 @@
            android:theme="@style/My2c2pSDK.Theme"
            android:screenOrientation="portrait" />
 
+       <!-- Optional : add if Samsung Pay SDK show error. -->
+       <!-- Samsung Pay -->
+       <meta-data android:name="debug_mode" android:value="N" />
+       <meta-data android:name="spay_sdk_api_level" android:value="1.6" />
 
        <!-- Don't delete the meta-data below.
             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

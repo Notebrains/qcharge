@@ -1,6 +1,6 @@
 /// status : 1
 /// message : "Profile Details."
-/// response : {"name":"Imdadul Haque","email":"imdadulhaque.bt@gmail.com","mobile":"0909564636","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635783069.jpg","wallet":"9839.2","collect_point":"50","current_membership_plan":"Unavailable","current_membership_plan_price":"","user_level":"Lv 1 Copper","due_billing":1040,"payment_flag":0,"normal_customer_charging_price":"10","normal_customer_parking_price":"100","normal_customer_stay_time_after_charge":"15","vehicles":[{"vehicle_id":1,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi005x","image":""}]}
+/// response : {"name":"Imdadul Haque","email":"imdadulhaque.bt@gmail.com","mobile":"0909564636","image":"https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635783069.jpg","wallet":"9436.02","collect_point":"0","current_membership_plan":"Unavailable","current_membership_plan_price":"","user_level":"Lv 1 Copper","due_billing":"1,052.42","payment_flag":0,"normal_customer_charging_price":"10","normal_customer_parking_price":"100","normal_customer_stay_time_after_charge":"5","vehicles":[{"vehicle_id":1,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi005x","image":""}]}
 
 class ProfileApiResModel {
   ProfileApiResModel({
@@ -41,16 +41,16 @@ class ProfileApiResModel {
 /// email : "imdadulhaque.bt@gmail.com"
 /// mobile : "0909564636"
 /// image : "https://mridayaitservices.com/demo/qcharge/public/uploads/user/img_1635783069.jpg"
-/// wallet : "9839.2"
-/// collect_point : "50"
+/// wallet : "9436.02"
+/// collect_point : "0"
 /// current_membership_plan : "Unavailable"
 /// current_membership_plan_price : ""
 /// user_level : "Lv 1 Copper"
-/// due_billing : 1040
+/// due_billing : "1,052.42"
 /// payment_flag : 0
 /// normal_customer_charging_price : "10"
 /// normal_customer_parking_price : "100"
-/// normal_customer_stay_time_after_charge : "15"
+/// normal_customer_stay_time_after_charge : "5"
 /// vehicles : [{"vehicle_id":1,"brand_id":1,"model_id":1,"brand":"Honda","model":"ABCD1234","car_name":"Audi","car_lisense_plate":"Audi005x","image":""}]
 
 class Response {
@@ -64,7 +64,7 @@ class Response {
       String? currentMembershipPlan, 
       String? currentMembershipPlanPrice, 
       String? userLevel, 
-      int? dueBilling, 
+      String? dueBilling, 
       int? paymentFlag, 
       String? normalCustomerChargingPrice, 
       String? normalCustomerParkingPrice, 
@@ -118,7 +118,7 @@ class Response {
   String? _currentMembershipPlan;
   String? _currentMembershipPlanPrice;
   String? _userLevel;
-  int? _dueBilling;
+  String? _dueBilling;
   int? _paymentFlag;
   String? _normalCustomerChargingPrice;
   String? _normalCustomerParkingPrice;
@@ -134,7 +134,7 @@ class Response {
   String? get currentMembershipPlan => _currentMembershipPlan;
   String? get currentMembershipPlanPrice => _currentMembershipPlanPrice;
   String? get userLevel => _userLevel;
-  int? get dueBilling => _dueBilling;
+  String? get dueBilling => _dueBilling;
   int? get paymentFlag => _paymentFlag;
   String? get normalCustomerChargingPrice => _normalCustomerChargingPrice;
   String? get normalCustomerParkingPrice => _normalCustomerParkingPrice;

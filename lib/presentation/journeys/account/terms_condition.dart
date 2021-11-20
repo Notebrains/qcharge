@@ -8,6 +8,7 @@ import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/extensions/string_extensions.dart';
+import 'view_pdf.dart';
 
 class TermsAndCondition extends StatefulWidget {
   final Function isProcessCompleted;
@@ -26,42 +27,47 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
       physics: BouncingScrollPhysics(),
       child: Column(
         children: [
-          InkWell(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(45, Sizes.dimen_24.h, 45, Sizes.dimen_16.h),
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: AppColor.grey,
-                border: Border.all(
-                  color: Colors.white,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
-                ),
+          Container(
+            margin: EdgeInsets.fromLTRB(45, Sizes.dimen_24.h, 45, Sizes.dimen_16.h),
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: AppColor.grey,
+              border: Border.all(
+                color: Colors.white,
+                width: 1.0,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    Strings.tAndCTxt,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: 13.0),
-                  ),
-
-                  Text(
-                    '\nRead More...',
-                    style: TextStyle(fontSize: 13.0),
-                  ),
-                ],
+              borderRadius: BorderRadius.all(
+                Radius.circular(5.0),
               ),
             ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  Strings.tAndCTxt,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontSize: 13.0),
+                ),
 
-            onTap: (){
-              _launchInBrowser("https://docs.google.com/gview?embedded=true&url=" + Strings.termAndCondPdfUrl);
-              //_launchInBrowser("https://docs.google.com/viewer?url="+ Strings.termAndCondPdfUrl);
-            },
+                InkWell(
+                  child: Text(
+                    '\n${TranslationConstants.readMore.t(context)}...',
+                    style: TextStyle(fontSize: 13.0, color: AppColor.border),
+                  ),
+                  onTap: (){
+                    //_launchInBrowser("https://docs.google.com/gview?embedded=true&url=" + Strings.termAndCondPdfUrl);
+                    //_launchInBrowser("http://drive.google.com/viewerng/viewer?embedded=true&url=" + Strings.termAndCondPdfUrl);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewPdf(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
 
           Padding(
@@ -73,7 +79,7 @@ class _TermsAndConditionState extends State<TermsAndCondition> {
                 style: TextStyle(fontSize: 13.0),),
               value: isAgreed,
               onChanged: (isChecked) {
-                print('---- : $isChecked ,isAgreed: $isAgreed');
+                //print('---- : $isChecked ,isAgreed: $isAgreed');
                 setState(() {
                   isAgreed = isChecked!;
                 });

@@ -4,6 +4,7 @@ import 'package:qcharge_flutter/presentation/journeys/account/forgot_password.da
 import 'package:qcharge_flutter/presentation/journeys/contents/faqs.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
 import 'package:qcharge_flutter/presentation/journeys/subscription/billing.dart';
+import 'journeys/contents/app_tutorial.dart';
 import 'journeys/home_screen/call_center.dart';
 import 'journeys/home_screen/notifications.dart';
 import 'journeys/profile/update_profile.dart';
@@ -41,5 +42,6 @@ class Routes {
         RouteList.finish: (context) => Finish(),
         RouteList.billing: (context) => Billing(),
         RouteList.notificationsScreen: (context) => NotificationsScreen(),
+        RouteList.appTutorial: (context) => AppTutorial(),
       };
 }

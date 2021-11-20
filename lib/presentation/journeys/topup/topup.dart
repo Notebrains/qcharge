@@ -8,6 +8,7 @@ import 'package:qcharge_flutter/data/data_sources/authentication_local_data_sour
 import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/wallet_recharge_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
+import 'package:qcharge_flutter/presentation/journeys/payments/qr_payments.dart';
 import 'package:qcharge_flutter/presentation/journeys/topup/usage_history.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -19,7 +20,7 @@ import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_if_ic_round.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_img_row.dart';
 
-import '../../2c2p_payment_gateway.dart';
+import '../payments/2c2p_payment_gateway.dart';
 
 class TopUp extends StatefulWidget {
   final TopUpCubit cubit;
@@ -35,6 +36,7 @@ class _TopUpState extends State<TopUp> {
 
   bool isTopUpBtnSelected = false;
   bool isAddMoneyActive = false;
+  int paymentMethodId = 55;
 
   String userId = '', dropdownTopUpAmount = '';
   final ValueNotifier<String> _walletBalance = ValueNotifier<String>('0.00');
@@ -42,7 +44,6 @@ class _TopUpState extends State<TopUp> {
   OptionItem optionItemSelected = OptionItem(id: '0', title: "Select amount");
 
   DropListModel amountDropDownList = DropListModel([
-    OptionItem(id: '5', title: "5 THB"),
     OptionItem(id: '500', title: "500 THB"),
     OptionItem(id: '1000', title: "1,000 THB"),
     OptionItem(id: '2000', title: "2,000 THB"),
@@ -70,7 +71,7 @@ class _TopUpState extends State<TopUp> {
       drawer: NavigationDrawer(onTap: (){},),
       body: BlocBuilder<TopUpCubit, TopUpState>(
         builder: (BuildContext context, state) {
-          if (state is TopUpSuccess) {
+          if (state is TopUpSuccess && state.model.status == 1) {
             //_walletBalance.value = state.model.response!.wallet!;
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -177,13 +178,14 @@ class _TopUpState extends State<TopUp> {
                               ),
                               InkWell(
                                 child: TxtImgRow(
-                                  txt: TranslationConstants.onlineTopup.t(context),
+                                  txt: TranslationConstants.creditDebitCard.t(context),
                                   txtColor: AppColor.app_txt_white,
-                                  txtSize: 16,
-                                  img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
+                                  txtSize: 14,
+                                  img: 'assets/images/credit2.png',
                                 ),
                                 onTap: () {
                                   setState(() {
+                                    paymentMethodId = 0;
                                     isAddMoneyActive ? isAddMoneyActive = false : isAddMoneyActive = true;
                                   });
                                 },
@@ -191,13 +193,29 @@ class _TopUpState extends State<TopUp> {
 
                               InkWell(
                                 child: TxtImgRow(
-                                  txt: TranslationConstants.creditDebitCard.t(context),
+                                  txt: "123 Payment",
                                   txtColor: AppColor.app_txt_white,
-                                  txtSize: 16,
-                                  img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
+                                  txtSize: 14,
+                                  img: 'assets/images/123download.png',
                                 ),
                                 onTap: () {
                                   setState(() {
+                                    paymentMethodId = 1;
+                                    isAddMoneyActive ? isAddMoneyActive = false : isAddMoneyActive = true;
+                                  });
+                                },
+                              ),
+
+                              InkWell(
+                                child: TxtImgRow(
+                                  txt: "TrueMoney Wallet",
+                                  txtColor: AppColor.app_txt_white,
+                                  txtSize: 14,
+                                  img: 'assets/images/truewallet.png',
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    paymentMethodId = 2;
                                     isAddMoneyActive ? isAddMoneyActive = false : isAddMoneyActive = true;
                                   });
                                 },
@@ -216,6 +234,21 @@ class _TopUpState extends State<TopUp> {
                                   ),
                                 ),
                               ),
+/*
+                              InkWell(
+                                child: TxtImgRow(txt: "QR Payment", txtColor: AppColor.app_txt_white, txtSize: 16,
+                                  img: 'assets/icons/pngs/create_account_logo.png',
+                                ),
+
+                                onTap: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ScanQr(),
+                                    ),
+                                  );
+                                },
+                              ),*/
 
                               Visibility(
                                 visible: isAddMoneyActive,
@@ -226,7 +259,7 @@ class _TopUpState extends State<TopUp> {
                                     icColor: AppColor.app_txt_white,
                                     itemSelected: optionItemSelected,
                                     onOptionSelected: (OptionItem optionItem) {
-                                      print('----Selected Amount: ${optionItem.id}');
+                                      //print('----Selected Amount: ${optionItem.id}');
                                       setState(() {
                                         dropdownTopUpAmount = optionItem.id;
                                         optionItemSelected.title = optionItem.title;
@@ -249,7 +282,7 @@ class _TopUpState extends State<TopUp> {
                                         edgeAlert(context,
                                             title: TranslationConstants.warning.t(context), description: TranslationConstants.enterTopUpAmount.t(context), gravity: Gravity.top);
                                       } else if (userId.isNotEmpty) {
-                                        openPaymentGateway(context);
+                                        openPaymentGateway(context , paymentMethodId);
                                         //requestPayment();
                                       } else {
                                         edgeAlert(context,
@@ -261,14 +294,6 @@ class _TopUpState extends State<TopUp> {
                                   ),
                                 ),
                               ),
-
-                              /*TxtImgRow(txt: TranslationConstants.creditDebitCard.t(context), txtColor: AppColor.app_txt_white, txtSize: 16,
-                                  img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
-                                ),
-
-                                TxtImgRow(txt: TranslationConstants.selectTopUpMethod.t(context), txtColor: AppColor.app_txt_white, txtSize: 16,
-                                  img: 'assets/icons/pngs/crete_account_layer_mob_bank.png',
-                                ),*/
 
                               SizedBox(
                                 height: 80,
@@ -318,6 +343,7 @@ class _TopUpState extends State<TopUp> {
             heroTag: '90',
             mini: true,
             onPressed: () async {
+              print("-----Top up refresh: $userId, ${DateTime.now().year}-${DateTime.now().month}");
               widget.cubit.initiateTopUp(userId, "${DateTime.now().year}-${DateTime.now().month}");
             },
             child: Icon(
@@ -336,9 +362,9 @@ class _TopUpState extends State<TopUp> {
   }
 
   //credentials are live
-  void openPaymentGateway(BuildContext context) async {
+  void openPaymentGateway(BuildContext context, int paymentMethodId) async {
     try {
-      openProductionPaymentGateway(dropdownTopUpAmount).then((responseJson) => {
+      openProductionPaymentGateway(dropdownTopUpAmount, paymentMethodId, "Wallet Top Up").then((responseJson) => {
             /*
               print('-------respCode: ${responseJson["respCode"]}'),
               print('-------failReason: ${responseJson["failReason"]}'),

@@ -34,7 +34,17 @@ class TxtImgRow extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
 
-          Image.asset(img, width: 100, height: 50,),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Image(
+                width: 60, height: 50,
+                fit: BoxFit.cover,
+                image: AssetImage(img),
+              ),
+            ),
+          ),
         ],
       ),
     );

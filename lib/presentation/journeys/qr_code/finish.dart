@@ -35,11 +35,11 @@ class _FinishState extends State<Finish> {
   bool isPaymentDone = false;
   late Future _future;
   late String? startDateTime = "";
-  late String date = "", time = "", totalUnits = "", totalPrice = "", stayTimeAfterCharge = "", parkingPrice = "" ;
+  late String date = "", time = "", totalUnits = "", totalPrice = "", stayTimeAfterCharge = "", parkingPrice = "", showNotificationTime = "";
   late String? userId = "0";
   late int? couponId  = 0;
-  String elapsedTime = '00:00:00', endTime = '00:00', cardNo = '0' , language = 'en';
-  String dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within -- minutes. After that, the parking charge will be apply at -- thb/hr. Thank you.";
+  String  endTime = '00:00', cardNo = '0' , language = 'en';
+  String dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within -- minutes. After that, the parking charge will be apply at -- thb/hr  since --. Thank you.";
   DateTime dateTime = DateTime.now();
 
   @override
@@ -57,13 +57,12 @@ class _FinishState extends State<Finish> {
   }
 
   Future<bool> getChargingDetails() async {
-    // startDateTime = await MySharedPreferences().getStartDateTime();
-    elapsedTime = await MySharedPreferences().getElapsedTime()?? '00:00:00';
-    endTime = await MySharedPreferences().getEndTime()?? '00:00:00';
     cardNo = await MySharedPreferences().getCardNo()?? '0';
+    // startDateTime = await MySharedPreferences().getStartDateTime();
+    couponId = await MySharedPreferences().getChargerId();
+    endTime = await MySharedPreferences().getEndTime()?? '00:00:00';
     startDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime); //change here
     userId = await AuthenticationLocalDataSourceImpl().getSessionId();
-    couponId = await MySharedPreferences().getChargerId();
 
     date = DateFormat("dd/MM/yyyy").format(dateTime);
     return true;
@@ -117,8 +116,8 @@ class _FinishState extends State<Finish> {
 
                       Container(
                         width: Sizes.dimen_280.w,
-                        padding: const EdgeInsets.all(24),
-                        margin: EdgeInsets.only(bottom: Sizes.dimen_30.h),
+                        padding: const EdgeInsets.fromLTRB(24,24,24, 24),
+                        margin: EdgeInsets.only(bottom: Sizes.dimen_20.h),
                         decoration: BoxDecoration(
                           color: AppColor.grey,
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -128,7 +127,7 @@ class _FinishState extends State<Finish> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ImgTxtRow(
-                              txt: '${TranslationConstants.date.t(context)} $date',
+                              txt: '${TranslationConstants.date.t(context)}: $date',
                               txtColor: AppColor.app_txt_white,
                               txtSize: 12,
                               fontWeight: FontWeight.normal,
@@ -170,9 +169,18 @@ class _FinishState extends State<Finish> {
                             ),
 
 
+                            ImgTxtRow(
+                              txt: "7 % VAT ${TranslationConstants.applied.t(context)}",
+                              txtColor: AppColor.app_txt_white,
+                              txtSize: 12,
+                              fontWeight: FontWeight.normal,
+                              icon: 'assets/icons/pngs/vat.png',
+                              icColor: AppColor.app_txt_white,
+                            ),
                           ],
                         ),
                       ),
+
 
                       Visibility(
                         visible: !isPaymentDone,
@@ -184,7 +192,7 @@ class _FinishState extends State<Finish> {
                       Visibility(
                         visible: !isPaymentDone,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 12),
+                          padding: const EdgeInsets.only(top: 12, bottom: 16),
                           child: Text(
                             TranslationConstants.processing.t(context),
                             style: TextStyle(fontWeight: FontWeight.normal, fontSize: Sizes.dimen_20.w, color: Colors.white, letterSpacing: 3),
@@ -192,10 +200,9 @@ class _FinishState extends State<Finish> {
                         ),
                       ),
 
-
                       Container(
                         width: 280,
-                        margin: EdgeInsets.only(left: 12, top: 34, bottom: 20),
+                        margin: EdgeInsets.only(left: 12, bottom: 20),
                         child: Button(
                           text: TranslationConstants.finish.t(context),
                           bgColor: isPaymentDone? [Color(0xFFEFE07D), Color(0xFFB49839)] : [Color(0xFF8D8D8D), Color(0xFFD2D2D2)],
@@ -243,7 +250,6 @@ class _FinishState extends State<Finish> {
             //String chargerId = resData["chargerId"].toString();
             totalUnits = resData["data"]["kwhValue"].toString();
 
-
             getChargingCalculatedData(stationId);
           });
 
@@ -264,11 +270,12 @@ class _FinishState extends State<Finish> {
 
   void getChargingCalculatedData(String stationId) async {
     try {
-      /*print('---- userId: $userId');
+      print('---- cardNo: $cardNo');
+      print('---- userId: $userId');
       print('---- stationId: $stationId');
       print('---- startDateTime: $startDateTime');
       print('---- time: $time');
-      print('---- totalUnits: $totalUnits');*/
+      print('---- totalUnits: $totalUnits');
 
       Map<String, dynamic> data = Map();
       data["user_id"] = userId;
@@ -276,9 +283,10 @@ class _FinishState extends State<Finish> {
       data["vehicle_id"] = '1';
       data["start_time"] = startDateTime;
       data["end_time"] = DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime);
-      data["duration"] = elapsedTime;
+      data["duration"] = time;
       data["consume_charge"] = totalUnits;
       data["id"] = couponId.toString();
+      data["transaction_id"] = cardNo;
 
       http.Response response =
       await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/charging"), body: data);
@@ -297,14 +305,40 @@ class _FinishState extends State<Finish> {
           stayTimeAfterCharge = resData["stay_time_after_charge"].toString();
           parkingPrice = resData["parking_price"].toString();
 
-          if (language != 'en') {
-            dialogTxt = "การชาร์จรถยนต์ของคุณเสร็จสิ้น โปรดย้ายรถออกจากสถานีชาร์จภายใน $stayTimeAfterCharge นาที หลังจากนั้นจะมีการเรียกเก็บค่าบริการที่จอดรถในอัตรา $parkingPrice บาท/ชม.  ขอขอบคุณ.";
-          } else {
-            dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within $stayTimeAfterCharge minutes. After that, the parking charge will be apply at $parkingPrice thb/hr. Thank you.";
-}
+          try {
+            var splitString = endTime.split(':');
+            int hourEndTime = int.parse(splitString[0].trim());
+            int minuteEndTime = int.parse(splitString[1].trim());
+
+            var d = Duration(minutes: int.parse(stayTimeAfterCharge));
+            List<String> parts = d.toString().split(':');
+            int hour = int.parse(parts[0].padLeft(2, '0'));
+            int minute = int.parse(parts[1].padLeft(2, '0'));
+
+            var format = DateFormat("HH:mm");
+            DateTime dateTime = format.parse("${hourEndTime + hour}:${minuteEndTime + minute}");
+            String parkingTime = DateFormat.Hm().format(dateTime);
+
+            if (language != 'en') {
+                        dialogTxt = "การชาร์จรถยนต์ของคุณเสร็จสิ้น โปรดย้ายรถออกจากสถานีชาร์จภายใน $stayTimeAfterCharge นาที หลังจากนั้นจะมีการเรียกเก็บค่าบริการที่จอดรถในอัตรา $parkingPrice บาท/ชม. ตั้งแต่เวลา $parkingTime.  ขอขอบคุณ.";
+                      } else {
+                        dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within $stayTimeAfterCharge minutes. After that, the parking charge will be apply at $parkingPrice thb/hr. since $parkingTime. Thank you.";
+                      }
+          } catch (e) {
+            print(e);
+          }
         });
-        
-        updatePaymentStatus(id, totalPrice);
+
+        String? userChargingStatus = await MySharedPreferences().getUserChargingStatus();
+        if (userChargingStatus == 'Charging') {
+          updatePaymentStatus(id, totalPrice);
+        } else {
+          setState(() {
+            isPaymentDone = true;
+          });
+        }
+
+
       } else
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -317,7 +351,6 @@ class _FinishState extends State<Finish> {
   }
 
   void updatePaymentStatus( String id, String totalPrice) async {
-
     try {
       Map<String, dynamic> data = Map();
       data["id"] = id;
@@ -371,8 +404,8 @@ class _FinishState extends State<Finish> {
         DialogButton(
           color: Colors.amber,
           onPressed: () {
-            //Navigator.pushNamed(context, RouteList.home_screen);
-            Navigator.push(
+            //MySharedPreferences().addUserChargingStatus("Charged");
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => HomeNavbar(page: 'Top Up',),
               ),
@@ -388,7 +421,6 @@ class _FinishState extends State<Finish> {
   }
 
   void getCardNo() async {
-    MySharedPreferences().addUserChargingStatus('Charged');
     await MySharedPreferences().getCardNo().then((cardNo) => {
     Future.delayed(const Duration(seconds: 5), () {
       getTransactionDetails(cardNo!);
@@ -401,3 +433,4 @@ class _FinishState extends State<Finish> {
   }
 
 }
+

@@ -61,14 +61,11 @@ class HomeCardList extends StatelessWidget{
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Image.asset(
-                img,
-                fit: BoxFit.contain,
-                width: double.infinity,
-                height: 60,
-              ),
+            Image.asset(
+              img,
+              fit: BoxFit.contain,
+              width: double.infinity,
+              height: 70,
             ),
 
           ],

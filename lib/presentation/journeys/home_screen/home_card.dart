@@ -54,56 +54,55 @@ class _HomeCardsState extends State<HomeCards> {
             bloc: _homeCardCubit,
             builder: (context, state) {
               if (state is HomeCardSuccess) {
-                print('----Title : ${state.model.response}');
-
                 return Container(
-                  margin: EdgeInsets.all(16),
+                  margin: EdgeInsets.only(left: 16, right: 16,),
                   padding: EdgeInsets.only(top: 5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /* Padding(
-                          padding: const EdgeInsets.only(left: 3, bottom:  12),
-                          child: Txt(txt: 'Activity', txtColor: Colors.white, txtSize: 20, fontWeight: FontWeight.bold, padding: 0, onTap: (){}),
-                    ),*/
-
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: state.model.response!.length,
-                          itemBuilder: (context, position) {
-                            return InkWell(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  cachedNetImgWithRadius(state.model.response![position].image!, double.infinity, Sizes.dimen_70.h, 6),
-
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 12, bottom: 24),
-                                    child: Text(
-                                      parseHtmlString(state.model.response![position].body!),
-                                      style: TextStyle(fontSize: 13, color: AppColor.app_txt_white),
-                                      maxLines: 4,
-                                      softWrap: false,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
+                  child: ListView.builder(
+                    itemCount: state.model.response!.length,
+                    itemBuilder: (context, position) {
+                      return InkWell(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 36),
+                              child: Text(
+                                parseHtmlString(state.model.response![position].title!),
+                                style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
+                                maxLines: 4,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
                               ),
+                            ),
 
-                              onTap: (){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => HomeCardDetails(response: state.model.response![position],),
-                                  ),
-                                );
-                              },
-                            );
-                          },
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12, bottom: 14),
+                              child: Text(
+                                parseHtmlString(state.model.response![position].body!),
+                                style: TextStyle(fontSize: 13, color: AppColor.app_txt_white),
+                                maxLines: 4,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only( bottom: 12),
+                              child: cachedNetImgWithRadius(state.model.response![position].image!, double.infinity, Sizes.dimen_70.h, 4),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomeCardDetails(response: state.model.response![position],),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 );
               } else {

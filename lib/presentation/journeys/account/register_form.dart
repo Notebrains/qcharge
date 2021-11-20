@@ -333,8 +333,6 @@ class _RegisterFormState extends State<RegisterForm> {
                     edgeAlert(context, title: 'Warning',
                         description: 'Password and confirm password did not matched',
                         gravity: Gravity.top);
-                  } else if (base64Image.isEmpty) {
-                    edgeAlert(context, title: 'Warning', description: 'Please pick profile image.', gravity: Gravity.top);
                   } else {
                     if (isEnabled) {
                       BlocProvider.of<RegisterCubit>(context).initiateRegister(
@@ -400,8 +398,9 @@ class _RegisterFormState extends State<RegisterForm> {
               listenWhen: (previous, current) => current is CarModelLoaded,
               listener: (context, state) {
                 if (state is CarModelLoaded) {
-                  print('---- Car data loaded: ${state.carModelEntity[0].name}');
+                  //print('---- Car data loaded: ${state.carModelEntity[0].name}');
                   var dataList = state.carModelEntity;
+                  carModelDropDownList.listOptionItems.clear();
                   for(int i =0; i<dataList.length; i++){
                     carModelDropDownList.listOptionItems.add(
                       OptionItem(id: dataList[i].id.toString(), title: dataList[i].name.toString()),

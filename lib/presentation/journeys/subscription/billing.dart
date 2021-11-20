@@ -13,9 +13,10 @@ import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
-import 'package:qcharge_flutter/presentation/2c2p_payment_gateway.dart';
+import 'package:qcharge_flutter/presentation/journeys/payments/2c2p_payment_gateway.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/bill_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/bill_pay_cubit.dart';
+import 'package:qcharge_flutter/presentation/journeys/payments/payment_methods.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
@@ -361,8 +362,18 @@ class _BillingState extends State<Billing> {
                     DialogButton(
                       color: Colors.amber,
                       onPressed: () {
-                        if (totalBill.isNotEmpty && totalBill != '0.00')openPaymentGateway(context);
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
+                        //if (totalBill.isNotEmpty && totalBill != '0.00'){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PaymentMethods(onTap: (selectedIndex){
+                                print('----selectedIndex : $selectedIndex');
+                                openPaymentGateway(context, selectedIndex);
+                              }),
+                            ),
+                          );
+                        //}
                       },
                       child: Text(
                         TranslationConstants.payOnline.t(context),
@@ -407,10 +418,10 @@ class _BillingState extends State<Billing> {
     }
   }
 
-  void openPaymentGateway(BuildContext context) async {
+  void openPaymentGateway(BuildContext context, int selectedIndex) async {
     try {
-      openProductionPaymentGateway(totalBill).then((responseJson) => {
-        if (responseJson.isNotEmpty  && responseJson["respCode"] == '00') {
+      openProductionPaymentGateway(totalBill, selectedIndex, "Bill Payment").then((responseJson) => {
+        if (responseJson["uniqueTransactionCode"].isNotEmpty && responseJson["respCode"] == '00') {
             billPayCubit.initiateBillPayment(_userId, responseJson["uniqueTransactionCode"], totalBill, 'Payment Gateway'),
         } else {
           edgeAlert(context, title: TranslationConstants.message.t(context), description: TranslationConstants.paymentFailed.t(context), gravity: Gravity.top),
@@ -428,7 +439,7 @@ class _BillingState extends State<Billing> {
       if (userId != null)
         {
           _userId = userId,
-          billCubit.initiateBill('15')
+          billCubit.initiateBill(_userId)
         }
     });
 

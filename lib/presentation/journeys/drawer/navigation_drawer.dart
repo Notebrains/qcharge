@@ -115,7 +115,7 @@ class NavigationDrawer extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => HomeCards(
                           screenTitle: TranslationConstants.newsAndUpdate.t(context),
-                          urlEndpoint: 'news',
+                          urlEndpoint: 'activity',
                         ),
                       ),
                     );
@@ -142,6 +142,15 @@ class NavigationDrawer extends StatelessWidget {
                   onPressed: () {
                     onTap();
                     Navigator.of(context).pushNamed(RouteList.notificationsScreen);
+                  },
+                ),
+
+
+                NavigationListItem(
+                  title: "How To Use App?",
+                  onPressed: () {
+                    onTap();
+                    Navigator.of(context).pushNamed(RouteList.appTutorial);
                   },
                 ),
 

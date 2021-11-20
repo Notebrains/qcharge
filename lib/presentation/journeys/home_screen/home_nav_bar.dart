@@ -138,9 +138,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                 case 'Home':
                   return Home();
                 case 'QrCode':
-                  if (userChargingStatus == 'Charging') {
-                    return Stop();
-                  } else return QRScan();
+                  return QRScan();
                 case 'Profile':
                   return Profile();
                 default:

@@ -11,7 +11,6 @@ import 'package:qcharge_flutter/presentation/blocs/home/topup_cubit.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/libraries/month_picker/month_picker_dialog.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_txt_txt_row.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
@@ -36,9 +35,6 @@ class _TopUpHistoryState extends State<TopUpHistory> {
   @override
   void initState() {
     super.initState();
-
-    // cubit = getItInstance<TopUpCubit>();
-    // BlocProvider.of<TopUpCubit>(context).initiateTopUp('2', '2021-09');
 
     getTopUpData();
   }
@@ -89,9 +85,9 @@ class _TopUpHistoryState extends State<TopUpHistory> {
                           String? userId =  await AuthenticationLocalDataSourceImpl().getSessionId();
                           showMonthPicker(
                               context: context,
-                              firstDate: DateTime(DateTime.now().year - 1, 5),
+                              firstDate: DateTime(DateTime.now().year - 1, DateTime.now().month),
                               lastDate: DateTime(DateTime.now().year + 1, 9),
-                              initialDate: DateTime(DateTime.now().year, 5)).then((date) => {
+                              initialDate: DateTime(DateTime.now().year, DateTime.now().month)).then((date) => {
                             if (userId != null && date != null) {
                               //print('------${date.year}-${date.month}'),
                               cubit.initiateTopUp(userId, '${date.year}-${date.month}'),
@@ -169,7 +165,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: TxtTxtTxtRow(
-                              text1: isTopUpTabSelected? "Date:" : TranslationConstants.date.t(context),
+                              text1: isTopUpTabSelected? "${TranslationConstants.date.t(context)}:" : TranslationConstants.dateTime.t(context),
                               text2: isTopUpTabSelected? TranslationConstants.time.t(context) : TranslationConstants.duration.t(context),
                               text3: TranslationConstants.amount.t(context),
                               text4: TranslationConstants.unit.t(context),
@@ -218,8 +214,7 @@ class _TopUpHistoryState extends State<TopUpHistory> {
 
   void getTopUpData() async {
     await AuthenticationLocalDataSourceImpl().getSessionId().then((id) => {
-    cubit.initiateTopUp(id!, "${DateTime.now().year}-${DateTime.now().month}"),
+      cubit.initiateTopUp(id!, "${DateTime.now().year}-${DateTime.now().month}"),
     });
-
   }
 }

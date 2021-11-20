@@ -213,9 +213,9 @@ class _QrCodeState extends State<QrCode> {
                                     gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft,
                                         colors: hasLeft? [Color(0xFFEFE07D), Color(0xFFB49839)]: [Color(0xFF8D8D8D), Color(0xFFD2D2D2)]),
                                   ),
-                                  padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
+                                  //padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
                                   margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
-                                  width: 100,
+                                  width: 95,
                                   height: 35,
                                   child: TextButton(
                                     onPressed: (){
@@ -225,8 +225,8 @@ class _QrCodeState extends State<QrCode> {
                                       });
                                     },
                                     child: Text(
-                                      hasLeft? TranslationConstants.select.t(context): 'Not Ready',
-                                      style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                                      hasLeft? TranslationConstants.select.t(context): TranslationConstants.notReady.t(context),
+                                      style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 )
@@ -255,8 +255,8 @@ class _QrCodeState extends State<QrCode> {
                                         colors: hasRight? [Color(0xFFEFE07D), Color(0xFFB49839)]: [Color(0xFF8D8D8D), Color(0xFFD2D2D2)]),
                                   ),
                                   padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
-                                  margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
-                                  width: 100,
+                                  //margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
+                                  width: 95,
                                   height: 35,
                                   child: TextButton(
                                     onPressed: (){
@@ -266,8 +266,8 @@ class _QrCodeState extends State<QrCode> {
                                       });
                                     },
                                     child: Text(
-                                      hasRight? TranslationConstants.select.t(context): 'Not Ready',
-                                      style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                                      hasRight? TranslationConstants.select.t(context): TranslationConstants.notReady.t(context),
+                                      style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
@@ -276,6 +276,53 @@ class _QrCodeState extends State<QrCode> {
                           ),
                         ],
                       ),
+                    ),
+
+
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeIn,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                        gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft,
+                            colors: [Colors.grey.shade900, Colors.grey.shade900]),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_12.w),
+                      margin: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.h),
+                      width: double.maxFinite,
+                      height: 90,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            TranslationConstants.notReadyNote1.t(context),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: AppColor.app_txt_white),
+                            maxLines: 2,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            TranslationConstants.notReadyNote2.t(context),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: AppColor.app_txt_white),
+                            maxLines: 2,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            TranslationConstants.notReadyNote3.t(context),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: AppColor.app_txt_white),
+                            maxLines: 2,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      )
                     ),
 
                     Padding(

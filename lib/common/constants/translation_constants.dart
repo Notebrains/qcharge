@@ -52,6 +52,7 @@ class TranslationConstants {
   static const String topUpHistory = 'topUpHistory';
   static const String chargingHistory = 'chargingHistory';
   static const String date = 'date';
+  static const String dateTime = 'dateTime';
   static const String time = 'time';
   static const String amount = 'amount';
   static const String topUpCaps = 'topUpCaps';
@@ -196,4 +197,9 @@ class TranslationConstants {
   static const String drawerHeader2 = 'drawerHeader2';
   static const String notReady = 'notReady';
   static const String endTime = 'endTime';
+  static const String readMore = 'readMore';
+  static const String chargingStatus = 'chargingStatus';
+  static const String notReadyNote1 = 'notReadyNote1';
+  static const String notReadyNote2 = 'notReadyNote2';
+  static const String notReadyNote3 = 'notReadyNote3';
 }

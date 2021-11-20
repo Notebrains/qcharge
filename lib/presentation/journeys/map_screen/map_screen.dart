@@ -491,10 +491,9 @@ class _MapScreenState extends State<MapScreen> {
   void setMarkers(List<Response> response) async {
     //print('---- isViewAllAcStation, isViewAllDcStation: $isViewAllAcStation , $isViewAllDcStation');
     for (int i = 0; i < response.length; i++) {
-      //print('---- :  ${response[i].type}');
-      if (isViewAllAcStation && response[i].type == 'Ac') {
+      if (isViewAllAcStation && response[i].chargerType == 'AC') {
         addMarkers(response, i);
-      } else if (isViewAllDcStation && response[i].type == 'Dc') {
+      } else if (isViewAllDcStation && response[i].chargerType == 'DC') {
         addMarkers(response, i);
       } else if (!isViewAllAcStation && !isViewAllDcStation) {
         addMarkers(response, i);
@@ -509,13 +508,7 @@ class _MapScreenState extends State<MapScreen> {
     Geolocator.isLocationServiceEnabled().then((isLocationEnabled) => {
           if (isLocationEnabled)
             {
-              Geolocator.getCurrentPosition(
-                      //desiredAccuracy: LocationAccuracy.bestForNavigation,
-                      //forceAndroidLocationManager: true,
-                      )
-                  .then((curLoc) async {
-                //totalDistance = Geolocator.distanceBetween(_currentPosition.latitude, _currentPosition.longitude, markerLat, markerLong);
-                //double totalDistance = _coordinateDistance(22.608355, 88.426884, markerLat, markerLong);
+              Geolocator.getCurrentPosition().then((curLoc) async {
                 double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);
                 //print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
 
@@ -528,16 +521,14 @@ class _MapScreenState extends State<MapScreen> {
                         title: '${response[i].stationName},       ${totalDistance.toStringAsFixed(2)} km',
                         snippet: response[i].address,
                         onTap: () {
-                          BlocProvider.of<MapStationDetailsCubit>(context)
-                              .initiateMapStationDetails(response[i].stationId.toString());
-                          showBottomSheetUi(
-                              response[i].stationId.toString(), markerLat, markerLong, "${totalDistance.toStringAsFixed(2)} km");
+                          showBottomSheetUi(response[i].stationId.toString(), markerLat, markerLong, "${totalDistance.toStringAsFixed(2)} km");
                         }),
                     icon: await BitmapDescriptor.fromAssetImage(
-                      ImageConfiguration(devicePixelRatio: 2.5),
+                      ImageConfiguration(devicePixelRatio: 4.0,),
                       response[i].secure == 'Private'
                           ? 'assets/icons/pngs/create_account_layer_1.png'
                           : 'assets/icons/pngs/create_account_layer_2.png',
+                      mipmaps: true,
                     ),
                   ),
                 );
@@ -568,6 +559,7 @@ class _MapScreenState extends State<MapScreen> {
     double destinationLong,
     String totalDistance,
   ) async {
+    BlocProvider.of<MapStationDetailsCubit>(context).initiateMapStationDetails(stationId);
     MapStationDetailsCubit mapStationDetailsCubit = getItInstance<MapStationDetailsCubit>();
 
     showModalBottomSheet<void>(
@@ -644,6 +636,7 @@ class _MapScreenState extends State<MapScreen> {
                                       width: 25,
                                       height: 25,
                                       fit: BoxFit.contain,
+                                      color: AppColor.border,
                                     ),
                                   ),
                                   Column(
@@ -688,144 +681,132 @@ class _MapScreenState extends State<MapScreen> {
                                 ],
                               ),
                             ),
-                            Container(
-                              width: double.maxFinite,
-                              padding: const EdgeInsets.all(16),
-                              margin: const EdgeInsets.only(bottom: 12),
-                              decoration: BoxDecoration(
-                                color: AppColor.grey,
-                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 24),
-                                    child: Image.asset(
-                                      state.stationDetailsApiResModel.response!.type! == "DC"?
-                                      'assets/icons/pngs/dcConnector.png':
-                                      'assets/icons/pngs/filter_type_1.png',
-                                      width: 25,
-                                      height: 25,
-                                      fit: BoxFit.contain,
-                                    ),
+
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.stationDetailsApiResModel.response!.chargers!.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  width: double.maxFinite,
+                                  padding: const EdgeInsets.all(16),
+                                  margin: const EdgeInsets.only(bottom: 12),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.grey,
+                                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
                                   ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 12),
-                                          child: Txt(
-                                            //txt: state.stationDetailsApiResModel.response!.type!,
-                                            txt: 'Connector 1',
-                                            txtColor: Colors.white,
-                                            txtSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            padding: 0,
-                                            onTap: () {},
-                                          ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 12, bottom: 6),
+                                        child: Txt(
+                                          txt: state.stationDetailsApiResModel.response!.chargers![index].detail!.brand! +
+                                              " - " + state.stationDetailsApiResModel.response!.chargers![index].detail!.name!,
+                                          txtColor: Colors.white,
+                                          txtSize: 14,
+                                          fontWeight: FontWeight.normal,
+                                          padding: 0,
+                                          onTap: () {},
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 12),
-                                          child: Txt(
-                                            txt: 'AC Type 2, 22 kWh',
-                                            txtColor: Colors.white,
-                                            txtSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            padding: 0,
-                                            onTap: () {},
-                                          ),
+                                      ),
+
+                                      Padding(
+                                        padding: const EdgeInsets.only( bottom: 12),
+                                        child: Divider(
+                                          color: Colors.grey,
+                                          height: 8,
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: Txt(
-                                      txt: state.stationDetailsApiResModel.response!.chargingStatus == 1
-                                          ? "Available"
-                                          : "Occupied",
-                                      txtColor: state.stationDetailsApiResModel.response!.chargingStatus == 1? Colors.greenAccent : Colors.redAccent,
-                                      txtSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                      padding: 0,
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                      ),
+
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: state.stationDetailsApiResModel.response!.chargers![index].detail!.connector!.length,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, position) {
+                                          return Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(right: 24),
+                                                    child: Image.asset(
+                                                      state.stationDetailsApiResModel.response!.chargers![index].detail!.name!.toLowerCase().contains("dc")?
+                                                      'assets/icons/pngs/dcConnector.png':
+                                                      'assets/icons/pngs/filter_type_1.png',
+                                                      width: 25,
+                                                      height: 25,
+                                                      fit: BoxFit.contain,
+                                                      color: AppColor.border,
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(right: 12),
+                                                          child: Txt(
+                                                            txt: 'Connector ${position + 1}',
+                                                            txtColor: Colors.white,
+                                                            txtSize: 12,
+                                                            fontWeight: FontWeight.normal,
+                                                            padding: 0,
+                                                            onTap: () {},
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(right: 12),
+                                                          child: Txt(
+                                                            txt: state.stationDetailsApiResModel.response!.chargers![index].detail!.connector![position].type!,
+                                                            txtColor: Colors.white,
+                                                            txtSize: 12,
+                                                            fontWeight: FontWeight.normal,
+                                                            padding: 0,
+                                                            onTap: () {},
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(right: 12),
+                                                    child: Txt(
+                                                      txt: state.stationDetailsApiResModel.response!.chargers![index].detail!.connector![position].status! == "1"
+                                                          ? "Available"
+                                                          : "Occupied",
+                                                      txtColor: state.stationDetailsApiResModel.response!.chargers![index].detail!.connector![position].status! == "1"? Colors.amberAccent : Colors.redAccent,
+                                                      txtSize: 12,
+                                                      fontWeight: FontWeight.normal,
+                                                      padding: 0,
+                                                      onTap: () {},
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                                child: Divider(
+                                                  color: Colors.grey,
+                                                  height: 8,
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),                            );
+                              },
                             ),
-                            Container(
-                              width: double.maxFinite,
-                              padding: const EdgeInsets.all(16),
-                              margin: const EdgeInsets.only(bottom: 12),
-                              decoration: BoxDecoration(
-                                color: AppColor.grey,
-                                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 24),
-                                    child: Image.asset(
-                                      state.stationDetailsApiResModel.response!.type! == "DC"?
-                                      'assets/icons/pngs/dcConnector.png':
-                                      'assets/icons/pngs/filter_type_1.png',
-                                      width: 25,
-                                      height: 25,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 12),
-                                          child: Txt(
-                                            //txt: state.stationDetailsApiResModel.response!.type!,
-                                            txt: 'Connector 2',
-                                            txtColor: Colors.white,
-                                            txtSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            padding: 0,
-                                            onTap: () {},
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 12),
-                                          child: Txt(
-                                            txt: 'AC Type 2, 22 kWh',
-                                            txtColor: Colors.white,
-                                            txtSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            padding: 0,
-                                            onTap: () {},
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: Txt(
-                                      txt: state.stationDetailsApiResModel.response!.chargingStatus == 1
-                                          ? "Available"
-                                          : "Occupied",
-                                      txtColor: state.stationDetailsApiResModel.response!.chargingStatus == 1? Colors.greenAccent : Colors.redAccent,
-                                      txtSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                      padding: 0,
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+
+
+
                             cachedNetImgWithRadius(
                                 state.stationDetailsApiResModel.response!.image!, double.infinity, Sizes.dimen_50.h, 6),
                             Container(
@@ -867,11 +848,9 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     );
                   } else {
-                    return NoDataFound(
-                      txt: TranslationConstants.loadingCaps.t(context),
-                      onRefresh: () {
-                        BlocProvider.of<MapStationDetailsCubit>(context).initiateMapStationDetails(stationId);
-                      },
+                    return LinearProgressIndicator(
+                      color: AppColor.border,
+                        minHeight: 20,
                     );
                   }
                 }),

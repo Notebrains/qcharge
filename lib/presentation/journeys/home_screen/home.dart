@@ -8,16 +8,16 @@ import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
-import 'package:qcharge_flutter/presentation/demo/stopwatch_demo.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
+import 'package:qcharge_flutter/presentation/journeys/payments/payment_methods.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_card_list.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_slider.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 
 import '../../../common/extensions/string_extensions.dart';
-import '../../2c2p_payment_gateway.dart';
+import '../payments/2c2p_payment_gateway.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -66,15 +66,17 @@ class _HomeState extends State<Home> {
       print(status.localVersion);
       print(status.storeVersion);
       print(status.canUpdate.toString());
-      newVersion.showUpdateDialog(
-        context: context,
-        versionStatus: status,
-        dialogTitle: 'App Update Available',
-        dialogText: "Current version: ${status.localVersion}\nNew version: ${status.storeVersion}\n\n${Strings.updateDescTxt}",
-        updateButtonText: 'UPDATE',
-        allowDismissal: true,
-        dismissButtonText: 'MAYBE LATER',
-      );
+      if (status.canUpdate) {
+        newVersion.showUpdateDialog(
+          context: context,
+          versionStatus: status,
+          dialogTitle: 'App Update Available',
+          dialogText: "Current version: ${status.localVersion}\nNew version: ${status.storeVersion}\n\n${Strings.updateDescTxt}",
+          updateButtonText: 'UPDATE',
+          allowDismissal: true,
+          dismissButtonText: 'MAYBE LATER',
+        );
+      }
     }
   }
 
@@ -83,7 +85,9 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: appBarHome(context),
       drawer: NavigationDrawer(
-        onTap: () {},
+        onTap: () {
+
+        },
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -101,22 +105,8 @@ class _HomeState extends State<Home> {
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
                         HomeCardList(
-                            title: TranslationConstants.promotion.t(context),
-                            img: 'assets/images/home_screen_9.png',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomeCards(
-                                    screenTitle: TranslationConstants.promotion.t(context),
-                                    urlEndpoint: 'promotion',
-                                  ),
-                                ),
-                              );
-                            }),
-                        HomeCardList(
                           title: TranslationConstants.activity.t(context),
-                          img: 'assets/images/home_screen_8.png',
+                          img: 'assets/images/avtars.png',
                           onTap: () {
                             Navigator.push(
                               context,
@@ -130,19 +120,37 @@ class _HomeState extends State<Home> {
                           },
                         ),
                         HomeCardList(
+                            title: TranslationConstants.promotion.t(context),
+                            img: 'assets/images/mic.png',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomeCards(
+                                    screenTitle: TranslationConstants.promotion.t(context),
+                                    urlEndpoint: 'promotion',
+                                  ),
+                                ),
+                              );
+                            }),
+
+                        HomeCardList(
                           title: TranslationConstants.callCenter.t(context),
-                          img: 'assets/images/home_screen_7.png',
-                          onTap: () {
+                          img: 'assets/images/call_center.png',
+                          onTap: () async {
                             Navigator.pushNamed(context, RouteList.call_center);
 
-                            /*Navigator.push(
+                           /* Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => StopWatchTimerPage(),
+                                builder: (context) => PaymentMethods(onTap: (selectedIndex){
+                                    print('----selectedIndex : $selectedIndex');
+                                    openPaymentGateway( selectedIndex);
+                                }),
                               ),
-                            )*/;
+                            );*/
 
-                            // openPaymentGateway();
+                             //openPaymentGateway(0);
                           },
                         ),
                       ],
@@ -175,9 +183,9 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void openPaymentGateway() async {
+  void openPaymentGateway(int selectedIndex) async {
     try {
-      openProductionPaymentGatewayForQr('01000').then((responseJson) => {
+      openProductionPaymentGateway('01.00', selectedIndex, "Demo Payment").then((responseJson) => {
             print('-------respCode: ${responseJson["respCode"]}'),
             print('-------failReason: ${responseJson["failReason"]}'),
             print('-------status: ${responseJson["status"]}'),

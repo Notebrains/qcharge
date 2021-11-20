@@ -7,6 +7,7 @@ import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
@@ -45,37 +46,22 @@ class _StopState extends State<Stop> {
   late Stopwatch stopwatch = Stopwatch();
   late Timer timer;
   late Timer statusTimer;
-  late String elapsedTime = '00:00:00';
+  late String elapsedTime = '00:00:00', sessionTime = '00:00:00';
   late String connectorStatus = 'Waiting';
   late String units = '0';
   String amount = '0';
   String? cardNo = '', walletBalance = '', normalCustomerParkingPrice = "", normalCustomerChargingPrice = "", userSubscriptionStatus = "", userID = "";
   double usedAmount = 0.00;
 
-  updateTime(Timer timer) async {
-    String? chargerStatus = await MySharedPreferences().getUserChargingStatus();
-    if(chargerStatus == "Charging"){
-      String? previousTime = await MySharedPreferences().getStopWatchTime();
-      var format = DateFormat("HH:mm:ss");
-      var preTime = format.parse(previousTime!);
-      var currTime = format.parse("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
-      print("---------${currTime.difference(preTime).inSeconds}"); // prints 7:40
-      int timeDifference = currTime.difference(preTime).inSeconds;
-      var duration = Duration(seconds: timeDifference);
-
-      elapsedTime = transformMilliSeconds(duration.inSeconds * 1000);
-    } else {
-      elapsedTime = transformMilliSeconds(stopwatch.elapsedMilliseconds);
-    }
-
+  updateTime(Timer timer) {
     if (stopwatch.isRunning) {
       setState(() {
-
+        elapsedTime = transformMilliSeconds(stopwatch.elapsedMilliseconds);
       });
     }
   }
 
-  startWatch() {
+  startWatch() async {
     setState(() {
       stopwatch.start();
       showButton = true;
@@ -123,17 +109,19 @@ class _StopState extends State<Stop> {
 
   @override
   void dispose() {
+    try {
+      stopWatch();
+      timer.cancel();
+    } catch (e) {
+      print(e);
+    }
     super.dispose();
-
-    stopWatch();
-    timer.cancel();
   }
 
   Future<bool> getConnectorDetails() async {
     String? data = await MySharedPreferences().getConnectorData();
     cardNo = await MySharedPreferences().getCardNo();
 
-    //print(data);
     connectorData = jsonDecode(data.toString());
     print(connectorData);
 
@@ -157,13 +145,10 @@ class _StopState extends State<Stop> {
     if (data1["status"]) {
       isLoaded = true;
       statusData = data1["data"];
-//      String temp = statusData["status"];
-//      elapsedTime = "${temp.substring(0,1).toUpperCase}${temp.substring(1)}";
-      //connectorStatus = statusData["status"].toString().capitalize();
-      //units = statusData["kwhValue"];
+
       //https://mridayaitservices.com/demo/qcharge2/api/getchargerstatus/74/7401/1/440911753/1
 
-      statusTimer = Timer.periodic(Duration(seconds: 5), (timer) async {
+      statusTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
         http.Response checkStatus = await http.get(Uri.parse(
             "${Constants.APP_BASE_URL}getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}/$cardNo/$userID"));
         print("getchargerstatus code: ${checkStatus.statusCode}");
@@ -175,6 +160,9 @@ class _StopState extends State<Stop> {
           units = statusData["kwhValue"].toString();
           amount = statusData["price"].toString();
           connectorStatus = statusData["status"].toString().capitalize();
+          sessionTime = statusData["session_time"].toString();
+
+          //print('---------sessionTime : $sessionTime');
 
           try {
             usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(units);
@@ -186,15 +174,9 @@ class _StopState extends State<Stop> {
           } catch (e) {
             print(e);
           }
-
-          print('-----units 1: $units');
         });
 
-        //print('-----1  ${timer.tick}');
-        //print('-----3  $isChargingStart');
-        //print('-----2  ${statusData["status"].toString()}');
-
-        if (timer.tick == 15 && !isChargingStart) {
+        if (timer.tick == 16 && !isChargingStart) {
           stopWatch();
           timer.cancel();
           showWrongConnectorDialog();
@@ -207,14 +189,11 @@ class _StopState extends State<Stop> {
         }
 
         if (statusData["status"].toString() == "charging") {
-
+          MySharedPreferences().addUserChargingStatus('Charging');
           if (!stopwatch.isRunning){
             startWatch();
-            MySharedPreferences().addUserChargingStatus('Charging');
             isChargingStart = true;
           }
-
-          MySharedPreferences().addStopWatchTime("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
         }
 
         if(isChargingStart && statusData["status"].toString() == "available"){
@@ -239,18 +218,20 @@ class _StopState extends State<Stop> {
     try {
       stopWatch();
       timer.cancel();
+      MySharedPreferences().addEndTime("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
+
     } catch (e) {
       print(e);
     }
     setState(() {
       isLoading = true;
+      isChargingStart = false;
     });
 
     Map<String, dynamic> data = Map();
     data["chargerId"] = connectorData["chargerId"].toString();
     data["connectorId"] = connectorData["connector"]["connectorId"].toString();
     data["cardNo"] = cardNo;
-
     String? token = await MySharedPreferences().getApiToken();
     data["token"] = token.toString();
     try {
@@ -261,6 +242,7 @@ class _StopState extends State<Stop> {
         isLoading = false;
       });
       if (response.statusCode == 200) {
+        print('----Stop charge response.body : ${response.body}');
         if (dialogText == 'no') {
           Navigator.pushReplacementNamed(context, RouteList.finish);
         }
@@ -359,7 +341,7 @@ class _StopState extends State<Stop> {
                                     icColor: AppColor.app_txt_white,
                                   ),
                                   ImgTxtRow(
-                                    txt: '${TranslationConstants.chargingTime.t(context)} $elapsedTime',
+                                    txt: '${TranslationConstants.chargingTime.t(context)} $sessionTime',
                                     txtColor: AppColor.app_txt_white,
                                     txtSize: 12,
                                     fontWeight: FontWeight.normal,
@@ -385,21 +367,37 @@ class _StopState extends State<Stop> {
                                 ],
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/scan_qr_for_filter_9_next.png',
-                                  height: Sizes.dimen_130.h,
-                                  width: Sizes.dimen_110.w,
+                            Visibility(
+                              visible: !isChargingStart,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/scan_qr_for_filter_9_next.png',
+                                    height: Sizes.dimen_130.h,
+                                    width: Sizes.dimen_110.w,
+                                  ),
+                                  Image.asset(
+                                    'assets/icons/pngs/scan_qr_for_filter_6.png',
+                                    height: Sizes.dimen_150.h,
+                                    width: Sizes.dimen_230.w,
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            Visibility(
+                              visible: isChargingStart,
+                              child: Center(
+                                child: Lottie.asset(
+                                  'assets/animations/lottiefiles/charging_animation_lottie.json',
+                                  height: Sizes.dimen_450.w,
+                                  width: Sizes.dimen_450.w,
+                                  repeat: true,
+                                  animate: true,
                                 ),
-                                Image.asset(
-                                  'assets/icons/pngs/scan_qr_for_filter_6.png',
-                                  height: Sizes.dimen_150.h,
-                                  width: Sizes.dimen_230.w,
-                                ),
-                              ],
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 36, right: 36, bottom: 70),
@@ -508,8 +506,8 @@ class _StopState extends State<Stop> {
 
   void getNormalCustomerPrice() async {
     normalCustomerChargingPrice = await MySharedPreferences().getNormalCustomerChargingPrice();
-    normalCustomerParkingPrice = await MySharedPreferences().getNormalCustomerParkingPrice();
     walletBalance = await AuthenticationLocalDataSourceImpl().getWalletBalance();
+    normalCustomerParkingPrice = await MySharedPreferences().getNormalCustomerParkingPrice();
     userSubscriptionStatus = await AuthenticationLocalDataSourceImpl().getUserSubscriptionStatus();
   }
 
