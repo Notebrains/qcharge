@@ -183,13 +183,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void openPaymentGateway(int selectedIndex) async {
+  /*void openPaymentGateway(int selectedIndex) async {
     try {
-      openProductionPaymentGateway('01.00', selectedIndex, "Demo Payment").then((responseJson) => {
+      openProductionPaymentGateway('01.00').then((responseJson) => {
             print('-------respCode: ${responseJson["respCode"]}'),
             print('-------failReason: ${responseJson["failReason"]}'),
             print('-------status: ${responseJson["status"]}'),
-            /*
+
+            *//*
               String amount = responseJson["amt"];
               String respCode = responseJson["respCode"],
               print('----amount: ${responseJson["amt"]}');
@@ -197,10 +198,10 @@ class _HomeState extends State<Home> {
               print('----tranRef: ${responseJson["tranRef"]}');
               print('----approvalCode: ${responseJson["approvalCode"]}');
               print('----refNumber: ${responseJson["refNumber"]}');
-              */
+              *//*
           });
     } catch (e) {
       print('----Error : $e');
     }
-  }
+  }*/
 }

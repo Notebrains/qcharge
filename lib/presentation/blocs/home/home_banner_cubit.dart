@@ -58,7 +58,7 @@ class HomeBannerCubit extends Cubit<HomeBannerState> {
       if (userId != null) {
         profileCubit.initiateProfile(userId),
         mapCubit.initiateMap(),
-        topUpCubit.initiateTopUp(userId, formatDateForTopUp(DateTime.now())),
+        topUpCubit.initiateTopUp(formatDateForTopUp(DateTime.now())),
         firebaseTokenCubit.initiateFirebaseToken(userId),
       }
     });

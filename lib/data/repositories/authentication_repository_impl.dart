@@ -77,6 +77,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<Either<AppError, RegisterApiResModel>> registerUser(Map<String, dynamic> body) async {
     try {
       final register = await _authenticationRemoteDataSource.doRegister(body);
+      print('----Register Res : ${register.response}');
       if (register.status == 1) {
         await _authenticationLocalDataSource.saveSessionId(register.response!.userId.toString());
       }

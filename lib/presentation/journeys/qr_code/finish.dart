@@ -144,7 +144,7 @@ class _FinishState extends State<Finish> {
                             ),
 
                             ImgTxtRow(
-                              txt: '${TranslationConstants.endTime.t(context)} $endTime',
+                              txt: '${TranslationConstants.endTime.t(context)} ${formatStringTimeString(endTime)}',
                               txtColor: AppColor.app_txt_white,
                               txtSize: 12,
                               fontWeight: FontWeight.normal,

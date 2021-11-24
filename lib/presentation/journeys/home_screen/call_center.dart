@@ -50,7 +50,7 @@ class _SubscriptionState extends State {
                           width: Sizes.dimen_110.w,
                         )),
                     Padding(
-                      padding: EdgeInsets.only(top: Sizes.dimen_20.h),
+                      padding: EdgeInsets.only(top: Sizes.dimen_16.h),
                       child: Text(
                           TranslationConstants.getInTouch.t(context),
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: Sizes.dimen_24.w, color: Colors.white, letterSpacing: 3),
@@ -90,7 +90,7 @@ class _SubscriptionState extends State {
   }
 
   _launchCaller() async {
-    const url = "tel:1234567890";
+    const url = "tel:094-445-6447";
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -113,7 +113,7 @@ class _SubscriptionState extends State {
   }
 
   _launchEmailApp() async {
-    const url = 'mailto:sejpalbhargav67@gmail.com';
+    const url = 'mailto:qcharge.contact@gmail.com';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

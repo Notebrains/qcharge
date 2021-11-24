@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
-import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/profile_cubit.dart';
@@ -14,7 +14,6 @@ import 'package:qcharge_flutter/presentation/blocs/login/login_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
-import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -24,7 +23,7 @@ import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart'
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
-import 'package:http/http.dart' as http;
+
 import 'cars.dart';
 
 class Profile extends StatefulWidget {
@@ -34,7 +33,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String? userChargingStatus = "";
-
 
   @override
   void initState() {
@@ -193,8 +191,7 @@ class _ProfileState extends State<Profile> {
                           if (tokenResponse.statusCode == 200) {
                             try {
                               print('---- cardNo: $cardNo');
-                              http.Response response =
-                              await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/transaction/$cardNo"));
+                              http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/transaction/$cardNo"));
                               print("Transaction API response: ${response.body}");
 
                               if (response.statusCode == 200) {
@@ -209,11 +206,10 @@ class _ProfileState extends State<Profile> {
                                   //edgeAlert(context, title: TranslationConstants.warning.t(context), description: resData["message"], gravity: Gravity.top);
                                   Navigator.pushNamed(context, RouteList.stop);
                                 }
-
                               } else
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text("Error Code : ${response.statusCode}"),
+                                    content: Text("Something went wrong."),
                                   ),
                                 );
                             } catch (error) {

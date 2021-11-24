@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' show cos, sqrt, asin;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
+import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/models/map_api_res_model.dart';
@@ -383,16 +386,9 @@ class _MapScreenState extends State<MapScreen> {
       });
       // await _getAddress();
     }).catchError((error) {
-      //print('---- Error 0: $error');
       isCurrentLocFetched = false;
       if (error is TimeoutException) {
-        Geolocator.getLastKnownPosition(
-                //forceAndroidLocationManager: true,
-                )
-            .then((position) async {
-          //getting last known position
-          //print('---- Loc 2: $position');
-
+        Geolocator.getLastKnownPosition().then((position) async {
           setState(() {
             isCurrentLocFetched = true;
             _currentPosition = position!;
@@ -407,12 +403,7 @@ class _MapScreenState extends State<MapScreen> {
             );
           });
         }).catchError((error) {
-          //handle the exception
-          //print('----Error 1: $error');
           showSnackBar(context, 'Current location not found!');
-          setState(() {
-            isCurrentLocFetched = true;
-          });
         });
       } else {
         //handle the exception
@@ -502,41 +493,44 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void addMarkers(List<Response> response, int i) {
-    double markerLat = double.parse(response[i].latitude!);
-    double markerLong = double.parse(response[i].longitude!);
+    try {
+      double markerLat = double.parse(response[i].latitude!);
+      double markerLong = double.parse(response[i].longitude!);
 
-    Geolocator.isLocationServiceEnabled().then((isLocationEnabled) => {
-          if (isLocationEnabled)
-            {
-              Geolocator.getCurrentPosition().then((curLoc) async {
-                double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);
-                //print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
+      Geolocator.isLocationServiceEnabled().then((isLocationEnabled) => {
+                if (isLocationEnabled)
+                  {
+                    Geolocator.getCurrentPosition().then((curLoc) async {
+                      double totalDistance = _coordinateDistance(curLoc.latitude, curLoc.longitude, markerLat, markerLong);
+                      //print('----totalDistance : ${totalDistance.toStringAsFixed(2)}');
 
-                markers.add(
-                  Marker(
-                    markerId: MarkerId("${i + 1}"),
-                    position: LatLng(double.parse(response[i].latitude!), double.parse(response[i].longitude!)),
-                    //position: LatLng(13.736717 + i, 100.523186 + i),
-                    infoWindow: InfoWindow(
-                        title: '${response[i].stationName},       ${totalDistance.toStringAsFixed(2)} km',
-                        snippet: response[i].address,
-                        onTap: () {
-                          showBottomSheetUi(response[i].stationId.toString(), markerLat, markerLong, "${totalDistance.toStringAsFixed(2)} km");
-                        }),
-                    icon: await BitmapDescriptor.fromAssetImage(
-                      ImageConfiguration(devicePixelRatio: 4.0,),
-                      response[i].secure == 'Private'
+                      final Uint8List markerIcon = await getBytesFromAsset(response[i].secure == 'Private'
                           ? 'assets/icons/pngs/create_account_layer_1.png'
                           : 'assets/icons/pngs/create_account_layer_2.png',
-                      mipmaps: true,
-                    ),
-                  ),
-                );
+                          65);
 
-                setState(() {});
-              })
-            },
-        });
+                      markers.add(
+                        Marker(
+                          markerId: MarkerId("${i + 1}"),
+                          position: LatLng(double.parse(response[i].latitude!), double.parse(response[i].longitude!)),
+                          //position: LatLng(13.736717 + i, 100.523186 + i),
+                          infoWindow: InfoWindow(
+                              title: '${response[i].stationName},       ${totalDistance.toStringAsFixed(2)} km',
+                              snippet: response[i].address,
+                              onTap: () {
+                                showBottomSheetUi(response[i].stationId.toString(), markerLat, markerLong, "${totalDistance.toStringAsFixed(2)} km");
+                              }),
+                          icon: BitmapDescriptor.fromBytes(markerIcon),
+                        ),
+                      );
+
+                      setState(() {});
+                    })
+                  },
+              });
+    } catch (e) {
+      print(e);
+    }
   }
 
   void moveCameraToLoc(List<Response> list, int index) {

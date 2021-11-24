@@ -12,8 +12,8 @@ import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 
 final methodList = [
   PaymentMethodsModel('assets/images/credit2.png', 'Credit / Debit', true),
-  PaymentMethodsModel('assets/images/123download.png', '123 Payment', false),
   PaymentMethodsModel('assets/images/truewallet.png', 'TrueMoney Wallet', false),
+  //PaymentMethodsModel('assets/images/123download.png', '123 Payment', false),
 ];
 
 class PaymentMethodsModel {

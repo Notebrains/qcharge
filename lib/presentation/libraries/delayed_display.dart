@@ -90,8 +90,8 @@ class _DelayedDisplayState extends State<DelayedDisplay>
   /// Dispose the opacity controller
   @override
   void dispose() {
-    _opacityController?.dispose();
-    _timer?.cancel();
+    _opacityController.dispose();
+    _timer.cancel();
     super.dispose();
   }
 

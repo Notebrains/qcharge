@@ -119,7 +119,6 @@ class _QrCodeState extends State<QrCode> {
       if (leftConnectorStatus == '5') {
         try{
           http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/getsensorstatus/$stationId/$chargerId/$leftConnectorId"));
-
           //print("getsensorstatus Res 1: ${response.body}");
 
           if(response.statusCode == 200){
@@ -128,30 +127,6 @@ class _QrCodeState extends State<QrCode> {
             setState(() {
               data["data"]["parkingSensor"] == "1" && leftConnectorStatus == '5' ? hasLeft = true: hasLeft = false;
             });
-
-            if (rightConnectorStatus == '5') {
-              try{
-                http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/getsensorstatus/$stationId/$chargerId/$rightConnectorId"));
-                //print("get sensor status Res 2: ${response.body}");
-
-                if(response.statusCode == 200){
-                  dynamic data = jsonDecode(response.body);
-                  print('----- parkingSensor: ${data["data"]["parkingSensor"]}');
-
-                  setState(() {
-                    data["data"]["parkingSensor"] == "1" && rightConnectorStatus == '5' ? hasRight = true: hasRight = false;
-                  });
-                } else
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),));
-
-              }catch(error){
-                print("startCharge: $error");
-              }
-            } else {
-              setState(() {
-                hasRight = false;
-              });
-            }
 
           } else
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),));
@@ -162,6 +137,33 @@ class _QrCodeState extends State<QrCode> {
       } else {
         setState(() {
           hasLeft = false;
+        });
+      }
+
+      if (rightConnectorStatus == '5') {
+        try{
+          http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/getsensorstatus/$stationId/$chargerId/$rightConnectorId"));
+          //print("get sensor status Res 2: ${response.body}");
+
+          if(response.statusCode == 200){
+            dynamic data = jsonDecode(response.body);
+            print('-----ss parkingSensor: ${data["data"]["parkingSensor"]}');
+
+            setState(() {
+              print('-----ss hasRight: $hasRight');
+              print('-----ss rightConnectorStatus: $rightConnectorStatus');
+              data["data"]["parkingSensor"] == "1" && rightConnectorStatus == '5' ? hasRight = true: hasRight = false;
+
+            });
+          } else
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),));
+
+        }catch(error){
+          print("startCharge: $error");
+        }
+      } else {
+        setState(() {
+          hasRight = false;
         });
       }
     });
@@ -195,6 +197,8 @@ class _QrCodeState extends State<QrCode> {
                     Padding(
                       padding: const EdgeInsets.only(top: 56),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                             child: Column(
@@ -215,7 +219,7 @@ class _QrCodeState extends State<QrCode> {
                                   ),
                                   //padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
                                   margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
-                                  width: 95,
+                                  width: 80,
                                   height: 35,
                                   child: TextButton(
                                     onPressed: (){
@@ -235,7 +239,7 @@ class _QrCodeState extends State<QrCode> {
                           ),
 
                           Image.asset('assets/images/scan_qr_for_filter_9_next.png', height: Sizes.dimen_150.h,
-                            width: Sizes.dimen_110.w,),
+                            width: 100,),
 
                           Expanded(
                             child: Column(
@@ -254,9 +258,9 @@ class _QrCodeState extends State<QrCode> {
                                     gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft,
                                         colors: hasRight? [Color(0xFFEFE07D), Color(0xFFB49839)]: [Color(0xFF8D8D8D), Color(0xFFD2D2D2)]),
                                   ),
-                                  padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
-                                  //margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
-                                  width: 95,
+                                  //padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
+                                  margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
+                                  width: 80,
                                   height: 35,
                                   child: TextButton(
                                     onPressed: (){

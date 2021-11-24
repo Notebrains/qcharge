@@ -150,9 +150,7 @@ class AuthenticationRemoteDataSourceImpl
   Future<ProfileApiResModel> getProfile(String userId) async{
     final response = await _client.post(
         ApiConstants.profile,
-        params: {
-          'user_id': userId,
-        }
+        params: {'user_id': userId,}
     );
     print('Profile res: $response');
     return ProfileApiResModel.fromJson(response);

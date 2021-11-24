@@ -134,7 +134,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
                 case 'Map':
                   return MapScreen();
                 case 'Top Up':
-                  return TopUp(cubit: _topUpCubit,);
+                  return TopUp();
                 case 'Home':
                   return Home();
                 case 'QrCode':
