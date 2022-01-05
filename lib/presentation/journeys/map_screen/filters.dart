@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
 import 'package:qcharge_flutter/presentation/widgets/ic_txt_switch.dart';
 
+// This class has no use
 class Setting extends StatefulWidget{
   @override
   _SettingState createState() => _SettingState();

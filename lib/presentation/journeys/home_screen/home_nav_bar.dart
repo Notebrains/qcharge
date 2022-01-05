@@ -22,6 +22,7 @@ import 'package:qcharge_flutter/presentation/libraries/bottom_navbar_center_roun
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 
 class HomeNavbar extends StatefulWidget {
+  //Taking non final variable to show Home screen as first screen. When user come from Finish screen, page value will change and navigate to Top Up Screen.
   String page = 'Home';
 
   HomeNavbar({Key? key, required this.page}) : super(key: key);
@@ -39,12 +40,12 @@ class _HomeNavbarState extends State<HomeNavbar> {
   late WalletRechargeCubit walletRechargeCubit;
   late FirebaseTokenCubit _firebaseTokenCubit;
 
-  String? userChargingStatus = '';
-
 
   @override
   void initState() {
     super.initState();
+
+    //Init all screen before this page build to call all api below these screen. So that app does not call api everytime user tap on bottom nav screen
     _homeBannerCubit = getItInstance<HomeBannerCubit>();
     _mapStationDetailsCubit = getItInstance<MapStationDetailsCubit>();
     _profileCubit = _homeBannerCubit.profileCubit;
@@ -55,13 +56,13 @@ class _HomeNavbarState extends State<HomeNavbar> {
 
     _homeBannerCubit.initiateHomeBanner();
 
-    getLocalData();
   }
 
   @override
   void dispose() {
     super.dispose();
 
+    // Dispose must be done of cubits for app optimization
     _homeBannerCubit.close();
     _profileCubit.close();
     _topUpCubit.close();
@@ -86,9 +87,11 @@ class _HomeNavbarState extends State<HomeNavbar> {
       child: WillPopScope(
         onWillPop: onWillPop,
         child: Scaffold(
+          // On Tap function required on different screen.
           drawer: NavigationDrawer(onTap: (){},),
           extendBody: true,
           backgroundColor: AppColor.app_bg,
+          // PandaBar package is custom Bottom Navigation. I have customized if according to client need. This package does not depends on yaml file
           bottomNavigationBar: PandaBar(
             buttonSelectedColor: AppColor.app_ic,
             backgroundColor: AppColor.grey,
@@ -129,7 +132,6 @@ class _HomeNavbarState extends State<HomeNavbar> {
 
           body: Builder(
             builder: (context) {
-              print('----userChargingStatus : $userChargingStatus');
               switch (widget.page) {
                 case 'Map':
                   return MapScreen();
@@ -151,7 +153,7 @@ class _HomeNavbarState extends State<HomeNavbar> {
     );
   }
 
-
+  // This method will call when user press back btn on device. Dialog will take user app exit/not conformation
   Future<bool> onWillPop() async {
     return (await showDialog(
       context: context,
@@ -171,9 +173,5 @@ class _HomeNavbarState extends State<HomeNavbar> {
         ],
       ),
     )) ?? false;
-  }
-
-  void getLocalData() async {
-    userChargingStatus = await MySharedPreferences().getUserChargingStatus();
   }
 }

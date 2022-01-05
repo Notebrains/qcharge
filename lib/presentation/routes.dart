@@ -3,6 +3,7 @@ import 'package:qcharge_flutter/presentation/journeys/account/account_stepper.da
 import 'package:qcharge_flutter/presentation/journeys/account/forgot_password.dart';
 import 'package:qcharge_flutter/presentation/journeys/contents/faqs.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
+import 'package:qcharge_flutter/presentation/journeys/qr_code/qr_scan.dart';
 import 'package:qcharge_flutter/presentation/journeys/subscription/billing.dart';
 import 'journeys/contents/app_tutorial.dart';
 import 'journeys/home_screen/call_center.dart';
@@ -43,5 +44,6 @@ class Routes {
         RouteList.billing: (context) => Billing(),
         RouteList.notificationsScreen: (context) => NotificationsScreen(),
         RouteList.appTutorial: (context) => AppTutorial(),
+        RouteList.qrscan: (context) => QRScan(),
       };
 }

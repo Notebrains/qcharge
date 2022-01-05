@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -32,13 +31,11 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String? userChargingStatus = "";
 
   @override
   void initState() {
     super.initState();
 
-    getLocalData();
   }
 
   @override
@@ -182,7 +179,7 @@ class _ProfileState extends State<Profile> {
                       height: 45,
                       child: TextButton(
                         onPressed: () async {
-                          http.Response tokenResponse = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/token"));
+                          http.Response tokenResponse = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/token"));
                           print("token api status code: ${tokenResponse.statusCode}");
                           print("token api response body: ${tokenResponse.body}");
                           Map<String, dynamic> tokenResult = jsonDecode(tokenResponse.body);
@@ -191,7 +188,7 @@ class _ProfileState extends State<Profile> {
                           if (tokenResponse.statusCode == 200) {
                             try {
                               print('---- cardNo: $cardNo');
-                              http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/transaction/$cardNo"));
+                              http.Response response = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/transaction/$cardNo"));
                               print("Transaction API response: ${response.body}");
 
                               if (response.statusCode == 200) {
@@ -201,6 +198,8 @@ class _ProfileState extends State<Profile> {
                                 print('----message: ${resData["message"]}');
 
                                 if(resData["status"]){
+                                  //MySharedPreferences().addIsShowingSummary('');
+
                                   Navigator.pushNamed(context, RouteList.finish);
                                 } else {
                                   //edgeAlert(context, title: TranslationConstants.warning.t(context), description: resData["message"], gravity: Gravity.top);
@@ -224,7 +223,6 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
-
 
                     Visibility(
                       visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
@@ -421,12 +419,5 @@ class _ProfileState extends State<Profile> {
         },
       ),
     );
-  }
-
-  void getLocalData() async {
-    userChargingStatus = await MySharedPreferences().getUserChargingStatus();
-    setState(() {
-
-    });
   }
 }

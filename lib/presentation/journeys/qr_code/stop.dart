@@ -33,6 +33,8 @@ class Stop extends StatefulWidget {
   State<Stop> createState() => _StopState();
 }
 
+// Page content: Show charging details in realtime. Real time data works by calling API every seconds.
+
 class _StopState extends State<Stop> {
   late Future _future;
   late Map<String, dynamic> connectorData;
@@ -123,10 +125,11 @@ class _StopState extends State<Stop> {
     cardNo = await MySharedPreferences().getCardNo();
 
     connectorData = jsonDecode(data.toString());
-    print(connectorData);
+    // print(connectorData);
 
     userID = await AuthenticationLocalDataSourceImpl().getSessionId();
-    /*try {
+
+  /*  try {
       print('----- 2: ${connectorData["stationId"]}');
       print('----- 2: ${connectorData["chargerId"]}');
       print('----- 2: ${connectorData["connector"]["connectorId"]}');
@@ -145,14 +148,13 @@ class _StopState extends State<Stop> {
     if (data1["status"]) {
       isLoaded = true;
       statusData = data1["data"];
-
-      //https://mridayaitservices.com/demo/qcharge2/api/getchargerstatus/74/7401/1/440911753/1
+      //http://54.151.172.184/qcharge/api/getchargerstatus/74/7401/1/440911753/1
 
       statusTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
         http.Response checkStatus = await http.get(Uri.parse(
             "${Constants.APP_BASE_URL}getchargerstatus/${connectorData["stationId"]}/${connectorData["chargerId"]}/${connectorData["connector"]["connectorId"]}/$cardNo/$userID"));
-        print("getchargerstatus code: ${checkStatus.statusCode}");
-        print("get charger status res: ${checkStatus.body}");
+        // print("getchargerstatus code: ${checkStatus.statusCode}");
+        // print("get charger status res: ${checkStatus.body}");
         dynamic data = jsonDecode(checkStatus.body.toString());
         statusData = data["data"];
 
@@ -164,6 +166,7 @@ class _StopState extends State<Stop> {
 
           //print('---------sessionTime : $sessionTime');
 
+          // Checking if user has enough balance balance to charge car else charging will be stopped.
           try {
             usedAmount = double.parse(normalCustomerChargingPrice!) * double.parse(units);
             if(usedAmount >= double.parse(walletBalance!)){
@@ -172,10 +175,11 @@ class _StopState extends State<Stop> {
               });
             }
           } catch (e) {
-            print(e);
+            // print(e);
           }
         });
 
+        // Waiting for 16 sec. if charging not star then show wrong connector message
         if (timer.tick == 16 && !isChargingStart) {
           stopWatch();
           timer.cancel();
@@ -189,7 +193,7 @@ class _StopState extends State<Stop> {
         }
 
         if (statusData["status"].toString() == "charging") {
-          MySharedPreferences().addUserChargingStatus('Charging');
+          //MySharedPreferences().addUserChargingStatus('Charging');
           if (!stopwatch.isRunning){
             startWatch();
             isChargingStart = true;
@@ -202,6 +206,8 @@ class _StopState extends State<Stop> {
           });
         }
 
+        //Show charging status Total when charging finished or user manually unpluged from charger.
+        // When status show "total", app show dialog and finish charging
         if (statusData["status"].toString() == "total") {
           stopCharging(TranslationConstants.carChargedTxt.t(context), onTap: () {
             Navigator.pushReplacementNamed(context, RouteList.finish);
@@ -218,7 +224,7 @@ class _StopState extends State<Stop> {
     try {
       stopWatch();
       timer.cancel();
-      MySharedPreferences().addEndTime("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
+      //MySharedPreferences().addEndTime("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
 
     } catch (e) {
       print(e);
@@ -228,69 +234,96 @@ class _StopState extends State<Stop> {
       isChargingStart = false;
     });
 
-    Map<String, dynamic> data = Map();
-    data["chargerId"] = connectorData["chargerId"].toString();
-    data["connectorId"] = connectorData["connector"]["connectorId"].toString();
-    data["cardNo"] = cardNo;
-    String? token = await MySharedPreferences().getApiToken();
-    data["token"] = token.toString();
-    try {
-      http.Response response = await http.post(Uri.parse("${Constants.APP_BASE_URL}stopcharging"), body: data);
-      print("stopCharge: ${response.statusCode}");
-      print("stopCharge: ${response.body}");
-      setState(() {
-        isLoading = false;
-      });
-      if (response.statusCode == 200) {
-        print('----Stop charge response.body : ${response.body}');
-        if (dialogText == 'no') {
-          Navigator.pushReplacementNamed(context, RouteList.finish);
-        }
-      } else ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error Code : ${response.statusCode}"),
-      ));
+    //Token api called again because sometime token expires
+    http.Response tokenResponse = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/token"));
+    //print("token api status code: ${tokenResponse.statusCode}");
+    //print("Stop token api response body: ${tokenResponse.body}");
+    Map<String, dynamic> tokenResult = jsonDecode(tokenResponse.body);
 
-      if (dialogText != 'no') {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(TranslationConstants.message.t(context)),
-                content: Text(dialogText,),
-                actions: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeIn,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                      gradient: LinearGradient(
-                          begin: Alignment.centerRight,
-                          end: Alignment.centerLeft,
-                          colors: [Color(0xFFEFE07D), Color(0xFFB49839)]),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
-                    margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h, horizontal: 24),
-                    width: 80,
-                    height: 35,
-                    child: TextButton(
-                      onPressed: (){
-                        Navigator.pop(context);
-                        onTap();
-                      },
-                      child: Text(
-                        TranslationConstants.okay.t(context),
-                        style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )
-                ],
-              );
-            });
+    if (tokenResponse.statusCode == 200) {
+      try {
+        String accessToken = tokenResult["accessToken"].toString();
+
+       /* print('---- accessToken: $accessToken');
+        print('---- cardNo: $cardNo');
+        //print('----- 2: ${connectorData["stationId"]}');
+        print('----- 2: ${connectorData["chargerId"]}');
+        print('----- 2: ${connectorData["connector"]["connectorId"]}');
+        print('----- 2: $userID');*/
+
+        MySharedPreferences().addApiToken(accessToken);
+
+
+        //Calling stopcharging api
+
+        Map<String, dynamic> data = Map();
+        data["chargerId"] = connectorData["chargerId"].toString();
+        data["connectorId"] = connectorData["connector"]["connectorId"].toString();
+        data["cardNo"] = cardNo;
+        data["token"] = accessToken;
+
+        try {
+          http.Response response = await http.post(Uri.parse("${Constants.APP_BASE_URL}stopcharging"), body: data);
+          //print("stopCharge: ${response.statusCode}");
+          //print("stopCharge: ${response.body}");
+          setState(() {
+            isLoading = false;
+          });
+          if (response.statusCode == 200) {
+            //print('----Stop charge response.body : ${response.body}');
+            if (dialogText == 'no') {
+              Navigator.pushReplacementNamed(context, RouteList.finish);
+            }
+          } else ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Error Code : ${response.statusCode}"),
+          ));
+
+          if (dialogText != 'no') {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(TranslationConstants.message.t(context)),
+                    content: Text(dialogText,),
+                    actions: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeIn,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                          gradient: LinearGradient(
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft,
+                              colors: [Color(0xFFEFE07D), Color(0xFFB49839)]),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
+                        margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h, horizontal: 24),
+                        width: 80,
+                        height: 35,
+                        child: TextButton(
+                          onPressed: (){
+                            Navigator.pop(context);
+                            onTap();
+                          },
+                          child: Text(
+                            TranslationConstants.okay.t(context),
+                            style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                });
+          }
+        } catch (error) {
+          //print("stopCharge: $error");
+        }
+      } catch (error) {
+        //print("charging: $error");
       }
-    } catch (error) {
-      print("stopCharge: $error");
+
     }
   }
 

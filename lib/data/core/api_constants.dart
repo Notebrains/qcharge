@@ -1,7 +1,9 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String BASE_URL = "https://mridayaitservices.com/demo/qcharge/public/api/v1/";
+  //static const String BASE_URL_DEMO = "https://mridayaitservices.com/demo/qcharge/public/api/v1/";
+  static const String BASE_URL = "http://54.151.172.184/qcharge/api/v1/";
+
   static const String login = "login";
   static const String register = "register";
   static const String sendOtp = "sendotp";

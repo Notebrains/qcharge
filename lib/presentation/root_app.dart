@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -48,7 +47,10 @@ class _RootAppState extends State<RootApp> {
 
     // firebase notification
     messaging = FirebaseMessaging.instance;
+
+    // request permission for notification
     notificationPermission();
+
     initMessaging();
   }
 
@@ -74,7 +76,10 @@ class _RootAppState extends State<RootApp> {
 
   @override
   Widget build(BuildContext context) {
+    // ScreenUtil package is init to make the app responsive
     ScreenUtil.init();
+
+    //MultiBlocProvider init multiple blocks before open home page
     return MultiBlocProvider(
       providers: [
         BlocProvider<LanguageCubit>.value(value: _languageCubit),
@@ -190,7 +195,7 @@ class _RootAppState extends State<RootApp> {
               ),
               iOS: IOSNotificationDetails(),
             ),
-            payload: message.data['game_data'] ?? '');
+            payload: message.data['notification_data'] ?? '');
 
         fltNotification.initialize(initSetting, onSelectNotification: onSelectNotification);
       }
@@ -199,13 +204,14 @@ class _RootAppState extends State<RootApp> {
 
   Future onSelectNotification(String? payload) async {
     if (payload != null && payload.isNotEmpty) {
-      print('----payload: $payload');
-      openPageWithData(payload);
+      //print('----payload: $payload');
+
+      //openPageWithData(payload);
     }
   }
 
   void notificationPermission() async {
-    NotificationSettings settings = await messaging.requestPermission(
+    await messaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -233,9 +239,9 @@ class _RootAppState extends State<RootApp> {
     //print('----Firebase notification data onClicked 1: ${initialMessage.data}');
     //print('----Firebase notification contentAvailable onClicked 1: ${initialMessage.contentAvailable}');
 
-    if (initialMessage != null && initialMessage.data['game_data'] != null) {
-      print('----Firebase notification data onClicked 1: ${initialMessage.data}');
-      openPageWithData(initialMessage.data['game_data']);
+    if (initialMessage != null && initialMessage.data['notification_data'] != null) {
+      //print('----Firebase notification data onClicked 1: ${initialMessage.data}');
+      openPageWithData(initialMessage.data['notification_data']);
     } else {
       //Open Page
     }
@@ -243,9 +249,9 @@ class _RootAppState extends State<RootApp> {
     // Also handle any interaction when the app is in the background via a
     // Stream listener
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('----Firebase notification data onClicked 2: ${message.data}');
-      if (message != null && message.data['game_data'] != null) {
-        openPageWithData(message.data['game_data']);
+      //print('----Firebase notification data onClicked 2: ${message.data}');
+      if (message.data['notification_data'] != null) {
+        openPageWithData(message.data['notification_data']);
       } else {
         //Open Page
       }
@@ -255,8 +261,8 @@ class _RootAppState extends State<RootApp> {
   void openPageWithData(String payload) {
     try {
       // get data from payload and navigate to screen
-      var gameNotiData = json.decode(payload);
-      print('-----openPageWithData: $gameNotiData');
+      //var gameNotiData = json.decode(payload);
+      //print('-----openPageWithData: $gameNotiData');
       /*
       output
       {gameType: test, friendName: Imdadul, gameCat4: 1991-2000, friendId: MEM000033, playerType: bowler, friendImage:
@@ -264,17 +270,10 @@ class _RootAppState extends State<RootApp> {
        gameCat3: IPL, cardsToPlay: 120}
        */
 
-      print('----- ${gameNotiData['gameCat1']}');
+      //print('----- ${gameNotiData['gameCat1']}');
       //MyRootApp.navigatorKey.currentState.push(MaterialPageRoute(builder: (_) => HomeNavigation(),),);
     } catch (e) {
       print(e);
     }
   }
-
-
-/* Notification data ex:
-Message data: {game_data: {"gameType":"test","friendName":"Imdadul","gameCat4":"1991-2000","friendId":"MEM000033",
-"playerType":"bowler","friendImage":"https:\/\/lh3.googleusercontent.com\/a-\/AOh14GhhY4WoN2ln1gzcQE_QSQ3tOtyjWCk3oHEniCp4=s96-c",
-"gameCat1":"sports","gameCat2":"cricket","gameCat3":"IPL","cardsToPlay":"120"}, click_action: FLUTTER_NOTIFICATION_CLICK}
-*/
 }

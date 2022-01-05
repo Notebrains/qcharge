@@ -46,8 +46,8 @@ class BillApiResModel {
 class Response {
   Response({
       String? startDate, 
-      String? endDate, 
-      int? totalBilling, 
+      String? endDate,
+    String? totalBilling,
       int? paymentFlag, 
       List<History>? history,}){
     _startDate = startDate;
@@ -71,13 +71,13 @@ class Response {
   }
   String? _startDate;
   String? _endDate;
-  int? _totalBilling;
+  String? _totalBilling;
   int? _paymentFlag;
   List<History>? _history;
 
   String? get startDate => _startDate;
   String? get endDate => _endDate;
-  int? get totalBilling => _totalBilling;
+  String? get totalBilling => _totalBilling;
   int? get paymentFlag => _paymentFlag;
   List<History>? get history => _history;
 

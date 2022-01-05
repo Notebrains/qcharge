@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_version/new_version.dart';
@@ -10,7 +9,6 @@ import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/home_banner_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/home_screen/home_card.dart';
-import 'package:qcharge_flutter/presentation/journeys/payments/payment_methods.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_card_list.dart';
 import 'package:qcharge_flutter/presentation/widgets/home_slider.dart';
@@ -31,17 +29,12 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    // Instantiate NewVersion manager object (Using GCP Console app as example)
+    // Instantiate NewVersion manager object (Using GCP Console app as example).
+    // This package check if app has new version available on app/play store by giving application id for android and bundle id for iOS
     final newVersion = NewVersion(
       iOSId: 'com.arrow.energy.qcharge',
       androidId: 'com.arrowenergy.qcharge',
     );
-
-    /*  //There are test credentials  //change here
-    final newVersion = NewVersion(
-      iOSId: 'itunes.apple.com',
-      androidId: 'com.whatsapp.w4b',
-    );*/
 
     // You can let the plugin handle fetching the status and showing a dialog,
     // or you can fetch the status and display your own dialog, or no dialog.
@@ -61,11 +54,13 @@ class _HomeState extends State<Home> {
   advancedStatusCheck(NewVersion newVersion) async {
     final status = await newVersion.getVersionStatus();
     if (status != null) {
-      print(status.releaseNotes);
+      /*print(status.releaseNotes);
       print(status.appStoreLink);
       print(status.localVersion);
       print(status.storeVersion);
-      print(status.canUpdate.toString());
+      print(status.canUpdate.toString());*/
+
+      //
       if (status.canUpdate) {
         newVersion.showUpdateDialog(
           context: context,
@@ -84,11 +79,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarHome(context),
-      drawer: NavigationDrawer(
-        onTap: () {
-
-        },
-      ),
+      drawer: NavigationDrawer(onTap: () {},),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: BlocBuilder<HomeBannerCubit, HomeBannerState>(
@@ -96,6 +87,7 @@ class _HomeState extends State<Home> {
             if (state is HomeBannerSuccess) {
               return Column(
                 children: [
+                  //Three cards showing on top of home screen
                   Container(
                     alignment: Alignment.center,
                     margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h, horizontal: 12),
@@ -150,12 +142,15 @@ class _HomeState extends State<Home> {
                               ),
                             );*/
 
-                             //openPaymentGateway(0);
+                            // openPaymentGateway();
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => PgwSdkPayment(),),);
                           },
                         ),
                       ],
                     ),
                   ),
+
+                  //Auto sliding Banner: Carousel Slider With Indicator
                   Container(
                     height: Sizes.dimen_350.w,
                     width: double.infinity,
@@ -183,25 +178,27 @@ class _HomeState extends State<Home> {
     );
   }
 
-  /*void openPaymentGateway(int selectedIndex) async {
+
+  //This method called only for testing payment gateway.
+  void openPaymentGateway() async {
     try {
-      openProductionPaymentGateway('01.00').then((responseJson) => {
+      openSandboxQrPaymentGateway('100.00').then((responseJson) => {
             print('-------respCode: ${responseJson["respCode"]}'),
             print('-------failReason: ${responseJson["failReason"]}'),
             print('-------status: ${responseJson["status"]}'),
 
-            *//*
-              String amount = responseJson["amt"];
-              String respCode = responseJson["respCode"],
-              print('----amount: ${responseJson["amt"]}');
-              print('----uniqueTransactionCode: ${responseJson["uniqueTransactionCode"]}');
-              print('----tranRef: ${responseJson["tranRef"]}');
-              print('----approvalCode: ${responseJson["approvalCode"]}');
-              print('----refNumber: ${responseJson["refNumber"]}');
-              *//*
+
+            /*String amount = responseJson["amt"];
+            String respCode = responseJson["respCode"];
+            print('----amount: ${responseJson["amt"]}');
+            print('----uniqueTransactionCode: ${responseJson["uniqueTransactionCode"]}');
+            print('----tranRef: ${responseJson["tranRef"]}');
+            print('----approvalCode: ${responseJson["approvalCode"]}');
+            print('----refNumber: ${responseJson["refNumber"]}');*/
+
           });
     } catch (e) {
       print('----Error : $e');
     }
-  }*/
+  }
 }

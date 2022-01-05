@@ -37,14 +37,20 @@ class _FinishState extends State<Finish> {
   late String? startDateTime = "";
   late String date = "", time = "", totalUnits = "", totalPrice = "", stayTimeAfterCharge = "", parkingPrice = "", showNotificationTime = "";
   late String? userId = "0";
+  //late String? isShowingSummary = "0";
   late int? couponId  = 0;
-  String  endTime = '00:00', cardNo = '0' , language = 'en';
+  String  endTime = '00:00:00', cardNo = '0' , language = 'en';
+
+  // Parking charge amount and time showing in dialog is dynamic.These data coming from API.
   String dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within -- minutes. After that, the parking charge will be apply at -- thb/hr  since --. Thank you.";
   DateTime dateTime = DateTime.now();
+
 
   @override
   void initState() {
     super.initState();
+
+    //get charging details from local db before page load
     _future = getChargingDetails();
 
     getCardNo();
@@ -60,11 +66,12 @@ class _FinishState extends State<Finish> {
     cardNo = await MySharedPreferences().getCardNo()?? '0';
     // startDateTime = await MySharedPreferences().getStartDateTime();
     couponId = await MySharedPreferences().getChargerId();
-    endTime = await MySharedPreferences().getEndTime()?? '00:00:00';
     startDateTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime); //change here
     userId = await AuthenticationLocalDataSourceImpl().getSessionId();
-
+    //isShowingSummary = await MySharedPreferences().geIsShowingSummary();
     date = DateFormat("dd/MM/yyyy").format(dateTime);
+
+
     return true;
   }
 
@@ -228,21 +235,22 @@ class _FinishState extends State<Finish> {
     );
   }
 
+  // This API is called to get time of charging and total unit
   void getTransactionDetails(String cardNo) async {
     try {
-      print('---- cardNo: $cardNo');
+      //print('---- cardNo: $cardNo');
       http.Response response =
       await http.get(Uri.parse("${Constants.APP_BASE_URL}transaction/$cardNo"));
-      print("Transaction API response: ${response.body}");
+      // print("Transaction API response: ${response.body}");
 
       if (response.statusCode == 200) {
         var resData = jsonDecode(response.body.toString());
 
-        print('----status: ${resData["status"]}');
-        print('----message: ${resData["message"]}');
+        // print('----status: ${resData["status"]}');
+        // print('----message: ${resData["message"]}');
 
         if(resData["status"]){
-          print('----stationId: ${resData["data"]["stationId"]}');
+          // print('----stationId: ${resData["data"]["stationId"]}');
 
           setState(() {
             String stationId = resData["data"]["stationId"].toString();
@@ -260,22 +268,23 @@ class _FinishState extends State<Finish> {
       } else
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Error Code : ${response.statusCode}"),
+            content: Text("Something went wrong. Please try again."),
           ),
         );
     } catch (error) {
-      print("charging: $error");
+      print("Something went wrong. Please try again.");
     }
   }
 
+  // This API is called to get
   void getChargingCalculatedData(String stationId) async {
     try {
-      print('---- cardNo: $cardNo');
+      /*print('---- cardNo: $cardNo');
       print('---- userId: $userId');
       print('---- stationId: $stationId');
       print('---- startDateTime: $startDateTime');
       print('---- time: $time');
-      print('---- totalUnits: $totalUnits');
+      print('---- totalUnits: $totalUnits');*/
 
       Map<String, dynamic> data = Map();
       data["user_id"] = userId;
@@ -285,18 +294,19 @@ class _FinishState extends State<Finish> {
       data["end_time"] = DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime);
       data["duration"] = time;
       data["consume_charge"] = totalUnits;
-      data["id"] = couponId.toString();
+      data["coupon_id"] = couponId.toString();
       data["transaction_id"] = cardNo;
+      data["status"] = '1';
 
       http.Response response =
-      await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/charging"), body: data);
-      print("charging response: ${response.body}");
+      await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/charging"), body: data);
+      // print("charging response: ${response.body}");
 
       if (response.statusCode == 200) {
         var resData = jsonDecode(response.body.toString());
 
-        print('----id: ${resData["id"]}');
-        print('----total_price: ${resData["total_price"]}');
+        // print('----id: ${resData["id"]}');
+        // print('----total_price: ${resData["total_price"]}');
 
         String id = resData["id"].toString();
         
@@ -304,6 +314,8 @@ class _FinishState extends State<Finish> {
           totalPrice = resData["total_price"].toString();
           stayTimeAfterCharge = resData["stay_time_after_charge"].toString();
           parkingPrice = resData["parking_price"].toString();
+
+          endTime = resData["end_time"].toString().split(" ")[1];
 
           try {
             var splitString = endTime.split(':');
@@ -320,37 +332,38 @@ class _FinishState extends State<Finish> {
             String parkingTime = DateFormat.Hm().format(dateTime);
 
             if (language != 'en') {
-                        dialogTxt = "การชาร์จรถยนต์ของคุณเสร็จสิ้น โปรดย้ายรถออกจากสถานีชาร์จภายใน $stayTimeAfterCharge นาที หลังจากนั้นจะมีการเรียกเก็บค่าบริการที่จอดรถในอัตรา $parkingPrice บาท/ชม. ตั้งแต่เวลา $parkingTime.  ขอขอบคุณ.";
-                      } else {
-                        dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within $stayTimeAfterCharge minutes. After that, the parking charge will be apply at $parkingPrice thb/hr. since $parkingTime. Thank you.";
-                      }
+                dialogTxt = "การชาร์จรถยนต์ของคุณเสร็จสิ้น โปรดย้ายรถออกจากสถานีชาร์จภายใน $stayTimeAfterCharge นาที หลังจากนั้นจะมีการเรียกเก็บค่าบริการที่จอดรถในอัตรา $parkingPrice บาท/ชม. ตั้งแต่เวลา $parkingTime.  ขอขอบคุณ.";
+              } else {
+                dialogTxt = "Your car's charging is finished. Please move\n the car from the charger station within $stayTimeAfterCharge minutes. After that, the parking charge will be apply at $parkingPrice thb/hr. since $parkingTime. Thank you.";
+              }
           } catch (e) {
             print(e);
           }
         });
 
-        String? userChargingStatus = await MySharedPreferences().getUserChargingStatus();
-        if (userChargingStatus == 'Charging') {
+        String? userSubscriptionStatus = await AuthenticationLocalDataSourceImpl().getUserSubscriptionStatus();
+        //print('---- userSubscriptionStatus: $userSubscriptionStatus');
+
+        // update-payment-status API called only for non-subscribe user and for subscribe user charging payment will be added when stop charging API called and price value will be added as due payment
+        if (userSubscriptionStatus == 'Unavailable') {
           updatePaymentStatus(id, totalPrice);
         } else {
           setState(() {
             isPaymentDone = true;
           });
         }
-
-
       } else
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Error Code : ${response.statusCode}"),
+            content: Text("Something went wrong. Please try again."),
           ),
         );
     } catch (error) {
-      print("charging: $error");
+      //print("Something went wrong. Please try again.");
     }
   }
 
-  void updatePaymentStatus( String id, String totalPrice) async {
+  void updatePaymentStatus(String id, String totalPrice) async {
     try {
       Map<String, dynamic> data = Map();
       data["id"] = id;
@@ -358,19 +371,17 @@ class _FinishState extends State<Finish> {
       data["user_id"] = userId;
       data["total_price"] = totalPrice;
 
-      http.Response response = await http
-          .post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/update-payment-status"), body: data);
-      print("charging pay response: ${response.body}");
+      http.Response response = await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/update-payment-status"), body: data);
+      //print("update-payment-status response: ${response.body}");
 
       if (response.statusCode == 200) {
         setState(() {
           isPaymentDone = true;
         });
-        //edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Processing complete. Thank you!', gravity: Gravity.top);
-        //Navigator.pushReplacementNamed(context, RouteList.home_screen);
-      } else
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error Code : ${response.statusCode}"),),
+        // edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Processing complete. Thank you!', gravity: Gravity.top);
+        // Navigator.pushReplacementNamed(context, RouteList.home_screen);
+      } else ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Something went wrong. Please try again."),),
         );
     } catch (error) {
       print("charging pay: $error");
@@ -399,7 +410,8 @@ class _FinishState extends State<Finish> {
           icon: Icon(
             Icons.cancel,
             color: Colors.white70,
-          )),
+          ),
+      ),
       buttons: [
         DialogButton(
           color: Colors.amber,
@@ -429,7 +441,7 @@ class _FinishState extends State<Finish> {
 
 
     language = await LanguageLocalDataSourceImpl().getPreferredLanguage();
-    print('----lang : $language');
+    //print('----lang : $language');
   }
 
 }

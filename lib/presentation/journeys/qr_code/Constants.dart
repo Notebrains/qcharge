@@ -1,6 +1,8 @@
 library constants;
 //{"device_id" : "24:0A:C4:ED:FF:7A"}
-const APP_BASE_URL = "https://mridayaitservices.com/demo/qcharge2/api/";
+//const APP_BASE_URL_DEMO = "https://mridayaitservices.com/demo/qcharge2/api/";
+
+const APP_BASE_URL = "http://54.151.172.184/qcharge/api/";
 
 bool isConnectedToMachine = false;
 bool isSessionApproved = false;

@@ -6,6 +6,8 @@ import '../../../common/extensions/size_extensions.dart';
 import '../../blocs/loading/loading_cubit.dart';
 import 'loading_circle.dart';
 
+
+//Page content: 3 line lottie loading showing through out app screen.
 class LoadingScreen extends StatelessWidget {
   final Widget screen;
 

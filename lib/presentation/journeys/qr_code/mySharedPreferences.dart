@@ -293,4 +293,19 @@ class MySharedPreferences {
       return "";
   }
 
+ /* void addIsShowingSummary(String isShowingSummary) async {
+    _preferences = await SharedPreferences.getInstance();
+    await _preferences!.setString("IsShowingSummary", isShowingSummary);
+  }
+
+  Future<String?> geIsShowingSummary() async {
+    _preferences = await SharedPreferences.getInstance();
+    if (_preferences!.containsKey("IsShowingSummary")) {
+      String? key = _preferences!.getString("IsShowingSummary");
+      return key;
+    }
+    else
+      return "";
+  }*/
+
 }

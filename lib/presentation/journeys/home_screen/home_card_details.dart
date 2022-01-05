@@ -3,10 +3,10 @@ import 'package:flutter_animator/flutter_animator.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
-import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/data/models/home_card_api_res_model.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/cached_net_img_radius.dart';
+
 
 class HomeCardDetails extends StatelessWidget {
   final Response response;

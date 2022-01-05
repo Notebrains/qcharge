@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:qcharge_flutter/data/core/api_constants.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
 import 'package:http/http.dart' as http;
 
 
+// Page details: List of notification showing in this screen that has sent to user device.
+// Language change is not controlled in this screen. Different language notification is set in backend and showing in app
 class NotificationsScreen extends StatefulWidget {
 
 
@@ -36,10 +37,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Future<bool> getNotifications()async{
     String? userId = await AuthenticationLocalDataSourceImpl().getSessionId();
     try{
-      http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge/api/v1/notification/"+ userId!),);
+      http.Response response = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/v1/notification/"+ userId!),);
       //print("${ApiConstants.BASE_URL}notification/1");
       //print("notification: ${response.statusCode}");
-      print("notification: ${response.body}");
+      //print("notification: ${response.body}");
 
       if(response.statusCode == 200) {
         dynamic data = jsonDecode(response.body);
@@ -48,7 +49,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           isDataAvailable = true;
       }
     } catch(error){
-       print("notification: $error");
+       //print("notification: $error");
     }
     return isDataAvailable;
   }
@@ -94,10 +95,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   ),
                 );
               }
-              else
-                return Center(child: Text("No Notifications to show!"));
-            }else
-              return Center(child: CircularProgressIndicator(
+              else return Center(child: Text("No Notifications to show!"));
+            } else return Center(child: CircularProgressIndicator(
                 color: Colors.amber,
               ));
           },

@@ -29,6 +29,11 @@ import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 
 import 'search_screen.dart';
 
+
+// Page content: Showing charging station with custom marker on google map.
+// User current location is showing when user open this screen.
+// Marker also showing details of station details on tap of the station marker. Buttomsheet ui show list of charger. On direction button map show navigation route from current loc to station.
+
 class MapScreen extends StatefulWidget {
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -36,6 +41,8 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
+
+  //This is initial location of Thailand
   CameraPosition _initialLocation = CameraPosition(
     target: LatLng(
       13.736717,
@@ -74,6 +81,7 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
 
+    //Init marker list with empty list else show error
     setMarkers([]);
   }
 
@@ -101,7 +109,9 @@ class _MapScreenState extends State<MapScreen> {
                   zoomControlsEnabled: false,
                   compassEnabled: true,
                   polylines: Set<Polyline>.of(polylines.values),
+                  //Set marker and get current location after map created
                   onMapCreated: (GoogleMapController controller) {
+
                     //controller.setMapStyle(Utils.mapStyles); // map theme
                     _controllerGoogleMap.complete(controller);
                     mapController = controller;
@@ -111,6 +121,10 @@ class _MapScreenState extends State<MapScreen> {
                     _getCurrentLocation();
                   },
                 ),
+
+                // This block work as filter. Click on first row show private station and show public station click on other row.
+                // Station charging type is not coming from CMS, that is why doing filter on station secure type.
+                // On every click refreshing markers
                 Container(
                   alignment: Alignment.center,
                   height: 115,
@@ -279,7 +293,7 @@ class _MapScreenState extends State<MapScreen> {
                               delegate: CustomSearchDelegate(
                                   locationList: state.model.response!,
                                   onTap: (index) {
-                                    print('----Search on Tap: $index');
+                                    //print('----Search on Tap: $index');
                                     moveCameraToLoc(state.model.response!, index);
                                   }),
                             );
@@ -362,7 +376,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  // Method for retrieving the current location
+  // Method for retrieving the current location by Geolocator. If no loc found then trying to get last user loc. After getting current loc camera move to that loc
   void _getCurrentLocation() async {
     await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.bestForNavigation,

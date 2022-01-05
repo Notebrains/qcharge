@@ -20,16 +20,22 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+  // Set screen orientation to portrait
   WidgetsFlutterBinding.ensureInitialized();
   unawaited(SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]));
+
+  //Change the color off app status bar
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: AppColor.notification_bar));
 
-  //firebase
+  //firebase init for notification
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  //Init hive local database
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDir.path);
+
+  //init get it package for dependency injection
   unawaited(getIt.init());
 
   runApp(RootApp());

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+
 class LoadingCircle extends StatelessWidget {
   final double size;
 

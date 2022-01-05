@@ -20,6 +20,7 @@ class RouteList {
   static const String subscription_details = '/subscription_details';
   static const String faq = '/faq';
   static const String update_profile = '/update_profile';
+  static const String qrscan = '/qrscan';
   static const String qrcode = '/qrcode';
   static const String start = '/start';
   static const String stop = '/stop';

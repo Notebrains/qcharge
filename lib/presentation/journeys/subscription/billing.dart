@@ -1,27 +1,23 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my2c2psdk/models/my2c2psdk_type.dart';
-import 'package:my2c2psdk/my2c2psdk.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
-import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
 import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
 import 'package:qcharge_flutter/di/get_it.dart';
-import 'package:qcharge_flutter/presentation/journeys/payments/2c2p_payment_gateway.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/bill_cubit.dart';
 import 'package:qcharge_flutter/presentation/blocs/home/bill_pay_cubit.dart';
+import 'package:qcharge_flutter/presentation/journeys/payments/2c2p_payment_gateway.dart';
 import 'package:qcharge_flutter/presentation/journeys/payments/payment_methods.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/appbar_ic_back.dart';
 import 'package:qcharge_flutter/presentation/widgets/no_data_found.dart';
+import 'package:qcharge_flutter/presentation/widgets/txt.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -69,7 +65,6 @@ class _BillingState extends State<Billing> {
         child: BlocBuilder<BillCubit, BillState>(builder: (context, state) {
           if (state is BillSuccess && state.model.status == 1) {
             totalBill = state.model.response!.totalBilling.toString();
-
             return Column(
               children: [
                 Container(
@@ -101,7 +96,7 @@ class _BillingState extends State<Billing> {
                               text: '',
                               style: DefaultTextStyle.of(context).style,
                               children: <TextSpan>[
-                                TextSpan(text: convertStrToDoubleStr(state.model.response!.totalBilling.toString()),
+                                TextSpan(text: state.model.response!.totalBilling,
                                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34, color: Colors.white)),
                                 TextSpan(text: ' THB',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10, color: Colors.white)),
                               ],
@@ -171,10 +166,11 @@ class _BillingState extends State<Billing> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(6),
+                      Container(
+                        width: 67,
+                        padding: EdgeInsets.only(top: 6, bottom: 6, left: 6),
                         child: Text(
-                          TranslationConstants.duration.t(context),
+                          TranslationConstants.durationRegular.t(context),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -184,10 +180,11 @@ class _BillingState extends State<Billing> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(6),
+                      Container(
+                        width: 65,
+                        padding: EdgeInsets.only(top: 6, bottom: 6, left: 6),
                         child: Text(
-                          TranslationConstants.unit.t(context),
+                          TranslationConstants.unitRegular.t(context),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 13,
@@ -256,10 +253,11 @@ class _BillingState extends State<Billing> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(6),
+                              Container(
+                                width: 67,
+                                padding: EdgeInsets.only(top: 6, bottom: 6, left: 6),
                                 child: Text(
-                                  state.model.response!.history![index].duration!,
+                                  state.model.response!.history![index].duration ?? '',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -268,8 +266,9 @@ class _BillingState extends State<Billing> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(6),
+                              Container(
+                                width: 65,
+                                padding: EdgeInsets.only(top: 6, bottom: 6, left: 6),
                                 child: Text(
                                   state.model.response!.history![index].unit!,
                                   style: TextStyle(
@@ -320,9 +319,11 @@ class _BillingState extends State<Billing> {
                 ),
               ],
             );
-          } else {
+          } else if (state is BillInitial){
             return NoDataFound(txt: TranslationConstants.loadingCaps.t(context), onRefresh: (){
             },);
+          } else {
+            return Center(child: Txt(txt: TranslationConstants.billNotFound.t(context), txtColor: Colors.white, txtSize: 16, fontWeight: FontWeight.normal, padding: 5, onTap: (){}));
           }
         }),
       ),
@@ -331,58 +332,61 @@ class _BillingState extends State<Billing> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12, bottom: 12),
-            child: FloatingActionButton.extended(
-              backgroundColor: AppColor.app_bg,
-              label: Text(TranslationConstants.payBill.t(context), style: TextStyle(color: AppColor.app_txt_white, fontWeight: FontWeight.bold,),),
-              icon: Icon(Icons.payment, color: AppColor.app_txt_white,),
-              onPressed: () {
-                Alert(
-                  context: context,
-                  title: TranslationConstants.paymentMethod.t(context),
-                  desc: "${TranslationConstants.message.t(context)}\n\n ${TranslationConstants.walletBalance.t(context)}: ${convertStrToDoubleStr(walletBalance)} thb",
-                  image: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Image.asset("assets/images/payment-credit-card.png", width: 170, height: 170,),
-                  ),
-                  buttons: [
-                    DialogButton(
-                      color: Colors.amber,
-                      onPressed: () {
-                        if (totalBill.isNotEmpty && totalBill != '0.00')billPayCubit.initiateBillPayment(_userId, (Random().nextInt(912319541) + 12319541).toString() , totalBill, 'Wallet');
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        TranslationConstants.wallet.t(context),
-                        style: TextStyle(
-                            color: Colors.black, fontSize: 14),
-                      ),
+          Visibility(
+            visible: totalBill != '0.00',
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12, bottom: 12),
+              child: FloatingActionButton.extended(
+                backgroundColor: AppColor.app_bg,
+                label: Text(TranslationConstants.payBill.t(context), style: TextStyle(color: AppColor.app_txt_white, fontWeight: FontWeight.bold,),),
+                icon: Icon(Icons.payment, color: AppColor.app_txt_white,),
+                onPressed: () {
+                  Alert(
+                    context: context,
+                    title: TranslationConstants.paymentMethod.t(context),
+                    desc: "${TranslationConstants.message.t(context)}\n\n ${TranslationConstants.walletBalance.t(context)}: ${convertStrToDoubleStr(walletBalance)} thb",
+                    image: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Image.asset("assets/images/payment-credit-card.png", width: 170, height: 170,),
                     ),
-                    DialogButton(
-                      color: Colors.amber,
-                      onPressed: () {
-                        Navigator.pop(context);
-                        //if (totalBill.isNotEmpty && totalBill != '0.00'){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PaymentMethods(onTap: (selectedIndex){
-                                print('----selectedIndex : $selectedIndex');
-                                openPaymentGateway(context, selectedIndex);
-                              }),
-                            ),
-                          );
-                        //}
-                      },
-                      child: Text(
-                        TranslationConstants.payOnline.t(context),
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+                    buttons: [
+                      DialogButton(
+                        color: Colors.amber,
+                        onPressed: () {
+                          if (totalBill.isNotEmpty && totalBill != '0.00')billPayCubit.initiateBillPayment(_userId, (Random().nextInt(912319541) + 12319541).toString() , totalBill, 'Wallet');
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          TranslationConstants.wallet.t(context),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: 14),
+                        ),
                       ),
-                    )
-                  ],
-                ).show();
-              },
+                      DialogButton(
+                        color: Colors.amber,
+                        onPressed: () {
+                          Navigator.pop(context);
+                          //if (totalBill.isNotEmpty && totalBill != '0.00'){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PaymentMethods(onTap: (selectedIndex){
+                                  print('----selectedIndex : $selectedIndex');
+                                  openPaymentGateway(context, selectedIndex);
+                                }),
+                              ),
+                            );
+                          //}
+                        },
+                        child: Text(
+                          TranslationConstants.payOnline.t(context),
+                          style: TextStyle(color: Colors.black, fontSize: 14),
+                        ),
+                      )
+                    ],
+                  ).show();
+                },
+              ),
             ),
           ),
           Visibility(
@@ -395,7 +399,7 @@ class _BillingState extends State<Billing> {
                 icon: Icon(Icons.picture_as_pdf_outlined, color: AppColor.app_txt_white,),
                 onPressed: () {
                   //_launchInBrowser("https://docs.google.com/gview?embedded=true&url=" + Strings.termAndCondPdfUrl); //to view in browser
-                  _launchInBrowser(Strings.termAndCondPdfUrl); //to view and download
+                  //_launchInBrowser(Strings.termAndCondPdfUrl); //to view and download
                 },
               ),
             ),

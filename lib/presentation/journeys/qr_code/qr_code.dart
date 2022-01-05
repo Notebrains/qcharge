@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
-import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
 import 'Constants.dart' as Constants;
 
 import 'package:flutter/material.dart';
@@ -51,12 +51,15 @@ class _QrCodeState extends State<QrCode> {
 
   }
 
+  // Connector ids getting from local db. Checking left and right connector available for charging.
+  // Calling API in every 5 sec to get real time data and showing on app. If leftConnectorStatus == '5' and parkingSensor == "1", select button will be selectable
+
   Future<bool> getChargerDetails() async {
     String? token = await MySharedPreferences().getApiToken();
     String? data = await MySharedPreferences().getChargerData();
-    print(data);
+    //print(data);
     chargerData = jsonDecode(data.toString());
-    print(chargerData);
+    //print(chargerData);
 
     connectors = chargerData["charger"]["detail"]["connector"];
 
@@ -66,25 +69,25 @@ class _QrCodeState extends State<QrCode> {
     leftConnectorId = connectors[0]["status"];
     rightConnectorId = connectors[1]["status"];
 
-/*
-    if(connectors[0]["status"] == "1") {
-        //print('----11---- : ${connectors[0]["status"]}');
-        hasLeft = true;
-        MySharedPreferences().addLeftConnectorId(connectors[0]["connectorId"].toString());
-      }
-    if(connectors[1]["status"] == "1") {
-        //print('----22---- : ${connectors[1]["status"]}');
-        hasRight = true;
-        MySharedPreferences().addRightConnectorId(connectors[1]["connectorId"].toString());
-      }*/
+    /*
+        if(connectors[0]["status"] == "1") {
+            //print('----11---- : ${connectors[0]["status"]}');
+            hasLeft = true;
+            MySharedPreferences().addLeftConnectorId(connectors[0]["connectorId"].toString());
+          }
+        if(connectors[1]["status"] == "1") {
+            //print('----22---- : ${connectors[1]["status"]}');
+            hasRight = true;
+            MySharedPreferences().addRightConnectorId(connectors[1]["connectorId"].toString());
+          }*/
 
     String stationId = chargerData["station"]["stationId"].toString();
     String chargerId = chargerData["charger"]["id"].toString();
 
     timer = Timer.periodic(Duration(seconds: 5), (timer) async {
-      print("----stationId:  $stationId");
-      print("----chargerId:  $chargerId");
-      print("----token:  $token");
+      // print("----stationId:  $stationId");
+      // print("----chargerId:  $chargerId");
+      // print("----token:  $token");
 
       try {
         Map<String, dynamic> data = Map();
@@ -94,7 +97,7 @@ class _QrCodeState extends State<QrCode> {
 
         http.Response response = await http.post(Uri.parse("${Constants.APP_BASE_URL}qrscan"), body: data);
         //print("qrscan status code: ${response.statusCode}");
-        print("qrscan api res body: ${response.body}");
+        //print("qrscan api res body: ${response.body}");
 
         chargerData = jsonDecode(response.body.toString());
         //stationId = chargerData["station"]["stationId"].toString();
@@ -107,23 +110,23 @@ class _QrCodeState extends State<QrCode> {
         rightConnectorStatus = connectors[1]["status"].toString();
 
 
-        print('----- leftConnectorId:  $leftConnectorId');
-        print('----- rightConnectorId:  $rightConnectorId');
-        print('----- leftConnectorStatus:  $leftConnectorStatus');
-        print('----- rightConnectorStatus:  $rightConnectorStatus');
+        //print('----- leftConnectorId:  $leftConnectorId');
+        //print('----- rightConnectorId:  $rightConnectorId');
+        //print('----- leftConnectorStatus:  $leftConnectorStatus');
+        //print('----- rightConnectorStatus:  $rightConnectorStatus');
 
       } catch (error) {
-        print("qrscan error 1: $error");
+        //print("qrscan error 1: $error");
       }
 
       if (leftConnectorStatus == '5') {
         try{
-          http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/getsensorstatus/$stationId/$chargerId/$leftConnectorId"));
+          http.Response response = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/getsensorstatus/$stationId/$chargerId/$leftConnectorId"));
           //print("getsensorstatus Res 1: ${response.body}");
 
           if(response.statusCode == 200){
             dynamic data = jsonDecode(response.body);
-            print('----- parkingSensor: ${data["data"]["parkingSensor"]}');
+            //print('----- parkingSensor: ${data["data"]["parkingSensor"]}');
             setState(() {
               data["data"]["parkingSensor"] == "1" && leftConnectorStatus == '5' ? hasLeft = true: hasLeft = false;
             });
@@ -132,7 +135,7 @@ class _QrCodeState extends State<QrCode> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),));
 
         }catch(error){
-          print("startCharge: $error");
+          //print("startCharge: $error");
         }
       } else {
         setState(() {
@@ -142,7 +145,7 @@ class _QrCodeState extends State<QrCode> {
 
       if (rightConnectorStatus == '5') {
         try{
-          http.Response response = await http.get(Uri.parse("https://mridayaitservices.com/demo/qcharge2/api/getsensorstatus/$stationId/$chargerId/$rightConnectorId"));
+          http.Response response = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/getsensorstatus/$stationId/$chargerId/$rightConnectorId"));
           //print("get sensor status Res 2: ${response.body}");
 
           if(response.statusCode == 200){
@@ -217,9 +220,8 @@ class _QrCodeState extends State<QrCode> {
                                     gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft,
                                         colors: hasLeft? [Color(0xFFEFE07D), Color(0xFFB49839)]: [Color(0xFF8D8D8D), Color(0xFFD2D2D2)]),
                                   ),
-                                  //padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
                                   margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
-                                  width: 80,
+                                  //width: 95,
                                   height: 35,
                                   child: TextButton(
                                     onPressed: (){
@@ -238,8 +240,7 @@ class _QrCodeState extends State<QrCode> {
                             ),
                           ),
 
-                          Image.asset('assets/images/scan_qr_for_filter_9_next.png', height: Sizes.dimen_150.h,
-                            width: 100,),
+                          Image.asset('assets/images/scan_qr_for_filter_9_next.png', height: Sizes.dimen_150.h, width: 100,),
 
                           Expanded(
                             child: Column(
@@ -258,9 +259,8 @@ class _QrCodeState extends State<QrCode> {
                                     gradient: LinearGradient(begin: Alignment.centerRight, end: Alignment.centerLeft,
                                         colors: hasRight? [Color(0xFFEFE07D), Color(0xFFB49839)]: [Color(0xFF8D8D8D), Color(0xFFD2D2D2)]),
                                   ),
-                                  //padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_8.w),
                                   margin: EdgeInsets.symmetric(vertical: Sizes.dimen_8.h),
-                                  width: 80,
+                                  //width: 95,
                                   height: 35,
                                   child: TextButton(
                                     onPressed: (){
@@ -339,6 +339,9 @@ class _QrCodeState extends State<QrCode> {
                       child: Button(text: TranslationConstants.next.t(context), bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
                         onPressed: (){
                         if(isSocketSelected && (hasLeft || hasRight)) {
+                          // This card no is generated randomly. This card no will be used to track charging status. This no is unique per charging process
+                          MySharedPreferences().addCardNo((Random().nextInt(912319541) + 154145).toString());
+
                           Map<String, dynamic> selectedSocketData = Map();
                           selectedSocketData["stationId"] = chargerData["station"]["stationId"];
                           selectedSocketData["chargerId"] = chargerData["charger"]["id"];
@@ -366,40 +369,4 @@ class _QrCodeState extends State<QrCode> {
     );
   }
 
-  void showNotParkedDialog() {
-    Alert(
-      context: context,
-      onWillPopActive: true,
-      title: 'Car is not parked',
-      desc:  'Please park the car to start charging',
-      image: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Icon(
-            Icons.warning_rounded,
-            color: AppColor.border,
-            size: 100,
-          )),
-      closeIcon: IconButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, RouteList.home_screen);
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.cancel,
-            color: Colors.white70,
-          )),
-      buttons: [
-        DialogButton(
-          color: Colors.amber,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text(
-            TranslationConstants.okay.t(context),
-            style: TextStyle(color: Colors.black, fontSize: 14),
-          ),
-        ),
-      ],
-    ).show();
-  }
 }

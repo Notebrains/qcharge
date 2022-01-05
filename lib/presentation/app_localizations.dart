@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../common/constants/languages.dart';
 
+// This class manages app language on device
 class AppLocalizations {
   final Locale locale;
 

@@ -202,4 +202,8 @@ class TranslationConstants {
   static const String notReadyNote1 = 'notReadyNote1';
   static const String notReadyNote2 = 'notReadyNote2';
   static const String notReadyNote3 = 'notReadyNote3';
+  static const String notDataOnMonth = 'notDataOnMonth';
+  static const String billNotFound = 'billNotFound';
+  static const String unitRegular = 'unitRegular';
+  static const String durationRegular = 'durationRegular';
 }

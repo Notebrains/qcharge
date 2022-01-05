@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:qcharge_flutter/common/constants/route_constants.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
@@ -62,7 +63,7 @@ class _StartState extends State<Start> {
 
     print(data);
     connectorData = jsonDecode(data.toString());
-    print(connectorData);
+    // print(connectorData);
     return true;
   }
   @override
@@ -157,8 +158,8 @@ class _StartState extends State<Start> {
                           onIconTap: () async {
                             try {
                               http.Response response =
-                                  await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/promocode"));
-                              print("promo code API response: ${response.body}");
+                                  await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/promocode"));
+                              // print("promo code API response: ${response.body}");
 
                               if (response.statusCode == 200) {
                                 CouponCodeApiResModel model = CouponCodeApiResModel.fromJson(jsonDecode(response.body.toString()));
@@ -168,7 +169,7 @@ class _StartState extends State<Start> {
 
                                 if(model.status == 1 && model.response != null){
                                   showCouponsBottomSheet(model.response);
-                                }else {
+                                } else {
                                   edgeAlert(context, title: TranslationConstants.message.t(context), description: 'Currently coupon code not available', gravity: Gravity.top);
                                 }
 
@@ -176,12 +177,14 @@ class _StartState extends State<Start> {
                               }
                                 //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),),);
                             } catch (error) {
-                              print("charging: $error");
+                              // print("charging: $error");
                             }
                           }, applyBtnTxt: applyBtnTxt == 'Apply'? TranslationConstants.apply.t(context): TranslationConstants.applied.t(context),
                         )
                       ),
 
+
+                      // Star charging on button click
                       Padding(
                         padding: const EdgeInsets.only(left: 36, right: 36, bottom: 70),
                         child: Button(
@@ -193,8 +196,8 @@ class _StartState extends State<Start> {
                               isLoading = true;
                             });
 
-                            print('----- 1: ${connectorData["chargerId"]}');
-                            print('----- 1: ${connectorData["connector"]["connectorId"]}');
+                            // print('----- 1: ${connectorData["chargerId"]}');
+                            // print('----- 1: ${connectorData["connector"]["connectorId"]}');
 
                             Map<String, dynamic> data = Map();
                             data["chargerId"] = connectorData["chargerId"].toString();
@@ -205,18 +208,20 @@ class _StartState extends State<Start> {
                             data["token"] = token.toString();
                             try{
                               http.Response response = await http.post(Uri.parse("${Constants.APP_BASE_URL}startcharging"), body: data);
-                              print("startCharge: ${response.statusCode}");
-                              print("startCharge: ${response.body}");
+                              //print("startCharge: ${response.statusCode}");
+                              //print("startCharge: ${response.body}");
+
                               setState(() {
                                 isLoading = false;
                               });
 
-                              if(response.statusCode == 200)
-                                Navigator.pushReplacementNamed(context, RouteList.stop);
-                              //else ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error Code : ${response.statusCode}"),));
+                              if(response.statusCode == 200) {
+                                getChargingCalculatedData(connectorData["stationId"].toString());
 
+                                Navigator.pushReplacementNamed(context, RouteList.stop);
+                              }
                             }catch(error){
-                              print("startCharge: $error");
+                              // print("startCharge: $error");
                             }
                           },
                         ),
@@ -245,6 +250,37 @@ class _StartState extends State<Start> {
         }
       ),
     );
+  }
+
+  void getChargingCalculatedData(String stationId) async {
+    // This api is called to save charging status. data["status"] = '0'; This data will be used to detect the charging is going as normal flow or not.
+    // If flow is normal then data["status"] = '1'; on finish page else charging will be completed by chron job in backend.
+    // Scenario: User use app to start charging -> exit app -> charge finish.
+
+    try {
+      String? userId = await AuthenticationLocalDataSourceImpl().getSessionId();
+      // print('---- cardNo: $cardNo');
+      // print('---- userId: $userId');
+      // print('---- stationId: $stationId');
+
+      Map<String, dynamic> data = Map();
+      data["user_id"] = userId;
+      data["station_id"] = stationId;
+      data["vehicle_id"] = '1';
+      data["start_time"] = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+      data["end_time"] = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+      data["duration"] = "";
+      data["consume_charge"] = "0";
+      data["coupon_id"] = couponId.toString();
+      data["transaction_id"] = cardNo;
+      data["status"] = '0';
+
+      await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/charging"), body: data);
+      // print("charging response: ${response.body}");
+
+    } catch (error) {
+      // print("charging: $error");
+    }
   }
 
   void showCouponsBottomSheet(List<Response>? response) {
@@ -363,8 +399,8 @@ class _StartState extends State<Start> {
       data["id"] = couponId;
 
       try{
-        http.Response response = await http.post(Uri.parse("https://mridayaitservices.com/demo/qcharge/public/api/v1/apply-promocode"), body: data);
-        print("apply promo code status code: ${response.statusCode}");
+        http.Response response = await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/apply-promocode"), body: data);
+        //print("apply promo code status code: ${response.statusCode}");
         print("apply promo code res: ${response.body}");
         setState(() {
           isLoading = false;

@@ -33,6 +33,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
   int stationId = 0;
   int chargerId = 0;
   late bool isLoading = false;
+  List<dynamic> connectors = [];
 
 //  AnimationController? _animationController;
 
@@ -51,8 +52,6 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
 
     super.initState();
 //    animateScanAnimation(true);
-
-    MySharedPreferences().addCardNo((Random().nextInt(912319541) + 154145).toString());
   }
 
   @override
@@ -71,14 +70,20 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
 //    }
 //  }
 
+
+  //Getting accessToken from cms using chargerId and stationId.
   Future<void> getChargerDetails() async {
     try {
       http.Response tokenResponse = await http.get(Uri.parse("${Constants.APP_BASE_URL}token"));
-      print("token api status code: ${tokenResponse.statusCode}");
-      print("token api response body: ${tokenResponse.body}");
+      //print("token api status code: ${tokenResponse.statusCode}");
+      //print("token api response body: ${tokenResponse.body}");
       Map<String, dynamic> tokenResult = jsonDecode(tokenResponse.body);
       MySharedPreferences().addApiToken(tokenResult["accessToken"]);
 
+      //print('----stationId, chargerId: $stationId,   $chargerId ');
+
+
+      // Getting connector details from qrscan API. After that connectors details save in local db.
       Map<String, dynamic> data = Map();
       data["stationId"] = stationId.toString();
       data["chargerId"] = chargerId.toString();
@@ -86,20 +91,36 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
 
       try {
         http.Response response = await http.post(Uri.parse("${Constants.APP_BASE_URL}qrscan"), body: data);
-        print("qrscan status code: ${response.statusCode}");
-        print("qrscan api res body: ${response.body}");
+        //print("qrscan status code: ${response.statusCode}");
+        //print("qrscan api res body: ${response.body}");
         MySharedPreferences().addChargerData(response.body);
+
+        Map<String, dynamic> chargerData = jsonDecode(response.body.toString());
+
+        connectors = chargerData["charger"]["detail"]["connector"];
+
       } catch (error) {
-        print("qrscan error 1: $error");
+        //print("qrscan error 1: $error");
       }
       setState(() {
         isLoading = false;
       });
-      Navigator.pushReplacementNamed(context, RouteList.qrcode);
+
+      //print("qrscan connectors.length: ${connectors.length}");
+
+      if (connectors.isNotEmpty) {
+        Navigator.pushReplacementNamed(context, RouteList.qrcode);
+      } else {
+        showNoConnectorDialog(context);
+      }
+
     } catch (error) {
-      print("qrscan error 2: $error");
+      //print("qrscan error 2: $error");
     }
   }
+
+  //Scanning Charger QR code to get chargerId and stationId. After that saving ids to local db.
+  // Before scanning user has sufficient balance to charge car and if user has any payment due or not
 
   void _onQRViewCreated(QRViewController controller) async {
     try {
@@ -114,19 +135,22 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
 
       if (userSubscriptionStatus != 'Unavailable' && userDuePaymentStatus == '1') {
         showDuePaymentDialog(context);
-      } else if (userSubscriptionStatus == 'Unavailable' && walletBalance == 0 || walletBalance < 100) {
+      } else if (userSubscriptionStatus == 'Unavailable' && walletBalance < 10) {
         showInsufficientWalletBalanceDialog(context);
       } else {
         this.controller = controller;
         controller.scannedDataStream.listen((scanData) async {
-          print(scanData);
-          print(scanData.format);
-          print(scanData.code);
+          //print(scanData);
+          //print(scanData.format);
+          //print(scanData.code);
           controller.stopCamera();
           if (scanData.code.isNotEmpty) {
             Map<String, dynamic> data = jsonDecode(scanData.code);
             stationId = data["stationId"];
             chargerId = data["chargerId"];
+
+            //print('----stationId, chargerId 22 : ${stationId},   $chargerId ');
+
             MySharedPreferences().addStationId(data["stationId"]);
             MySharedPreferences().addChargerId(data["chargerId"]);
             setState(() {
@@ -137,7 +161,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
         });
       }
     } catch (e) {
-      print(e);
+      //print(e);
     }
   }
 
@@ -163,8 +187,7 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
                   ),
                 ),
               ),
-              isLoading
-                  ? Positioned(
+              isLoading ? Positioned(
                       child: Align(
                         alignment: Alignment.center,
                         child: SpinKitWave(
@@ -179,6 +202,44 @@ class _QRScanState extends State<QRScan> with SingleTickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  void showNoConnectorDialog(BuildContext context) {
+    Alert(
+      context: context,
+      onWillPopActive: true,
+      title: TranslationConstants.warning.t(context),
+      desc: 'There is no connector available at this moment. Please try different charger.',
+      image: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Icon(
+            Icons.warning,
+            color: AppColor.border,
+            size: 120,
+          )),
+      closeIcon: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, RouteList.home_screen);
+          },
+          icon: Icon(
+            Icons.cancel,
+            color: Colors.white70,
+          )),
+      buttons: [
+        DialogButton(
+          color: Colors.amber,
+          onPressed: () {
+            Navigator.pushNamed(context, RouteList.home_screen);
+            //submitChargingData();
+            //Navigator.pop(context);
+          },
+          child: Text(
+            TranslationConstants.okay.t(context),
+            style: TextStyle(color: Colors.black, fontSize: 14),
+          ),
+        )
+      ],
+    ).show();
   }
 
   void showDuePaymentDialog(BuildContext context) {
