@@ -55,6 +55,8 @@ abstract class AuthenticationRemoteDataSource {
   Future<StatusMessageApiResModel> sendFirebaseToken(Map<String, dynamic> params);
 
   Future<StatusMessageApiResModel> billPayment(Map<String, dynamic> params);
+
+  Future<StatusMessageApiResModel> deleteUser(String sessionId);
 }
 
 class AuthenticationRemoteDataSourceImpl
@@ -324,6 +326,18 @@ class AuthenticationRemoteDataSourceImpl
         params: params
     );
     print('Bill Payment Res: $response');
+    return StatusMessageApiResModel.fromJson(response);
+  }
+
+  @override
+  Future<StatusMessageApiResModel> deleteUser(String userId) async {
+    final response = await _client.post(
+        ApiConstants.deleteUser,
+        params: {
+          'user_id' : userId,
+        }
+    );
+    print('Delete User Res: $response');
     return StatusMessageApiResModel.fromJson(response);
   }
 

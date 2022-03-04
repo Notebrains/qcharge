@@ -148,7 +148,7 @@ class _StopState extends State<Stop> {
     if (data1["status"]) {
       isLoaded = true;
       statusData = data1["data"];
-      //http://54.151.172.184/qcharge/api/getchargerstatus/74/7401/1/440911753/1
+      //http://qcapp2134.arrow-energy.com/qcharge/api/getchargerstatus/74/7401/1/440911753/1
 
       statusTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
         http.Response checkStatus = await http.get(Uri.parse(
@@ -235,7 +235,7 @@ class _StopState extends State<Stop> {
     });
 
     //Token api called again because sometime token expires
-    http.Response tokenResponse = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/token"));
+    http.Response tokenResponse = await http.get(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/token"));
     //print("token api status code: ${tokenResponse.statusCode}");
     //print("Stop token api response body: ${tokenResponse.body}");
     Map<String, dynamic> tokenResult = jsonDecode(tokenResponse.body);

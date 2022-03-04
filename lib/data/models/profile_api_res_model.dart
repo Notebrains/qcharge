@@ -48,6 +48,7 @@ class ProfileApiResModel {
 /// user_level : "Lv 1 Copper"
 /// due_billing : "1,052.42"
 /// payment_flag : 0
+/// is_deleted_feature_enable : true
 /// normal_customer_charging_price : "10"
 /// normal_customer_parking_price : "100"
 /// normal_customer_stay_time_after_charge : "5"
@@ -66,7 +67,8 @@ class Response {
       String? userLevel, 
       String? dueBilling, 
       int? paymentFlag, 
-      String? normalCustomerChargingPrice, 
+      bool? isDeletedFeatureEnable,
+      String? normalCustomerChargingPrice,
       String? normalCustomerParkingPrice, 
       String? normalCustomerStayTimeAfterCharge, 
       List<Vehicles>? vehicles,}){
@@ -81,6 +83,7 @@ class Response {
     _userLevel = userLevel;
     _dueBilling = dueBilling;
     _paymentFlag = paymentFlag;
+    _isDeletedFeatureEnable = isDeletedFeatureEnable;
     _normalCustomerChargingPrice = normalCustomerChargingPrice;
     _normalCustomerParkingPrice = normalCustomerParkingPrice;
     _normalCustomerStayTimeAfterCharge = normalCustomerStayTimeAfterCharge;
@@ -99,6 +102,7 @@ class Response {
     _userLevel = json['user_level'];
     _dueBilling = json['due_billing'];
     _paymentFlag = json['payment_flag'];
+    _isDeletedFeatureEnable = json['is_deleted_feature_enable'];
     _normalCustomerChargingPrice = json['normal_customer_charging_price'];
     _normalCustomerParkingPrice = json['normal_customer_parking_price'];
     _normalCustomerStayTimeAfterCharge = json['normal_customer_stay_time_after_charge'];
@@ -120,6 +124,7 @@ class Response {
   String? _userLevel;
   String? _dueBilling;
   int? _paymentFlag;
+  bool? _isDeletedFeatureEnable;
   String? _normalCustomerChargingPrice;
   String? _normalCustomerParkingPrice;
   String? _normalCustomerStayTimeAfterCharge;
@@ -136,6 +141,7 @@ class Response {
   String? get userLevel => _userLevel;
   String? get dueBilling => _dueBilling;
   int? get paymentFlag => _paymentFlag;
+  bool? get isDeletedFeatureEnable => _isDeletedFeatureEnable;
   String? get normalCustomerChargingPrice => _normalCustomerChargingPrice;
   String? get normalCustomerParkingPrice => _normalCustomerParkingPrice;
   String? get normalCustomerStayTimeAfterCharge => _normalCustomerStayTimeAfterCharge;
@@ -154,6 +160,7 @@ class Response {
     map['user_level'] = _userLevel;
     map['due_billing'] = _dueBilling;
     map['payment_flag'] = _paymentFlag;
+    map['is_deleted_feature_enable'] = _isDeletedFeatureEnable;
     map['normal_customer_charging_price'] = _normalCustomerChargingPrice;
     map['normal_customer_parking_price'] = _normalCustomerParkingPrice;
     map['normal_customer_stay_time_after_charge'] = _normalCustomerStayTimeAfterCharge;

@@ -21,6 +21,8 @@ class UpdateProfile extends StatefulWidget {
   _UpdateProfileState createState() => _UpdateProfileState();
 }
 
+
+// Page content: if isChangePass = true then pass is mandate else nothing is mandate
 class _UpdateProfileState extends State<UpdateProfile> {
   late UpdateProfileCubit updateProfileCubit;
 
@@ -54,16 +56,16 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
       setState(() {
             xFile = File(imageFile!.path);
-            print('Image Path $xFile');
+            //print('Image Path $xFile');
           });
     } catch (e) {
-      print(e);
+      //print(e);
     }
   }
 
   setImage(String path) {
     try {
-      print('----path: $path');
+      //print('----path: $path');
       if (path.isEmpty) {
             return cachedNetImgWithRadius(
               Strings.imgUrlNotFoundYellowAvatar,
@@ -280,7 +282,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                 gravity: Gravity.top);
                           } else {
                             await AuthenticationLocalDataSourceImpl().getSessionId().then((userId) => {
-                              print('---- user id 1: $userId'),
+                              //print('---- user id 1: $userId'),
                               if (userId != null)
                                 {
                                   BlocProvider.of<UpdateProfileCubit>(context).initiateUpdateProfile(

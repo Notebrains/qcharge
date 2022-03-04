@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "LaunchImage@1x.jpeg",
+      "filename" : "LaunchImage@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "LaunchImage@2x.jpeg",
+      "filename" : "LaunchImage@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

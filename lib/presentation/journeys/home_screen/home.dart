@@ -142,7 +142,7 @@ class _HomeState extends State<Home> {
                               ),
                             );*/
 
-                            // openPaymentGateway();
+                             //openPaymentGateway();
                             //Navigator.push(context, MaterialPageRoute(builder: (context) => PgwSdkPayment(),),);
                           },
                         ),
@@ -186,7 +186,6 @@ class _HomeState extends State<Home> {
             print('-------respCode: ${responseJson["respCode"]}'),
             print('-------failReason: ${responseJson["failReason"]}'),
             print('-------status: ${responseJson["status"]}'),
-
 
             /*String amount = responseJson["amt"];
             String respCode = responseJson["respCode"];

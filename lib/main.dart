@@ -6,8 +6,6 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:hive/hive.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
-
-
 import 'di/get_it.dart' as getIt;
 import 'presentation/root_app.dart';
 

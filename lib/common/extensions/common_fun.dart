@@ -13,6 +13,22 @@ String getFirstWordFromText(String txt) {
   return (txt + " ").split(" ")[0]; //add " " to string to be sure there is something to split
 }
 
+Future<bool> isInternetConnectionAvailable() async {
+  bool isConnectedToInternet = false;
+  try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      print('connected');
+      isConnectedToInternet = true;
+    }
+  } on SocketException catch (_) {
+    isConnectedToInternet = false;
+    print('not connected');
+  }
+
+  return isConnectedToInternet;
+}
+
 void showToast(BuildContext context, String message) {
   Toast.show(
     message,

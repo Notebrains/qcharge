@@ -299,7 +299,7 @@ class _FinishState extends State<Finish> {
       data["status"] = '1';
 
       http.Response response =
-      await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/charging"), body: data);
+      await http.post(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/v1/charging"), body: data);
       // print("charging response: ${response.body}");
 
       if (response.statusCode == 200) {
@@ -371,7 +371,7 @@ class _FinishState extends State<Finish> {
       data["user_id"] = userId;
       data["total_price"] = totalPrice;
 
-      http.Response response = await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/update-payment-status"), body: data);
+      http.Response response = await http.post(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/v1/update-payment-status"), body: data);
       //print("update-payment-status response: ${response.body}");
 
       if (response.statusCode == 200) {

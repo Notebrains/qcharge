@@ -69,4 +69,6 @@ abstract class AuthenticationRepository {
   Future<Either<AppError, StatusMessageApiResModel>> firebaseToken(Map<String, dynamic> params);
 
   Future<Either<AppError, StatusMessageApiResModel>> billPayment(Map<String, dynamic> params);
+
+  Future<Either<AppError, StatusMessageApiResModel>> deleteUser();
 }

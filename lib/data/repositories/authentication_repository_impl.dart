@@ -361,4 +361,23 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       return Left(AppError(AppErrorType.api));
     }
   }
+
+  @override
+  Future<Either<AppError, StatusMessageApiResModel>> deleteUser() async {
+    final sessionId = await _authenticationLocalDataSource.getSessionId();
+    try {
+      final response = await _authenticationRemoteDataSource.deleteUser(sessionId??'');
+      if (response.status == 1) {
+        await Future.wait([
+          _authenticationLocalDataSource.deleteSessionId(),
+        ]);
+      }
+
+      return Right(response);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
+      return Left(AppError(AppErrorType.api));
+    }
+  }
 }

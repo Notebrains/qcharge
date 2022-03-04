@@ -3,6 +3,8 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qcharge_flutter/data/models/login_api_res_model.dart';
+import 'package:qcharge_flutter/data/models/status_message_api_res_model.dart';
+import 'package:qcharge_flutter/domain/usecases/delete_ac_usecase.dart';
 
 import '../../../common/constants/translation_constants.dart';
 import '../../../domain/entities/app_error.dart';
@@ -17,11 +19,13 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   final LoginUser loginUser;
   final LogoutUser logoutUser;
+  final DeleteUser deleteUser;
   final LoadingCubit loadingCubit;
 
   LoginCubit({
     required this.loginUser,
     required this.logoutUser,
+    required this.deleteUser,
     required this.loadingCubit,
   }) : super(LoginInitial());
 
@@ -49,6 +53,21 @@ class LoginCubit extends Cubit<LoginState> {
   void logout() async {
     await logoutUser(NoParams());
     emit(LogoutSuccess());
+  }
+
+  void deleteUserAc() async {
+    loadingCubit.show();
+    final Either<AppError, StatusMessageApiResModel> eitherResponse = await deleteUser(NoParams());
+
+    emit(eitherResponse.fold(
+          (l) {
+        var message = getErrorMessage(l.appErrorType);
+        print(message);
+        return LoginError(message);
+      },
+          (r) => DeleteUserSuccess(r),
+    ));
+    loadingCubit.hide();
   }
 
   String getErrorMessage(AppErrorType appErrorType) {

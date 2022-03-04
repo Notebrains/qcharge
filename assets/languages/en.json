@@ -91,7 +91,7 @@
   "exitDialogTitle": "Are you sure?",
   "exitDialogContent": "Do you want to exit?",
   "cancel": "Cancel",
-  "logoutCaps": "Logut",
+  "logoutCaps": "Logout",
   "logoutDialogContent": "Are you sure you want to logout?",
   "faqCaps": "FAQ",
   "faqFullForm": "Frequently Asked Questions \n( FAQ )",
@@ -202,7 +202,13 @@
   "chargingStatus": "Last Charging Status",
   "notReadyNote1": "Note: If the socket is “Not Ready” please check",
   "notReadyNote2": "1. Car is parked at the correct slot",
-  "notReadyNote3": "2. Socket connection"
-
-
+  "notReadyNote3": "2. Socket connection",
+  "notDataOnMonth": "No data found for this month",
+  "billNotFound": "No billing history found",
+  "unitRegular": "Unit",
+  "durationRegular": "Duration",
+  "deleteAc": "Delete Account",
+  "delete": "Delete",
+  "deleteAcDialogContent": "If you delete your account, you will lost all your data and you will not be able to recover anything in future.",
+  "dueClearText": "You can not delete your Account without clearing your old dues"
 }

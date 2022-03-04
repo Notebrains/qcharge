@@ -28,3 +28,13 @@ class LoginError extends LoginState {
   @override
   List<Object> get props => [message];
 }
+
+class DeleteUserSuccess extends LoginState {
+  final StatusMessageApiResModel model;
+
+  DeleteUserSuccess(this.model);
+
+  @override
+  List<Object> get props => [model];
+}
+

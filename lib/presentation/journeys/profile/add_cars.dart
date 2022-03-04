@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qcharge_flutter/common/constants/size_constants.dart';
-import 'package:qcharge_flutter/common/constants/strings.dart';
 import 'package:qcharge_flutter/common/constants/translation_constants.dart';
-import 'package:qcharge_flutter/common/extensions/common_fun.dart';
 import 'package:qcharge_flutter/common/extensions/size_extensions.dart';
 import 'package:qcharge_flutter/common/extensions/string_extensions.dart';
 import 'package:qcharge_flutter/data/data_sources/authentication_local_data_source.dart';
@@ -86,7 +84,6 @@ class _AddOrUpdateCarState extends State<AddOrUpdateCar> {
 
     _carBrandCubit.loadCarBrand();
     _carModelCubit.loadCarModel('1');
-
 
   }
 

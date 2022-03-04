@@ -52,7 +52,7 @@ class _CarsState extends State<Cars> {
       Map<String, dynamic> data = Map();
       data["user_id"] = userId.toString();
 
-      http.Response response = await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/profile/"),
+      http.Response response = await http.post(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/v1/profile/"),
         body: data,
       );
       print("Profile_car res: ${response.body}");

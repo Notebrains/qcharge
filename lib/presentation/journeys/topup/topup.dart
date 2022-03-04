@@ -38,14 +38,11 @@ class _TopUpState extends State<TopUp> {
   AuthenticationLocalDataSourceImpl localData = AuthenticationLocalDataSourceImpl();
   late Future<bool> _future;
   DateTime currentDate = DateTime.now();
-
   late bool isDataAvailable = false;
   bool isTopUpTabSelected = false;
-
   bool isTopUpBtnSelected = false;
   bool isAddMoneyActive = false;
   int paymentMethodId = 55;
-
   String userId = '', dropdownTopUpAmount = '';
   final ValueNotifier<String> _walletBalance = ValueNotifier<String>('0.00');
 
@@ -78,14 +75,14 @@ class _TopUpState extends State<TopUp> {
     String? userId = await AuthenticationLocalDataSourceImpl().getSessionId();
     try {
       http.Response response = await http.post(
-        Uri.parse("http://54.151.172.184/qcharge/api/v1/topuphistory") , body: {
+        Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/v1/topuphistory") , body: {
           "user_id" : userId,
           "filter_date": "${currentDate.year}-${currentDate.month}"
       },
       );
       //print("${ApiConstants.BASE_URL}notification/1");
       //print("notification: ${response.statusCode}");
-      print("topup history: ${response.body}");
+      //print("topup history: ${response.body}");
 
       topUpModel = TopUpApiResModel.fromJson(jsonDecode(response.body));
 
@@ -314,7 +311,8 @@ class _TopUpState extends State<TopUp> {
                                           edgeAlert(context,
                                               title: TranslationConstants.message.t(context),
                                               description: TranslationConstants.somethingWentWrong.t(context),
-                                              gravity: Gravity.top);
+                                              gravity: Gravity.top,
+                                          );
                                         }
                                       },
                                     ),
@@ -512,6 +510,8 @@ class _TopUpState extends State<TopUp> {
           child: Text(TranslationConstants.notDataOnMonth.t(context)),
         );
       } else {
+        // isTopUpTabSelected flag is used to show topupHistory and chargingHistory
+
         return ListView.builder(
           itemCount: isTopUpTabSelected? model.response!.topupHistory!.length: model.response!.chargingHistory!.length,
           itemBuilder: (context, position) {
@@ -520,7 +520,7 @@ class _TopUpState extends State<TopUp> {
                 text1: isTopUpTabSelected? model.response!.topupHistory![position].date! : model.response!.chargingHistory![position].date!,
                 text2: isTopUpTabSelected? model.response!.topupHistory![position].time! : model.response!.chargingHistory![position].time!,
                 text3: isTopUpTabSelected? model.response!.topupHistory![position].amount! + TranslationConstants.thb.t(context):
-                model.response!.chargingHistory![position].price!  + TranslationConstants.thb.t(context),
+                model.response!.chargingHistory![position].price! + TranslationConstants.thb.t(context),
                 text4: !isTopUpTabSelected? model.response!.chargingHistory![position].consumeCharge! + ' kWh': '',
                 size: 11,
                 fontWeight: FontWeight.normal,
@@ -554,6 +554,7 @@ class _TopUpState extends State<TopUp> {
               print('----refNumber: ${responseJson["refNumber"]}');
               */
 
+            //responseJson["respCode"] == '00' means payment success
             if (responseJson["uniqueTransactionCode"].isNotEmpty && responseJson["respCode"] == '00')
               {
                 BlocProvider.of<WalletRechargeCubit>(context).initiateWalletRecharge(
@@ -562,8 +563,7 @@ class _TopUpState extends State<TopUp> {
                   dropdownTopUpAmount,
                 ),
               }
-            else
-              {
+            else {
                 edgeAlert(context,
                     title: TranslationConstants.message.t(context),
                     description: TranslationConstants.paymentFailed.t(context),

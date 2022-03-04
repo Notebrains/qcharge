@@ -262,8 +262,6 @@ class _LoginFormState extends State<LoginForm> {
                     Navigator.of(context).pushNamedAndRemoveUntil(RouteList.home_screen,(route) => false,);
                   } else edgeAlert(context, title: TranslationConstants.warning.t(context), description: state.model.message! , gravity: Gravity.top);
                 }
-
-
               },
             ),
           ],

@@ -13,6 +13,8 @@ import 'package:qcharge_flutter/common/constants/strings.dart';
 // https://s.2c2p.com/manuals/android/download/certificategenerator.html,
 // https://s.2c2p.com/manuals/android/download/my2c2pkeyengine.html
 // Note: privateKey = public key(Payment admin) + private key (generate from generator)
+// paymentMethodId used in switch case to select payment method
+
 
 Future<Map<String, dynamic>> openProductionPaymentGateway(String amount, int paymentMethodId, String paymentText) async {
   My2c2pSDK sdk =  My2c2pSDK(privateKey: Platform.isAndroid? Strings.androidPrivateKeyForProduction : Strings.iosPrivateKeyForProduction);
@@ -80,21 +82,18 @@ Future<Map<String, dynamic>> openSandboxPaymentGateway(String amount) async {
 }
 
 Future<Map<String, dynamic>> openSandboxQrPaymentGateway(String amount) async {
-  final sdk = My2c2pSDK(privateKey: Platform.isAndroid? Strings.androidPrivateKeyForSandbox : Strings.iosPrivateKeyForSandbox);
-  sdk.paymentUI = true; // false to direct payment and true to see payment ui to manual payment
-  sdk.productionMode = false;
-  sdk.merchantId = "764764000001966";
+  My2c2pSDK sdk =  My2c2pSDK(privateKey: Platform.isAndroid? Strings.androidPrivateKeyForProduction : Strings.iosPrivateKeyForProduction);
+  sdk.paymentUI = true;
+  sdk.productionMode = true;
+  sdk.merchantId = "764764000009335";
   sdk.uniqueTransactionCode = (Random().nextInt(912319541) + 154145).toString();
-  sdk.desc = "product item 1";
+  sdk.desc = "product item";
   sdk.amount = double.parse(amount);
   sdk.currencyCode = "764";
-  sdk.secretKey = "24ABCC819638916E7DD47D09F2DEA4588FAE70636B085B8DE47A9592C4FD034F";
-  //set optional fields
-  //sdk.cardHolderName = "Arrow Energy";
-  //sdk.panCountry = "TH";
-  //sdk.securityCode = "12345";
+  sdk.secretKey = "21516FBA6A3FA1CBAAB295E4D8B826FB644DCACA936AD98EF2C9E4D31DE43B03";
   //sdk.cardHolderEmail = 'thanpilin-9335@arrow-energy.com';
-  sdk.paymentOption = PaymentOption.ALL;
+  sdk.paymentOption = PaymentOption.ONE_TWO_THREE;
+  sdk.paymentChannel = PaymentChannel.ONE_TWO_THREE;
 
 
   final result = await sdk.proceed();

@@ -57,7 +57,7 @@ class _StartState extends State<Start> {
     _controller.dispose();
   }
 
-  Future<bool> getConnectorDetails()async{
+  Future<bool> getConnectorDetails() async {
     String? data = await MySharedPreferences().getConnectorData();
     cardNo = await MySharedPreferences().getCardNo();
 
@@ -158,7 +158,7 @@ class _StartState extends State<Start> {
                           onIconTap: () async {
                             try {
                               http.Response response =
-                                  await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/promocode"));
+                                  await http.post(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/v1/promocode"));
                               // print("promo code API response: ${response.body}");
 
                               if (response.statusCode == 200) {
@@ -275,7 +275,7 @@ class _StartState extends State<Start> {
       data["transaction_id"] = cardNo;
       data["status"] = '0';
 
-      await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/charging"), body: data);
+      await http.post(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/v1/charging"), body: data);
       // print("charging response: ${response.body}");
 
     } catch (error) {
@@ -399,7 +399,7 @@ class _StartState extends State<Start> {
       data["id"] = couponId;
 
       try{
-        http.Response response = await http.post(Uri.parse("http://54.151.172.184/qcharge/api/v1/apply-promocode"), body: data);
+        http.Response response = await http.post(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/v1/apply-promocode"), body: data);
         //print("apply promo code status code: ${response.statusCode}");
         print("apply promo code res: ${response.body}");
         setState(() {

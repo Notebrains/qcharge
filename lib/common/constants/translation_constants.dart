@@ -206,4 +206,8 @@ class TranslationConstants {
   static const String billNotFound = 'billNotFound';
   static const String unitRegular = 'unitRegular';
   static const String durationRegular = 'durationRegular';
+  static const String deleteAc = 'deleteAc';
+  static const String delete = 'delete';
+  static const String deleteAcDialogContent = 'deleteAcDialogContent';
+  static const String dueClearText = 'dueClearText';
 }

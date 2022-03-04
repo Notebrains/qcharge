@@ -13,6 +13,7 @@ import 'package:qcharge_flutter/presentation/blocs/login/login_cubit.dart';
 import 'package:qcharge_flutter/presentation/journeys/drawer/navigation_drawer.dart';
 import 'package:qcharge_flutter/presentation/journeys/qr_code/mySharedPreferences.dart';
 import 'package:qcharge_flutter/presentation/libraries/dialog_rflutter/rflutter_alert.dart';
+import 'package:qcharge_flutter/presentation/libraries/edge_alerts/edge_alerts.dart';
 import 'package:qcharge_flutter/presentation/libraries/liquid_linear_progress_bar/liquid_linear_progress_indicator.dart';
 import 'package:qcharge_flutter/presentation/themes/theme_color.dart';
 import 'package:qcharge_flutter/presentation/widgets/app_bar_home.dart';
@@ -25,12 +26,20 @@ import 'package:qcharge_flutter/presentation/widgets/txt_ic_row.dart';
 
 import 'cars.dart';
 
+/*
+*  Page content: currentMembershipPlan! == 'Unavailable' means user not subscribed. This info saved in local db and
+* used throughout the app to differentiate between sub and non sub user.
+*
+*
+*
+* */
 class Profile extends StatefulWidget {
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  bool isAcDeleteFeatureEnable = false;
 
   @override
   void initState() {
@@ -46,6 +55,7 @@ class _ProfileState extends State<Profile> {
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (BuildContext context, state) {
           if (state is ProfileSuccess) {
+            isAcDeleteFeatureEnable = state.model.response!.isDeletedFeatureEnable?? false;
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Padding(
@@ -93,8 +103,7 @@ class _ProfileState extends State<Profile> {
                                     padding: const EdgeInsets.only(left: 12),
                                     child: ImgTxtRow(
                                       txt: state.model.response!.currentMembershipPlan! == 'Unavailable'
-                                          ? state.model.response!.userLevel!
-                                          : state.model.response!.currentMembershipPlan!,
+                                          ? state.model.response!.userLevel! : state.model.response!.currentMembershipPlan!,
                                       txtColor: AppColor.app_txt_white,
                                       txtSize: 14,
                                       fontWeight: FontWeight.normal,
@@ -179,23 +188,27 @@ class _ProfileState extends State<Profile> {
                       height: 45,
                       child: TextButton(
                         onPressed: () async {
-                          http.Response tokenResponse = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/token"));
-                          print("token api status code: ${tokenResponse.statusCode}");
-                          print("token api response body: ${tokenResponse.body}");
+                          http.Response tokenResponse = await http.get(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/token"));
+                          //print("token api status code: ${tokenResponse.statusCode}");
+                          //print("token api response body: ${tokenResponse.body}");
                           Map<String, dynamic> tokenResult = jsonDecode(tokenResponse.body);
                           MySharedPreferences().addApiToken(tokenResult["accessToken"]);
                           String? cardNo = await MySharedPreferences().getCardNo();
                           if (tokenResponse.statusCode == 200) {
                             try {
-                              print('---- cardNo: $cardNo');
-                              http.Response response = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/transaction/$cardNo"));
-                              print("Transaction API response: ${response.body}");
+                              //print('---- cardNo: $cardNo');
+                              http.Response response = await http.get(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/transaction/$cardNo"));
+                              //print("Transaction API response: ${response.body}");
 
                               if (response.statusCode == 200) {
                                 var resData = jsonDecode(response.body.toString());
 
-                                print('----status: ${resData["status"]}');
-                                print('----message: ${resData["message"]}');
+                                //print('----status: ${resData["status"]}');
+                                //print('----message: ${resData["message"]}');
+
+
+                                // If status is true, car charging is finished and navigating to finish page to show charging summary.
+                                // If status is false, car still charging and navigating to stop page to show charging status
 
                                 if(resData["status"]){
                                   //MySharedPreferences().addIsShowingSummary('');
@@ -224,6 +237,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
 
+                    // This due ui only show if user has subscribed
                     Visibility(
                       visible: state.model.response!.currentMembershipPlan! != 'Unavailable',
                       child: Row(
@@ -344,13 +358,17 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
 
+                    // Logout user and clean login data fom local db
                     BlocListener<LoginCubit, LoginState>(
                       listenWhen: (previous, current) => current is LogoutSuccess,
                       listener: (context, state) {
                         Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial, (route) => false);
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: 56, top: 16),
+                        padding: EdgeInsets.only(
+                            bottom: isAcDeleteFeatureEnable ?  0 : 35,
+                            top: 16,
+                        ),
                         child: Button(
                           text: TranslationConstants.logoutCaps.t(context),
                           bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
@@ -369,7 +387,7 @@ class _ProfileState extends State<Profile> {
                                   )),
                               closeIcon: IconButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, RouteList.home_screen);
+                                    Navigator.pop(context);
                                   },
                                   icon: Icon(
                                     Icons.cancel,
@@ -401,6 +419,72 @@ class _ProfileState extends State<Profile> {
                             ).show();
 
                           },
+                        ),
+                      ),
+                    ),
+
+                    // Logout user and clean login data fom local db
+                    Visibility(
+                      visible: isAcDeleteFeatureEnable,
+                      child: BlocListener<LoginCubit, LoginState>(
+                        listenWhen: (previous, current) => current is DeleteUserSuccess,
+                        listener: (context, state) {
+                          Navigator.of(context).pushNamedAndRemoveUntil(RouteList.initial, (route) => false);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 35,),
+                          child: Button(
+                            text: TranslationConstants.deleteAc.t(context),
+                            bgColor: [Color(0xFFEFE07D), Color(0xFFB49839)],
+                            onPressed: () {
+                              if (state.model.response!.paymentFlag! == 0) {
+                                Alert(
+                                  context: context,
+                                  onWillPopActive: true,
+                                  title: TranslationConstants.exitDialogTitle.t(context),
+                                  desc: TranslationConstants.deleteAcDialogContent.t(context),
+                                  image: Padding(
+                                      padding: const EdgeInsets.all(18.0),
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: AppColor.border,
+                                        size: 80,
+                                      )),
+                                  closeIcon: IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: Icon(
+                                        Icons.cancel,
+                                        color: Colors.white70,
+                                      )),
+                                  buttons: [
+                                    DialogButton(
+                                      color: Colors.amber,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        TranslationConstants.cancel.t(context),
+                                        style: TextStyle(color: Colors.black, fontSize: 14),
+                                      ),
+                                    ),
+                                    DialogButton(
+                                      color: Colors.amber,
+                                      onPressed: () {
+                                        BlocProvider.of<LoginCubit>(context).deleteUserAc();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        TranslationConstants.delete.t(context),
+                                        style: TextStyle(color: Colors.black, fontSize: 14),
+                                      ),
+                                    )
+                                  ],
+                                ).show();
+                              } else edgeAlert(context, title: TranslationConstants.warning.t(context), description: TranslationConstants.dueClearText.t(context));
+                            },
+                          ),
                         ),
                       ),
                     ),

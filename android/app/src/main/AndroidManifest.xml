@@ -68,7 +68,8 @@
        <activity
            android:name="com.ccpp.my2c2psdk.cores.My3DSActivity"
            android:theme="@style/My2c2pSDK.Theme"
-           android:screenOrientation="portrait">
+           android:screenOrientation="portrait"
+           android:exported="true">
 
            <intent-filter>
                <action android:name="android.intent.action.VIEW" />

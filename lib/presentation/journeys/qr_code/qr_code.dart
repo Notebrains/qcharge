@@ -121,7 +121,7 @@ class _QrCodeState extends State<QrCode> {
 
       if (leftConnectorStatus == '5') {
         try{
-          http.Response response = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/getsensorstatus/$stationId/$chargerId/$leftConnectorId"));
+          http.Response response = await http.get(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/getsensorstatus/$stationId/$chargerId/$leftConnectorId"));
           //print("getsensorstatus Res 1: ${response.body}");
 
           if(response.statusCode == 200){
@@ -145,7 +145,7 @@ class _QrCodeState extends State<QrCode> {
 
       if (rightConnectorStatus == '5') {
         try{
-          http.Response response = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/getsensorstatus/$stationId/$chargerId/$rightConnectorId"));
+          http.Response response = await http.get(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/getsensorstatus/$stationId/$chargerId/$rightConnectorId"));
           //print("get sensor status Res 2: ${response.body}");
 
           if(response.statusCode == 200){

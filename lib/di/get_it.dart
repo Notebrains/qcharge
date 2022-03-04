@@ -4,6 +4,7 @@ import 'package:qcharge_flutter/domain/usecases/add_update_car_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/bill_pay_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/bill_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/cancel_subscription_usecase.dart';
+import 'package:qcharge_flutter/domain/usecases/delete_ac_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/delete_car_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/faq_usecase.dart';
 import 'package:qcharge_flutter/domain/usecases/firebase_token_usecase.dart';
@@ -100,6 +101,8 @@ Future init() async {
 
   getItInstance.registerLazySingleton<LogoutUser>(() => LogoutUser(getItInstance()));
 
+  getItInstance.registerLazySingleton<DeleteUser>(() => DeleteUser(getItInstance()));
+
   getItInstance.registerLazySingleton<AppRepository>(() => AppRepositoryImpl(
         getItInstance(),
       ));
@@ -114,6 +117,7 @@ Future init() async {
   getItInstance.registerFactory(() => LoginCubit(
         loginUser: getItInstance(),
         logoutUser: getItInstance(),
+        deleteUser: getItInstance(),
         loadingCubit: getItInstance(),
       ));
 

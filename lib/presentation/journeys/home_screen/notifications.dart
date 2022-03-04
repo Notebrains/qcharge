@@ -37,7 +37,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Future<bool> getNotifications()async{
     String? userId = await AuthenticationLocalDataSourceImpl().getSessionId();
     try{
-      http.Response response = await http.get(Uri.parse("http://54.151.172.184/qcharge/api/v1/notification/"+ userId!),);
+      http.Response response = await http.get(Uri.parse("http://qcapp2134.arrow-energy.com/qcharge/api/v1/notification/"+ userId!),);
       //print("${ApiConstants.BASE_URL}notification/1");
       //print("notification: ${response.statusCode}");
       //print("notification: ${response.body}");
